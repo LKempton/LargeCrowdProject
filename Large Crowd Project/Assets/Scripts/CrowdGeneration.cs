@@ -34,7 +34,7 @@ public class CrowdGeneration : MonoBehaviour {
             for (int j = 0; j < _rows; j++)
             {
                 var _offset = Random.Range(_minOffset, _maxOffset);
-                var _objPos = new Vector3(_transform.position.x + i * _offset, transform.position.y + (_objCollider / 2), _transform.position.z + j * _offset);
+                var _objPos = new Vector3(_transform.position.x + i * _offset, transform.position.y + (_objCollider / 2), _transform.position.z + j);
 
                 var _obj = Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
