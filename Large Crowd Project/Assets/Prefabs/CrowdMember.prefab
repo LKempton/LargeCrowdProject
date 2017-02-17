@@ -21,6 +21,7 @@ GameObject:
   - 4: {fileID: 4000012964057084}
   - 33: {fileID: 33000011640697194}
   - 23: {fileID: 23000013411133568}
+  - 114: {fileID: 114000012226979988}
   m_Layer: 0
   m_Name: CrowdMember
   m_TagString: Untagged
@@ -77,3 +78,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012272084590}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114000012226979988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012272084590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50e9ec740d7c7714eb1ce730b2082ab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _material:
+  - {fileID: 2100000, guid: 8c616f17bcf7f39429191f023f8a662f, type: 2}
+  - {fileID: 2100000, guid: ec2dd0fef2e9491459747c5a64a90c24, type: 2}
+  - {fileID: 2100000, guid: 9e25a6092660ba94abf8805bab31d50c, type: 2}
+  - {fileID: 2100000, guid: 0a4bbc692afec074d973b01f39e04e93, type: 2}

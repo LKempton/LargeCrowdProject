@@ -19,7 +19,9 @@ public class CrowdGeneration : MonoBehaviour {
 
     void GenerateCrowd()
     {
+        // Diagnostic tool to test how long a method takes to run.
         var watch = System.Diagnostics.Stopwatch.StartNew();
+
         var _transform = gameObject.transform;
         int _objCount = 0;
 
