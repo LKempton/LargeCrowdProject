@@ -7,7 +7,7 @@ public class CrowdGeneration : MonoBehaviour {
     private int _rows, _columns;
 
     [SerializeField]
-    private float _offset = 0.5f;
+    private float _minOffset, _maxOffset;
 
     [SerializeField]
     private GameObject _crowdObject;
@@ -19,6 +19,7 @@ public class CrowdGeneration : MonoBehaviour {
 
     void GenerateCrowd()
     {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
         var _transform = gameObject.transform;
         int _objCount = 0;
 
@@ -28,15 +29,20 @@ public class CrowdGeneration : MonoBehaviour {
         {
             for (int j = 0; j < _rows; j++)
             {
+                var _offset = Random.Range(_minOffset, _maxOffset);
                 var _objPos = new Vector3(_transform.position.x + i * _offset, transform.position.y + (_objCollider / 2), _transform.position.z + j * _offset);
 
                 var _obj = Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
                 _objCount++;
-                print(_objCount);
-                
             }
         }
+
+        watch.Stop();
+        var _elapsedTime = watch.ElapsedMilliseconds / 100;
+
+        Debug.Log(System.String.Format("Generated {0} objects in {1} seconds.", _objCount, _elapsedTime));
+       
 
     }
 }
