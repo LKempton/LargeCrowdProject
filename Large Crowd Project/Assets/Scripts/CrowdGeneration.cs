@@ -27,6 +27,8 @@ public class CrowdGeneration : MonoBehaviour {
 
         var _objCollider = _crowdObject.GetComponent<MeshRenderer>().bounds.size.y * _transform.localScale.y ;
 
+        // Run through rows and columns and generate objects as needed. 
+        // Make them a child of the source object.
         for (int i = 0; i < _columns; i++)
         {
             for (int j = 0; j < _rows; j++)
@@ -41,9 +43,9 @@ public class CrowdGeneration : MonoBehaviour {
         }
 
         watch.Stop();
-        var _elapsedTime = watch.ElapsedMilliseconds / 100;
+        var _elapsedTime = watch.ElapsedMilliseconds;
 
-        Debug.Log(System.String.Format("Generated {0} objects in {1} seconds.", _objCount, _elapsedTime));
+        Debug.Log(System.String.Format("Generated {0} objects in {1} milliseconds.", _objCount, _elapsedTime));
        
 
     }

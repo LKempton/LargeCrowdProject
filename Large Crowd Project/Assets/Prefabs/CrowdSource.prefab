@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rows: 100
   _columns: 100
-  _minOffset: 0.2
-  _maxOffset: 0.6
+  _minOffset: 1.2
+  _maxOffset: 1.8
   _crowdObject: {fileID: 1000012272084590, guid: 038d3dbf7e420b14795b40578a176b01,
     type: 2}
