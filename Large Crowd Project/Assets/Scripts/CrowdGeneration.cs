@@ -23,7 +23,7 @@ public class CrowdGeneration : MonoBehaviour {
         var _transform = gameObject.transform;
         int _objCount = 0;
 
-        var _objCollider = _crowdObject.GetComponent<CapsuleCollider>().height;
+        var _objCollider = _crowdObject.GetComponent<MeshRenderer>().bounds.size.y * _transform.localScale.y ;
 
         for (int i = 0; i < _columns; i++)
         {

@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012964057084}
   - 33: {fileID: 33000011640697194}
-  - 136: {fileID: 136000011267772014}
   - 23: {fileID: 23000013411133568}
   m_Layer: 0
   m_Name: CrowdMember
@@ -78,16 +77,3 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012272084590}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!136 &136000011267772014
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012272084590}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
