@@ -31,16 +31,16 @@ public class CrowdCircleGen : MonoBehaviour
 
         for (int i = 0; i < _layers; i++)
         {
-            var _radius = _objColliderHeight;
+            var _radius = (i + 1) * _objColliderWidth * 2;
             var _circumference = 2 * Mathf.PI * _radius;
-            int _objPerLayer = (int)(_circumference / _radius);
+            int _objPerLayer = (int)(_circumference / (_objColliderWidth * 2));
 
             for (int j = 0; j < _objPerLayer; j++)
             {
                 var _offset = Random.Range(_minOffset, _maxOffset);
 
-                var _posX = _radius * Mathf.Sin(Mathf.Deg2Rad * (90 - (j * (360 / _objPerLayer))));
-                var _posZ = _radius * Mathf.Tan(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
+                var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
+                var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
 
                 var _objPos = new Vector3(_transform.position.x + _posX + (1 * _offset), _transform.position.y + (_objColliderHeight / 2), _transform.position.z + _posZ + (1 * _offset));
 

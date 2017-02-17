@@ -129,21 +129,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114000013255737636, guid: 5aab54e5067f8884fb162a4d474ffdb5,
-        type: 2}
-      propertyPath: _layers
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000013255737636, guid: 5aab54e5067f8884fb162a4d474ffdb5,
-        type: 2}
-      propertyPath: _maxOffset
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000013255737636, guid: 5aab54e5067f8884fb162a4d474ffdb5,
-        type: 2}
-      propertyPath: _minOffset
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5aab54e5067f8884fb162a4d474ffdb5, type: 2}
   m_IsPrefabParent: 0
