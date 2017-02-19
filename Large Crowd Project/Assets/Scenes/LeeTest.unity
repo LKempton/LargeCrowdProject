@@ -149,6 +149,12 @@ Prefab:
       propertyPath: _columns
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 114000012506461936, guid: 66b4aad0bcf314a4cb2c3e6d934653c8,
+        type: 2}
+      propertyPath: _crowdObject
+      value: 
+      objectReference: {fileID: 1000011580907342, guid: 3d15ae3f8a133854e9576ade790b5f36,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 66b4aad0bcf314a4cb2c3e6d934653c8, type: 2}
   m_IsPrefabParent: 0
