@@ -7,7 +7,7 @@ public class CrowdGeneration : MonoBehaviour {
     private int _rows, _columns;
 
     [SerializeField]
-    private float _minOffset, _maxOffset;
+    private float _minOffset, _maxOffset, _tiltAmount, _tiltStart;
 
     [SerializeField]
     private GameObject _crowdObject;
@@ -29,17 +29,25 @@ public class CrowdGeneration : MonoBehaviour {
 
         // Run through rows and columns and generate objects as needed. 
         // Make them a child of the source object.
+        
+
         for (int i = 0; i < _columns; i++)
         {
             for (int j = 0; j < _rows; j++)
             {
                 var _offset = Random.Range(_minOffset, _maxOffset);
-                var _objPos = new Vector3(_transform.position.x + i + (1 * _offset), transform.position.y + (_objCollider / 2), _transform.position.z + j);
+                var _objPos = new Vector3(_transform.position.x + i * _offset, transform.position.y + (_objCollider / 2) + _tiltStart, _transform.position.z + j * _offset);
 
                 var _obj = Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
                 _objCount++;
             }
+
+            if (_tiltAmount != 0)
+            {
+                _tiltStart = _tiltStart + _tiltAmount;
+            }
+            
         }
 
         watch.Stop();

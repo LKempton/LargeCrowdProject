@@ -132,12 +132,12 @@ Prefab:
     - target: {fileID: 114000012506461936, guid: 66b4aad0bcf314a4cb2c3e6d934653c8,
         type: 2}
       propertyPath: _minOffset
-      value: 1.2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 114000012506461936, guid: 66b4aad0bcf314a4cb2c3e6d934653c8,
         type: 2}
       propertyPath: _maxOffset
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 114000012506461936, guid: 66b4aad0bcf314a4cb2c3e6d934653c8,
         type: 2}
@@ -155,6 +155,11 @@ Prefab:
       value: 
       objectReference: {fileID: 1000011580907342, guid: 3d15ae3f8a133854e9576ade790b5f36,
         type: 2}
+    - target: {fileID: 114000012506461936, guid: 66b4aad0bcf314a4cb2c3e6d934653c8,
+        type: 2}
+      propertyPath: _tiltAmount
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 66b4aad0bcf314a4cb2c3e6d934653c8, type: 2}
   m_IsPrefabParent: 0
