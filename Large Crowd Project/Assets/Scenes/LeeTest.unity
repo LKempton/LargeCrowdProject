@@ -153,12 +153,17 @@ Prefab:
         type: 2}
       propertyPath: _crowdObject
       value: 
-      objectReference: {fileID: 1000011580907342, guid: 3d15ae3f8a133854e9576ade790b5f36,
+      objectReference: {fileID: 1000012783401876, guid: f6b0d747a0079094cb01642ed546fd27,
         type: 2}
     - target: {fileID: 114000012506461936, guid: 66b4aad0bcf314a4cb2c3e6d934653c8,
         type: 2}
       propertyPath: _tiltAmount
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000012506461936, guid: 66b4aad0bcf314a4cb2c3e6d934653c8,
+        type: 2}
+      propertyPath: _tiltStart
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 66b4aad0bcf314a4cb2c3e6d934653c8, type: 2}

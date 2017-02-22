@@ -9,7 +9,7 @@ namespace CrowdAI
         private int _rows, _columns;
 
         [SerializeField]
-        private float _minOffset, _maxOffset, _tiltAmount, _tiltStart;
+        private float _minOffset, _maxOffset, _tiltAmount, _startHeight;
 
         [SerializeField]
         private GameObject _crowdObject;
@@ -27,7 +27,8 @@ namespace CrowdAI
             var _transform = gameObject.transform;
             int _objCount = 0;
 
-            var _objCollider = _crowdObject.GetComponent<MeshRenderer>().bounds.size.y * _transform.localScale.y;
+            // Removed this for now as it's too specific of a use case. USE _startHeight INSTEAD!
+            //var _objCollider = _crowdObject.GetComponent<MeshRenderer>().bounds.size.y * _transform.localScale.y;
 
             // Run through rows and columns and generate objects as needed. 
             // Make them a child of the source object.
@@ -38,7 +39,7 @@ namespace CrowdAI
                 for (int j = 0; j < _rows; j++)
                 {
                     var _offset = Random.Range(_minOffset, _maxOffset);
-                    var _objPos = new Vector3(_transform.position.x + i * _offset, transform.position.y + (_objCollider / 2) + _tiltStart, _transform.position.z + j * _offset);
+                    var _objPos = new Vector3(_transform.position.x + i * _offset, transform.position.y + _startHeight, _transform.position.z + j * _offset);
 
                     var _obj = Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
@@ -47,7 +48,7 @@ namespace CrowdAI
 
                 if (_tiltAmount != 0)
                 {
-                    _tiltStart = _tiltStart + _tiltAmount;
+                    _startHeight = _startHeight + _tiltAmount;
                 }
 
             }
