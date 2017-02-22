@@ -9,7 +9,7 @@ namespace CrowdAI
         private int _layers;
 
         [SerializeField]
-        private float _minOffset, _maxOffset;
+        private float _minOffset, _maxOffset, _objHeight, _objWidth;
 
         [SerializeField]
         private GameObject _crowdObject;
@@ -27,14 +27,15 @@ namespace CrowdAI
             var _transform = gameObject.transform;
             int _objCount = 0;
 
-            var _objColliderHeight = _crowdObject.GetComponent<MeshRenderer>().bounds.size.y * _transform.localScale.y;
-            var _objColliderWidth = _crowdObject.GetComponent<MeshRenderer>().bounds.size.x * _transform.localScale.x;
+            //var _objColliderHeight = _crowdObject.GetComponent<MeshRenderer>().bounds.size.y * _transform.localScale.y;
+            //var _objColliderWidth = _crowdObject.GetComponent<MeshRenderer>().bounds.size.x * _transform.localScale.x;
 
             for (int i = 0; i < _layers; i++)
             {
-                var _radius = (i + 1) * _objColliderWidth * 2;
+                var _radius = (i + 1) * _objWidth * 2;
                 var _circumference = 2 * Mathf.PI * _radius;
-                int _objPerLayer = (int)(_circumference / (_objColliderWidth * 2));
+                int _objPerLayer = (int)(_circumference / (_objWidth * 2));
+                
 
                 for (int j = 0; j < _objPerLayer; j++)
                 {
@@ -43,7 +44,7 @@ namespace CrowdAI
                     var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
                     var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
 
-                    var _objPos = new Vector3(_transform.position.x + _posX + (1 * _offset), _transform.position.y + (_objColliderHeight / 2), _transform.position.z + _posZ + (1 * _offset));
+                    var _objPos = new Vector3(_transform.position.x + _posX + (1 * _offset), _transform.position.y + (_objHeight / 2), _transform.position.z + _posZ + (1 * _offset));
 
                     var _obj = Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
