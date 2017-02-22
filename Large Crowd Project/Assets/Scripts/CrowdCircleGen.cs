@@ -11,12 +11,16 @@ namespace CrowdAI
         [SerializeField]
         private float _minOffset, _maxOffset, _objHeight, _objWidth;
 
+        private float _objRemainder;
+
         [SerializeField]
         private GameObject _crowdObject;
         // Use this for initialization
         void Start()
         {
             GenerateCrowd();
+
+            _objRemainder = 0;
         }
 
         void GenerateCrowd()
@@ -32,19 +36,19 @@ namespace CrowdAI
 
             for (int i = 0; i < _layers; i++)
             {
-                var _radius = (i + 1) * _objWidth * 2;
+                //radius is number of layers multiplied by rough distance between objs
+                var _radius = (i + 1) * (_objWidth * 2);
                 var _circumference = 2 * Mathf.PI * _radius;
-                int _objPerLayer = (int)(_circumference / (_objWidth * 2));
-                
 
-                for (int j = 0; j < _objPerLayer; j++)
+                //number of objs around the circumference of the layer
+                var _objPerLayer = _circumference / (_objWidth * 2);
+
+                for (int j = 0; j < _objPerLayer - (_objWidth / 2); j++)
                 {
-                    var _offset = Random.Range(_minOffset, _maxOffset);
-
                     var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
                     var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
 
-                    var _objPos = new Vector3(_transform.position.x + _posX + (1 * _offset), _transform.position.y + (_objHeight / 2), _transform.position.z + _posZ + (1 * _offset));
+                    var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_objHeight / 2), _transform.position.z + _posZ);
 
                     var _obj = Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 

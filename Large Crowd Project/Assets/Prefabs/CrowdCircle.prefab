@@ -51,8 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e896f0727931e344aa632cd5fb8a1f3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _layers: 50
+  _layers: 40
   _minOffset: 0
   _maxOffset: 0
-  _crowdObject: {fileID: 1000012272084590, guid: 038d3dbf7e420b14795b40578a176b01,
+  _objHeight: 0
+  _objWidth: 1
+  _crowdObject: {fileID: 1000012783401876, guid: f6b0d747a0079094cb01642ed546fd27,
     type: 2}
