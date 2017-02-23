@@ -30,8 +30,8 @@ namespace CrowdAI
 
             var prefabRend = crowdObject.GetComponent<Renderer>();
 
-            // works with any renderer and will try a
-
+            // works with any renderer - may want to consider getting mutiple renderer components
+            //May want to consider getting mutiple rendering components and finding the largest value to allow users to have mutiple sprite objects for example.
             
 
             if (!prefabRend)
