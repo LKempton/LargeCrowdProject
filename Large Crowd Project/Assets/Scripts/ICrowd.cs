@@ -12,9 +12,12 @@ namespace CrowdAI
         void StartAnimation();
         void StopAnimation();
         bool LoopAnimation { get; set; }
-       
+      
         // possibly use a way of using a mix of global and local animations
     }
 
-  
+  public enum CrowdFormation
+    {
+        CIRCLE,SQUARE, RING
+    }
 }

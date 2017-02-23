@@ -10,6 +10,8 @@ namespace CrowdAI
         [SerializeField]
         private string[] _crowdStates;
         private CrowdGroup[] _crowdGroups;
+        [SerializeField]
+        CrowdFormation _crowdFormation;
 
 
         // Update is called once per frame

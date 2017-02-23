@@ -2,7 +2,7 @@
 using System.Collections;
 namespace CrowdAI
 {
-    public class CrowdGeneration : MonoBehaviour
+    public class CrowdGeneration 
     {
 
         [SerializeField]
@@ -14,13 +14,34 @@ namespace CrowdAI
         [SerializeField]
         private GameObject _crowdObject;
         // Use this for initialization
-        void Start()
+        
+
+       public ICrowd[] GenerateCrowd(CrowdFormation formation, GameObject parent)
         {
-            GenerateCrowd();
+            switch (formation)
+            {
+                case  CrowdFormation.CIRCLE:
+                  return  GenerateCrowdCircle(parent);
+                    
+                case CrowdFormation.RING:
+                   return GenerateCrowdRing(parent);
+
+                default:
+                   return GenerateCrowdSquare(parent);
+                 
+
+            }
         }
 
-        void GenerateCrowd()
+       private ICrowd[] GenerateCrowdCircle(GameObject gameObject)
         {
+            throw new System.NotImplementedException();
+        }
+
+       private ICrowd[] GenerateCrowdSquare(GameObject gameObject)
+        {
+            throw new System.NotImplementedException();
+
             // Diagnostic tool to test how long a method takes to run.
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -39,9 +60,9 @@ namespace CrowdAI
                 for (int j = 0; j < _rows; j++)
                 {
                     var _offset = Random.Range(_minOffset, _maxOffset);
-                    var _objPos = new Vector3(_transform.position.x + i * _offset, transform.position.y + _startHeight, _transform.position.z + j * _offset);
+                    var _objPos = new Vector3(_transform.position.x + i * _offset, gameObject.transform.position.y + _startHeight, _transform.position.z + j * _offset);
 
-                    var _obj = Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
+                    var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
                     _objCount++;
                 }
@@ -60,5 +81,13 @@ namespace CrowdAI
 
 
         }
+
+        private ICrowd[] GenerateCrowdRing(GameObject gameObject)
+        {
+            throw new System.NotImplementedException();
+        }
+
     }
+
+    
 }
