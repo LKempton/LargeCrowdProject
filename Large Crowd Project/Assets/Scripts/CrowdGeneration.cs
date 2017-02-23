@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 namespace CrowdAI
 {
     public class CrowdGeneration 
@@ -54,7 +55,7 @@ namespace CrowdAI
 
 
             /// <summary>
-            /// 
+            /// Generates a crowd in a given formation
             /// </summary>
             /// <param name="formation"> The formation of the crowd desired</param>
             /// <param name="parent">the object to which all objects are parented to </param>
@@ -79,7 +80,7 @@ namespace CrowdAI
 
         private ICrowd[] GenerateCrowdCircle(GameObject gameObject, CrowdGroup[] groups, bool randomGroupDist)
         {
-            throw new System.NotImplementedException();
+            var _crowdOutMembers = new List<ICrowd>();
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -107,15 +108,29 @@ namespace CrowdAI
 
                     var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
+                    var _crowdMemberInfo = _obj.GetComponent<ICrowd>();
+                    if (_crowdMemberInfo == null)
+                    {
+                        Debug.LogError("Crowd prefab object doesnt contain ICrowd interface");
+                    }
+                    else
+                    {
+                        _crowdOutMembers.Add(_crowdMemberInfo);
+                    }
+
                     _objCount++;
                 }
 
             }
+
+            return _crowdOutMembers.ToArray();
         }
 
        private ICrowd[] GenerateCrowdSquare(GameObject gameObject, CrowdGroup[] groups, bool randomGroupDist)
         {
-            throw new System.NotImplementedException();
+            
+
+            var _crowdOutMembers = new List<ICrowd>();
 
             // Diagnostic tool to test how long a method takes to run.
             var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -139,6 +154,16 @@ namespace CrowdAI
 
                     var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
+                    var _crowdMemberInfo = _obj.GetComponent<ICrowd>();
+                    if (_crowdMemberInfo == null)
+                    {
+                        Debug.LogError("Crowd prefab object doesnt contain ICrowd interface");
+                    }
+                    else
+                    {
+                        _crowdOutMembers.Add(_crowdMemberInfo);
+                    }
+
                     _objCount++;
                 }
 
@@ -153,7 +178,7 @@ namespace CrowdAI
             var _elapsedTime = watch.ElapsedMilliseconds;
 
             Debug.Log(System.String.Format("Generated {0} objects in {1} milliseconds.", _objCount, _elapsedTime));
-
+            return _crowdOutMembers.ToArray();
 
         }
 

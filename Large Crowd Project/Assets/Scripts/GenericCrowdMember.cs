@@ -8,6 +8,8 @@ namespace CrowdAI
 
     public class GenericCrowdMember : ICrowd
     {
+        
+
         public bool LoopAnimation
         {
             get
