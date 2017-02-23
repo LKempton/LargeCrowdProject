@@ -13,11 +13,19 @@ namespace CrowdAI
         [SerializeField]
         CrowdFormation _crowdFormation;
 
+        // crowd gen parameters
+        [SerializeField]
+        private int _rows, _columns;
+        [SerializeField]
+        private float _minOffset, _maxOffset, _tiltAmount, _startHeight;
+        [SerializeField]
+        private GameObject _crowdObject;
+
 
         // Update is called once per frame
         void Start()
         {
-
+            CrowdGeneration generator = new CrowdGeneration();
             if (_crowdStates == null)
             {
                 _crowdGroups = new CrowdGroup[1];

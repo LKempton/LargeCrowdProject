@@ -9,6 +9,8 @@ namespace CrowdAI
         private string _groupName;
         private List<ICrowd> _crowdMemebers;
 
+        
+
          public CrowdGroup(string groupName)
         {
             _crowdMemebers = new List<ICrowd>();

@@ -5,40 +5,58 @@ namespace CrowdAI
     public class CrowdGeneration 
     {
 
-        [SerializeField]
+       
         private int _rows, _columns;
 
-        [SerializeField]
+        
         private float _minOffset, _maxOffset, _tiltAmount, _startHeight;
 
-        [SerializeField]
+       
         private GameObject _crowdObject;
-        // Use this for initialization
         
+       public CrowdGeneration(int rows, int columns, float minOffset, float maxOffset, float tiltAmount, float startHeight, GameObject crowdObject)
+        {
+            
+            _rows = rows;
+            _columns = columns;
+            _minOffset = minOffset;
+            _maxOffset = maxOffset;
+            _tiltAmount = tiltAmount;
+            _startHeight = startHeight;
+            _crowdObject = crowdObject;
+        }
 
-       public ICrowd[] GenerateCrowd(CrowdFormation formation, GameObject parent)
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="formation"> The formation of the crowd desired</param>
+            /// <param name="parent">the object to which all objects are parented to </param>
+            /// <param name="groups"> the crowd groups that the crowd members are part of</param>
+            /// <param name="randomGroupDist"> if true the different groups are randomly distributed in the crowd, otherwise it is uniform</param>
+       public ICrowd[] GenerateCrowd(CrowdFormation formation, GameObject parent,CrowdGroup[] groups, bool randomGroupDist)
         {
             switch (formation)
             {
                 case  CrowdFormation.CIRCLE:
-                  return  GenerateCrowdCircle(parent);
+                  return  GenerateCrowdCircle(parent,groups,randomGroupDist);
                     
                 case CrowdFormation.RING:
-                   return GenerateCrowdRing(parent);
+                   return GenerateCrowdRing(parent, groups, randomGroupDist);
 
                 default:
-                   return GenerateCrowdSquare(parent);
-                 
+                   return GenerateCrowdSquare(parent, groups, randomGroupDist);
+
 
             }
         }
 
-       private ICrowd[] GenerateCrowdCircle(GameObject gameObject)
+       private ICrowd[] GenerateCrowdCircle(GameObject gameObject,CrowdGroup[] groups, bool randomGroupDist)
         {
             throw new System.NotImplementedException();
         }
 
-       private ICrowd[] GenerateCrowdSquare(GameObject gameObject)
+       private ICrowd[] GenerateCrowdSquare(GameObject gameObject, CrowdGroup[] groups, bool randomGroupDist)
         {
             throw new System.NotImplementedException();
 
@@ -82,7 +100,7 @@ namespace CrowdAI
 
         }
 
-        private ICrowd[] GenerateCrowdRing(GameObject gameObject)
+        private ICrowd[] GenerateCrowdRing(GameObject gameObject, CrowdGroup[]groups, bool randomGroupDist)
         {
             throw new System.NotImplementedException();
         }
