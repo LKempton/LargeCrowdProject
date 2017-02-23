@@ -13,6 +13,8 @@ namespace CrowdAI
         [SerializeField]
         CrowdFormation _crowdFormation;
 
+        float animationStagger = 0.25f;
+
         // crowd gen parameters
         [SerializeField]
         private int _rows, _columns;
@@ -20,12 +22,18 @@ namespace CrowdAI
         private float _minOffset, _maxOffset, _tiltAmount, _startHeight;
         [SerializeField]
         private GameObject _crowdObject;
+        [SerializeField]
+        bool _randomGroupDist = true;
 
+        
 
         // Update is called once per frame
         void Start()
         {
-            CrowdGeneration generator = new CrowdGeneration();
+
+            var _generator = new CrowdGeneration(_rows,_columns,_minOffset,_maxOffset,_tiltAmount,_startHeight,_crowdObject);
+
+
             if (_crowdStates == null)
             {
                 _crowdGroups = new CrowdGroup[1];
@@ -40,6 +48,9 @@ namespace CrowdAI
                     _crowdGroups[i] = new CrowdGroup(_crowdStates[i]);
                 }
             }
+
+            var _crowdMembers = _generator.GenerateCrowd(_crowdFormation, gameObject, _crowdGroups, _randomGroupDist);
+
         }
 
 

@@ -11,7 +11,10 @@ namespace CrowdAI
         
         private float _minOffset, _maxOffset, _tiltAmount, _startHeight;
 
-       
+        float _objWidth = 0, _objHeight = 0;
+
+
+
         private GameObject _crowdObject;
         
        public CrowdGeneration(int rows, int columns, float minOffset, float maxOffset, float tiltAmount, float startHeight, GameObject crowdObject)
@@ -24,6 +27,29 @@ namespace CrowdAI
             _tiltAmount = tiltAmount;
             _startHeight = startHeight;
             _crowdObject = crowdObject;
+
+            var prefabRend = crowdObject.GetComponent<Renderer>();
+
+            // works with any renderer and will try a
+
+            
+
+            if (!prefabRend)
+            {
+                prefabRend = crowdObject.GetComponentInChildren<Renderer>();
+
+            }
+
+            if (prefabRend)
+            {
+                _objWidth = prefabRend.bounds.extents.x * crowdObject.transform.localScale.x;
+                _objHeight = prefabRend.bounds.extents.y * crowdObject.transform.localScale.y;
+            }
+            else
+            {
+                Debug.LogError("Could not find Renderer in the prefab object : " + crowdObject.name + ". You must attach a sprite or mesh renderer on the object or in a direct chlid of the object");
+            }
+            
         }
 
 
@@ -51,9 +77,40 @@ namespace CrowdAI
             }
         }
 
-       private ICrowd[] GenerateCrowdCircle(GameObject gameObject,CrowdGroup[] groups, bool randomGroupDist)
+        private ICrowd[] GenerateCrowdCircle(GameObject gameObject, CrowdGroup[] groups, bool randomGroupDist)
         {
             throw new System.NotImplementedException();
+
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
+            var _transform = gameObject.transform;
+            int _objCount = 0;
+
+            //var _objColliderHeight = _crowdObject.GetComponent<MeshRenderer>().bounds.size.y * _transform.localScale.y;
+            //var _objColliderWidth = _crowdObject.GetComponent<MeshRenderer>().bounds.size.x * _transform.localScale.x;
+
+            for (int i = 0; i < _rows; i++)
+            {
+                //radius is number of layers multiplied by rough distance between objs
+                var _radius = (i + 1) * (_objWidth * 2);
+                var _circumference = 2 * Mathf.PI * _radius;
+
+                //number of objs around the circumference of the layer
+                var _objPerLayer = _circumference / (_objWidth * 2);
+
+                for (int j = 0; j < _objPerLayer - (_objWidth / 2); j++)
+                {
+                    var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
+                    var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
+
+                    var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_objHeight / 2), _transform.position.z + _posZ);
+
+                    var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
+
+                    _objCount++;
+                }
+
+            }
         }
 
        private ICrowd[] GenerateCrowdSquare(GameObject gameObject, CrowdGroup[] groups, bool randomGroupDist)

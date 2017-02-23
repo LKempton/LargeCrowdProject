@@ -7,13 +7,13 @@ namespace CrowdAI
     public class CrowdGroup
     {
         private string _groupName;
-        private List<ICrowd> _crowdMemebers;
+        private List<ICrowd> _crowdMembers;
 
         
 
          public CrowdGroup(string groupName)
         {
-            _crowdMemebers = new List<ICrowd>();
+            _crowdMembers = new List<ICrowd>();
 
             _groupName = groupName;
         }
@@ -22,23 +22,23 @@ namespace CrowdAI
         {
             _groupName = groupName;
 
-            _crowdMemebers = new List<ICrowd>();
+            _crowdMembers = new List<ICrowd>();
 
             for (int i = 0; i < crowdMemebers.Length; i++)
             {
-                _crowdMemebers.Add(crowdMemebers[i].GetComponent<ICrowd>());
+                _crowdMembers.Add(crowdMemebers[i].GetComponent<ICrowd>());
             }
 
         }
 
         public void AddCrowdMember(GameObject crowdMember)
         {
-            _crowdMemebers.Add(crowdMember.GetComponent<ICrowd>());
+            _crowdMembers.Add(crowdMember.GetComponent<ICrowd>());
         }
 
         public void AddCrowdMember(ICrowd crowdMeber)
         {
-            _crowdMemebers.Add(crowdMeber);
+            _crowdMembers.Add(crowdMeber);
         }
 
         public void AddCrowdMember(object crowdMember)
@@ -47,13 +47,13 @@ namespace CrowdAI
 
             var _goCrowdMember = (GameObject)crowdMember;
 
-                _crowdMemebers.Add(_goCrowdMember.GetComponent<ICrowd>());
+                _crowdMembers.Add(_goCrowdMember.GetComponent<ICrowd>());
             
         }
 
         public void ClearAll()
         {
-            _crowdMemebers.Clear();
+            _crowdMembers.Clear();
         }
 
 
