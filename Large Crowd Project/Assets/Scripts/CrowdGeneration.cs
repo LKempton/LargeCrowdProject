@@ -80,6 +80,7 @@ namespace CrowdAI
 
         private ICrowd[] GenerateCrowdCircle(GameObject gameObject, CrowdGroup[] groups, bool randomGroupDist)
         {
+            // crowd groups are passed because they are to be able to have their own models, still implementing.
             var _crowdOutMembers = new List<ICrowd>();
 
             var watch = System.Diagnostics.Stopwatch.StartNew();

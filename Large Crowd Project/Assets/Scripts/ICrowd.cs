@@ -3,15 +3,14 @@ namespace CrowdAI
 {
     public interface ICrowd
     {
-        void SetState(string State);
-        string GetState();
+        bool SetState(string state, bool useRandDelay);
+        string GetCurrentState();
       
-        void StartAnimations(float delay);
-        void StartAnimation();
-        void StopAnimation();
-        bool LoopAnimation { get; set; }
+       bool SetState(string state,float delay);
+      
+        void ToggleAnimation();
 
-        void DisableRenderer();
+        
 
         
       

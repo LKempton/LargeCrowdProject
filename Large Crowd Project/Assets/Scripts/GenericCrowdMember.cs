@@ -1,93 +1,132 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CrowdAI
 {
 
-    public class GenericCrowdMember : MonoBehaviour,ICrowd
+    public class GenericCrowdMember : MonoBehaviour, ICrowd
     {
         private Dictionary<string, AnimationClip> _animDict;
         private Renderer _rend;
-        private Animator _animator;
+        private Animation _animator;
+
+        [SerializeField]
+        [Range(0, 1)]
+        private float _minStartDelay = 0;
+        private float _maxStartDelay = 04f;
 
         [SerializeField]
         private AnimationClip[] _stateAnimClips;
+        [SerializeField]
+        private string[] _animStateNames;
 
+        private string currentState;
 
         private void Start()
         {
-            
+
 
             _animDict = new Dictionary<string, AnimationClip>();
-           
+
 
             _rend = gameObject.GetComponent<Renderer>();
-            _animator = GetComponent<Animator>();
+            _animator = GetComponent<Animation>();
 
             if (!_animator)
-                _animator = GetComponentInChildren<Animator>();
+                _animator = GetComponentInChildren<Animation>();
 
-            if (!_rend)            
+            if (!_rend)
                 _rend = GetComponentInChildren<Renderer>();
 
-            string[] states = GetComponentInParent<CrowdController>().GetCrowdStates();
+            var _crowdController = GetComponentInParent<CrowdController>();
 
-            for (int i = 0; i < states.Length; i++)
+            for (int i = 0; i < _animStateNames.Length; i++)
             {
-
+                if (_crowdController.StateExists(_animStateNames[i]))
+                    _animDict.Add(_animStateNames[i], _stateAnimClips[i]);
+                else
+                    Debug.LogError("State: " + _animStateNames[i] + " Does not exist in CrowdController Class");
             }
+            _animator.playAutomatically = false;
+            SetState(_animStateNames[0], true);
         }
-        
-      
 
-        public bool LoopAnimation
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+
+
 
         public void ToggleRenderer()
         {
-            
+            _rend.enabled = !_rend.enabled;
         }
 
-        public string GetState()
+        public string GetCurrentState()
         {
-            throw new NotImplementedException();
+            return currentState;
         }
 
-        public void SetState(string State)
+        public bool SetState(string state, bool useRandDelay)
         {
-            throw new NotImplementedException();
+            AnimationClip _animState = new AnimationClip();
+
+            bool _isStateSet = _animDict.TryGetValue(state, out _animState);
+
+            if (_isStateSet)
+            {
+                if (useRandDelay)
+                {
+                    float _delay = Random.Range(_minStartDelay, _maxStartDelay);
+                    
+                }
+                else
+                {
+                    _animator.Stop();
+                    _animator.clip = _animState;
+                    _animator.Play();
+                }
+                currentState = state;
+            }
+
+            return _isStateSet;
         }
 
-        public void StartAnimation()
+        public bool SetState(string state, float delay)
         {
-            throw new NotImplementedException();
+            AnimationClip _animState = new AnimationClip();
+
+            bool _isStateSet = _animDict.TryGetValue(state, out _animState);
+
+            if (_isStateSet)
+            {
+                StartCoroutine(StartStateDelayed(delay, _animState));
+                currentState = state;
+            }
+
+            return _isStateSet;
         }
 
-        public void StartAnimations(float delay)
+        IEnumerator StartStateDelayed(float delay, AnimationClip state)
         {
-            throw new NotImplementedException();
+            yield return new WaitForSeconds(delay);
+
+            _animator.Stop();
+            _animator.clip = state;
+            _animator.Play();
+        }
+        public void ToggleAnimation()
+        {
+            if (_animator.isPlaying)
+            {
+                _animator.Stop();
+            }
+            else
+            {
+                _animator.Play();
+            }
         }
 
-        public void StopAnimation()
-        {
-            throw new NotImplementedException();
-        }
 
-        public void DisableRenderer()
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

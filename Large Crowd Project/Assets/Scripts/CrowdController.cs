@@ -121,6 +121,16 @@ namespace CrowdAI
             return _crowdStatesCopy;
         }
 
+      public  bool StateExists(string stateName)
+        {
+            for (int i = 0; i < _crowdStates.Length; i++)
+            {
+                if (stateName == _crowdStates[i])
+                    return true;
+            }
+            return false;
+        }
+
 
 
     }
