@@ -13,8 +13,7 @@ namespace CrowdAI
 
         [SerializeField]
         [Range(0, 1)]
-        private float _minStartDelay = 0;
-        private float _maxStartDelay = 04f;
+        private float _minStartDelay = 0, _maxStartDelay = 0.4f;
 
         [SerializeField]
         private AnimationClip[] _stateAnimClips;
@@ -41,6 +40,7 @@ namespace CrowdAI
 
             var _crowdController = GetComponentInParent<CrowdController>();
 
+           
             for (int i = 0; i < _animStateNames.Length; i++)
             {
                 if (_crowdController.StateExists(_animStateNames[i]))

@@ -51,6 +51,14 @@ namespace CrowdAI
             
         }
 
+        public void SetState(string state)
+        {
+            for (int i = 0; i < _crowdMembers.Count; i++)
+            {
+                _crowdMembers[i].SetState(state, false);
+            }
+        }
+
         public void ClearAll()
         {
             _crowdMembers.Clear();

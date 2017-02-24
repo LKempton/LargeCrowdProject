@@ -36,7 +36,7 @@ namespace CrowdAI
 
        
             
-            if (_groupNames == null)
+            if (_groupNames.Length>0)
             {
                 _crowdGroups = new CrowdGroup[1];
                 _crowdGroups[0] = new CrowdGroup("default");
@@ -60,7 +60,11 @@ namespace CrowdAI
                
                 for (int i = 0; i < _crowdMembers.Length; i++)
                 {
-                    _crowdGroups[Random.Range(0, _crowdMembers.Length - 1)].AddCrowdMember(_crowdMembers[i]);
+                    int _nextCrowdGroup = Random.Range(0, _crowdGroups.Length);
+
+                   
+
+                    _crowdGroups[_nextCrowdGroup].AddCrowdMember(_crowdMembers[i]);
                 }
 
             }
@@ -129,6 +133,14 @@ namespace CrowdAI
                     return true;
             }
             return false;
+        }
+
+    public void SetStateAll(string state)
+        {
+            for (int i = 0; i < _crowdGroups.Length; i++)
+            {
+                _crowdGroups[i].SetState(state);
+            }
         }
 
 
