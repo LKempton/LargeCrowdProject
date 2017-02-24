@@ -8,7 +8,7 @@ namespace CrowdAI
     {
 
         [SerializeField]
-        private string[] _crowdStates;
+        private  string[] _crowdStates;
         [SerializeField]
         private string[] _groupNames;
 
@@ -29,13 +29,13 @@ namespace CrowdAI
         bool _randomGroupDist = true;
         
         // Update is called once per frame
-        void Start()
+        void Awake()
         {
 
             var _generator = new CrowdGeneration(_rows,_columns,_minOffset,_maxOffset,_tiltAmount,_startHeight,_crowdObject);
 
        
-
+            
             if (_groupNames == null)
             {
                 _crowdGroups = new CrowdGroup[1];
@@ -66,45 +66,50 @@ namespace CrowdAI
             }
             else
             {
-                // add crowd members to the groups in a uniform manner (linear fashion)
 
-                float _remainder = _crowdMembers.Length / _crowdGroups.Length;
-                int _groupDiv = (int)_remainder;
-                _remainder -= _groupDiv;
-                float _cRemainder = 0;
-               
-
-                int _currentCrowdMember = 0;
-
-                for (int i = 0; i < _crowdGroups.Length; i++)
-                {
-                    for (int j = 0; j < _groupDiv; j++)
-                    {
-                        _crowdGroups[i].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
-                        _currentCrowdMember++;
-                        _cRemainder += _remainder;
-
-                        if (_cRemainder >= 1)
-                        {// helps keep each group even
-                            _cRemainder -= 1;
-                            _crowdGroups[i].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
-                            _currentCrowdMember++;
-                        }
-                    }
-                }
-                
-
-                while(_currentCrowdMember < _crowdMembers.Length)
-                {//adds any remaining crowd members to the last group abritrarily
-                    _crowdGroups[_crowdGroups.Length-1].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
-                    _currentCrowdMember++;
-                }
-                
+                AddCrowdUniformly(_crowdMembers);
             }
 
         }
 
-        public string[] CrowdStates()
+        private void AddCrowdUniformly(ICrowd[] _crowdMembers)
+        { // add crowd members to the groups in a uniform manner 
+
+            float _remainder = _crowdMembers.Length / _crowdGroups.Length;
+            int _groupDiv = (int)_remainder;
+            _remainder -= _groupDiv;
+            float _cRemainder = 0;
+
+
+            int _currentCrowdMember = 0;
+
+            for (int i = 0; i < _crowdGroups.Length; i++)
+            {
+                for (int j = 0; j < _groupDiv; j++)
+                {
+                    _crowdGroups[i].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
+                    _currentCrowdMember++;
+                    _cRemainder += _remainder;
+
+                    if (_cRemainder >= 1)
+                    {// helps keep each group even
+                        _cRemainder -= 1;
+                        _crowdGroups[i].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
+                        _currentCrowdMember++;
+                    }
+                }
+            }
+
+
+            while (_currentCrowdMember < _crowdMembers.Length)
+            {//adds any remaining crowd members to the last group abritrarily
+                _crowdGroups[_crowdGroups.Length - 1].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
+                _currentCrowdMember++;
+            }
+
+        }
+
+        public string[] GetCrowdStates()
         {
             //copies array since they are passed by reference
             var _crowdStatesCopy = new string[_crowdStates.Length];
@@ -115,6 +120,8 @@ namespace CrowdAI
             }
             return _crowdStatesCopy;
         }
+
+
 
     }
 }
