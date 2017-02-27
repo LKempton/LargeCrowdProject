@@ -135,13 +135,29 @@ namespace CrowdAI
             return false;
         }
 
-    public void SetStateAll(string state)
+    public void SetState(string state)
         {
             for (int i = 0; i < _crowdGroups.Length; i++)
             {
                 _crowdGroups[i].SetState(state);
             }
         }
+
+        public bool SetState(string state, string groupName)
+        {
+            for (int i = 0; i < _groupNames.Length; i++)
+            {
+                if (groupName == _groupNames[i])
+                {
+                    _crowdGroups[i].SetState(state);
+
+                    return true;
+                }
+
+            }
+            return false;
+        }
+     
 
 
 

@@ -105,14 +105,14 @@ namespace CrowdAI
                     var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
                     var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
 
-                    var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_objHeight / 2), _transform.position.z + _posZ);
+                    var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_objHeight / 2) + _startHeight, _transform.position.z + _posZ);
 
                     var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
                     var _crowdMemberInfo = _obj.GetComponent<ICrowd>();
                     if (_crowdMemberInfo == null)
                     {
-                        Debug.LogError("Crowd prefab object doesnt contain ICrowd interface");
+                        Debug.LogError("Crowd prefab:" +_obj.name +" doesnt contain ICrowd interface");
                     }
                     else
                     {
