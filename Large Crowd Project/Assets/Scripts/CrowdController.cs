@@ -14,15 +14,15 @@ namespace CrowdAI
 
         private CrowdGroup[] _crowdGroups;
         [SerializeField]
-        CrowdFormation _crowdFormation;
+        public CrowdFormation _crowdFormation;
 
         float animationStagger = 0.25f;
 
         // crowd gen parameters
         [SerializeField]
-        private int _rows, _columns;
+        public int _rows, _columns;
         [SerializeField]
-        private float _minOffset, _maxOffset, _tiltAmount, _startHeight;
+        public float _minOffset, _maxOffset, _tiltAmount, _startHeight;
         [SerializeField]
         private GameObject _crowdObject;
         [SerializeField]
