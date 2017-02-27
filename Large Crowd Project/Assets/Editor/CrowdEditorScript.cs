@@ -11,7 +11,10 @@ public class CrowdEditorScript : Editor {
         minOffset_Prop,
         maxOffset_Prop,
         tiltAmount_Prop,
-        startHeight_Prop;
+        startHeight_Prop,
+        crowdObject_Prop,
+        groupNames_Prop,
+        crowdStates_Prop;
     
 
     void OnEnable()
@@ -23,6 +26,9 @@ public class CrowdEditorScript : Editor {
         maxOffset_Prop = serializedObject.FindProperty("_maxOffset");
         tiltAmount_Prop = serializedObject.FindProperty("_tiltAmount");
         startHeight_Prop = serializedObject.FindProperty("_startHeight");
+        crowdObject_Prop = serializedObject.FindProperty("_crowdObject");
+        groupNames_Prop = serializedObject.FindProperty("_groupNames");
+        crowdStates_Prop = serializedObject.FindProperty("_crowdStates");
     }
 
     public override void OnInspectorGUI()
@@ -33,31 +39,51 @@ public class CrowdEditorScript : Editor {
 
         CrowdAI.CrowdFormation cF = (CrowdAI.CrowdFormation)crowdFormation_Prop.enumValueIndex;
 
+        // Commented stuff is not yet implemented.
         switch (cF)
         {
             case CrowdAI.CrowdFormation.SQUARE:
-                EditorGUILayout.PropertyField(rows_Prop, new GUIContent("_rows"));
-                EditorGUILayout.PropertyField(columns_Prop, new GUIContent("_columns"));
-                EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("_minOffset"));
-                EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("_maxOffset"));
-                EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("_tiltAmount"));
-                EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("_startHeight"));
+                EditorGUILayout.ObjectField(crowdObject_Prop, new GUIContent("Crowd Object"));
+                EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Rows"));
+                EditorGUILayout.PropertyField(columns_Prop, new GUIContent("Columns"));
+                EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
+                EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("Maximum Offset"));
+                EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
+                EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
+                GUIArray(groupNames_Prop);
+                GUIArray(crowdStates_Prop);
                 break;
             case CrowdAI.CrowdFormation.CIRCLE:
-                EditorGUILayout.PropertyField(rows_Prop, new GUIContent("_rows"));
-                EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("_minOffset"));
-                EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("_maxOffset"));
-                EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("_startHeight"));
+                EditorGUILayout.ObjectField(crowdObject_Prop, new GUIContent("Crowd Object"));
+                EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Layers"));
+                //EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
+                //EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("Maximum Offset"));
+                EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
+                GUIArray(groupNames_Prop);
+                GUIArray(crowdStates_Prop);
                 break;
             case CrowdAI.CrowdFormation.RING:
-                EditorGUILayout.PropertyField(rows_Prop, new GUIContent("_rows"));
-                EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("_minOffset"));
-                EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("_maxOffset"));
-                EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("_startHeight"));
+                //EditorGUILayout.ObjectField(crowdObject_Prop, new GUIContent("Crowd Object"));
+                //EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Layers"));
+                //EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
+                //EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("Maximum Offset"));
+                //EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
+                //GUIArray(groupNames_Prop);
+                //GUIArray(crowdStates_Prop);
                 break;
         }
 
         serializedObject.ApplyModifiedProperties();
+    }
+
+    void GUIArray(SerializedProperty val)
+    {
+        EditorGUI.BeginChangeCheck();
+        EditorGUILayout.PropertyField(val, true);
+        if (EditorGUI.EndChangeCheck())
+        {
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 
 }

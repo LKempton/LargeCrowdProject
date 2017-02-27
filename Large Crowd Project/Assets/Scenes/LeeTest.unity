@@ -256,11 +256,10 @@ MonoBehaviour:
   _crowdStates:
   - Bob
   - Sway
-  _groupNames:
-  - Default
+  _groupNames: []
   _crowdFormation: 1
-  _rows: 100
-  _columns: 100
+  _rows: 10
+  _columns: 10
   _minOffset: 2
   _maxOffset: 2
   _tiltAmount: 0
