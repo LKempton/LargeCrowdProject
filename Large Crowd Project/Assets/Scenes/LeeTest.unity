@@ -253,16 +253,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f268956cd33f044a1b9fa7e34dbfc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _crowdStates: []
-  _groupNames: []
-  _crowdFormation: 0
-  _rows: 10
-  _columns: 1
+  _crowdStates:
+  - Bob
+  - Sway
+  _groupNames:
+  - Default
+  _crowdFormation: 1
+  _rows: 100
+  _columns: 100
   _minOffset: 2
   _maxOffset: 2
-  _tiltAmount: 1
+  _tiltAmount: 0
   _startHeight: 1
-  _crowdObject: {fileID: 1000011580907342, guid: 3d15ae3f8a133854e9576ade790b5f36,
+  _crowdObject: {fileID: 1054051684950950, guid: a028fc942c340154690e9ab783aba7ae,
     type: 2}
   _randomGroupDist: 1
 --- !u!1001 &1478398551
