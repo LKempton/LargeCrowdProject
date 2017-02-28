@@ -64,7 +64,13 @@ namespace CrowdAI
             _crowdMembers.Clear();
         }
 
-
+        public string GroupName
+        {
+            get
+            {
+                return _groupName;
+            }
+        }
     }
 
     
