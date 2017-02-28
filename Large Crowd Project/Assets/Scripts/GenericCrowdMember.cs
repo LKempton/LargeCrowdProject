@@ -24,12 +24,10 @@ namespace CrowdAI
 
         private void Start()
         {
-            Animator _anim = new Animator();
-          
-
             _animDict = new Dictionary<string, AnimationClip>();
 
-
+            
+            
             _rend = gameObject.GetComponent<Renderer>();
             _animator = GetComponent<Animation>();
 
