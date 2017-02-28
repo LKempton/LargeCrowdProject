@@ -24,7 +24,8 @@ namespace CrowdAI
 
         private void Start()
         {
-
+            Animator _anim = new Animator();
+          
 
             _animDict = new Dictionary<string, AnimationClip>();
 
@@ -74,13 +75,15 @@ namespace CrowdAI
 
             if (_isStateSet)
             {
+               
                 if (useRandDelay)
                 {
                     float _delay = Random.Range(_minStartDelay, _maxStartDelay);
-                    
+                    StartCoroutine(StartStateDelayed(_delay, _animState));
                 }
                 else
                 {
+                   
                     _animator.Stop();
                     _animator.clip = _animState;
                     _animator.Play();
@@ -99,6 +102,7 @@ namespace CrowdAI
 
             if (_isStateSet)
             {
+              
                 StartCoroutine(StartStateDelayed(delay, _animState));
                 currentState = state;
             }
@@ -109,7 +113,7 @@ namespace CrowdAI
         IEnumerator StartStateDelayed(float delay, AnimationClip state)
         {
             yield return new WaitForSeconds(delay);
-
+           
             _animator.Stop();
             _animator.clip = state;
             _animator.Play();
