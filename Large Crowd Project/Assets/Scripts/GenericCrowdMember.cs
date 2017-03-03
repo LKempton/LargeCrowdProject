@@ -10,7 +10,7 @@ namespace CrowdAI
         private Dictionary<string, AnimationClip> _animDict;
         private Renderer _rend;
         private Animation _animator;
-
+       
         [SerializeField]
         [Range(0, 1)]
         private float _minStartDelay = 0, _maxStartDelay = 0.4f;
@@ -81,7 +81,7 @@ namespace CrowdAI
                 }
                 else
                 {
-                   
+
                     _animator.Stop();
                     _animator.clip = _animState;
                     _animator.Play();
@@ -111,7 +111,7 @@ namespace CrowdAI
         IEnumerator StartStateDelayed(float delay, AnimationClip state)
         {
             yield return new WaitForSeconds(delay);
-           
+            
             _animator.Stop();
             _animator.clip = state;
             _animator.Play();

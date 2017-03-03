@@ -135,21 +135,23 @@ namespace CrowdAI
             return false;
         }
 
-    public void SetState(string state)
+    public void SetState(string state, bool useRandDelay)
         {
-            for (int i = 0; i < _crowdGroups.Length; i++)
-            {
-                _crowdGroups[i].SetState(state);
-            }
+           
+                for (int i = 0; i < _crowdGroups.Length; i++)
+                {
+                    _crowdGroups[i].SetState(state,useRandDelay);
+                }
+            
         }
 
-        public bool SetState(string state, string groupName)
+        public bool SetState(string state, string groupName, bool useRandDelay)
         {
             for (int i = 0; i < _groupNames.Length; i++)
             {
                 if (groupName == _groupNames[i])
                 {
-                    _crowdGroups[i].SetState(state);
+                    _crowdGroups[i].SetState(state,useRandDelay);
 
                     return true;
                 }

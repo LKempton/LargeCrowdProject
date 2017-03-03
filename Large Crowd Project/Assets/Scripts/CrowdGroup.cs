@@ -51,13 +51,15 @@ namespace CrowdAI
             
         }
 
-        public void SetState(string state)
+        public void SetState(string state, bool useRandDelay)
         {
             for (int i = 0; i < _crowdMembers.Count; i++)
             {
-                _crowdMembers[i].SetState(state, false);
+                _crowdMembers[i].SetState(state, useRandDelay);
             }
         }
+
+       
 
         public void ClearAll()
         {

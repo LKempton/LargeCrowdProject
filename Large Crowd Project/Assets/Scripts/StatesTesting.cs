@@ -28,7 +28,7 @@ namespace CrowdAI
                 if (_cState >= states.Length)
                     _cState = 0;
 
-                _crowdController.SetState(states[_cState]);
+                _crowdController.SetState(states[_cState],true);
                 print("Changed to : "+states[_cState]+" state");
             }
             else if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -37,7 +37,7 @@ namespace CrowdAI
                 if (_cState < 0)
                     _cState = states.Length - 1;
 
-                _crowdController.SetState(states[_cState]);
+                _crowdController.SetState(states[_cState],true);
                 print("Changed to : "+states[_cState]+" state");
 
             }
