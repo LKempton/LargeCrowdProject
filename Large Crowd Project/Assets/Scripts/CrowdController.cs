@@ -48,7 +48,7 @@ namespace CrowdAI
             {// creates as many crod groups as thier are names
                 _crowdGroups = new CrowdGroup[_groupNames.Length];
 
-                for (int i = 0; i < _crowdStates.Length; i++)
+                for (int i = 0; i < _groupNames.Length; i++)
                 {
                     // adds a new instance of CrowdGroup to an array and passes the name of the CrowdGroup
                     _crowdGroups[i] = new CrowdGroup(_groupNames[i]);
@@ -64,9 +64,6 @@ namespace CrowdAI
                 for (int i = 0; i < _crowdMembers.Length; i++)
                 {
                     int _nextCrowdGroup = Random.Range(0, _crowdGroups.Length);
-
-                   
-
                     _crowdGroups[_nextCrowdGroup].AddCrowdMember(_crowdMembers[i]);
                 }
 

@@ -13,7 +13,9 @@ namespace CrowdAI
         private Dictionary<string, string> _animDict; // links animation clip names to animation states
         private Renderer _rend;
         private Animation _animator;
-       
+
+        bool _isTransitioning = false;
+
         [SerializeField]
         [Range(0, 2.2f)] // range that delays the animation switch
         private float _minStartDelay = 0, _maxStartDelay = 0.4f;
@@ -24,7 +26,8 @@ namespace CrowdAI
         private string[] _animStateNames;
 
         //current animation state of the model
-        private string currentState;
+        private string _currentState;
+        private string _currentAnimName;
        
         private void Start()
         {
@@ -76,17 +79,23 @@ namespace CrowdAI
         /// <returns> The name of the animation state playing</returns>
         public string GetCurrentState()
         {
-            return currentState;
+            return _currentState;
         }
 
         /// <summary>
-        /// Attempts to find the animtation state then plays it if it exists
+        /// Attempts to find the animtation state then plays it if it exists 
+        /// and it is not in the middle of transisitioning between animations
         /// </summary>
         /// <param name="state"> The name of the state that will be looked for</param>
         /// <param name="useRandDelay">Whether the object should use a random delay</param>
         /// <returns>True if the state has been changed</returns>
         public bool SetState(string state, bool useRandDelay)
         {
+            if (_isTransitioning|| state == _currentState)
+            {
+                return false;
+            }
+
             string _animState;
 
             bool _isStateSet = _animDict.TryGetValue(state, out _animState);
@@ -104,7 +113,7 @@ namespace CrowdAI
 
                     StartCoroutine(StartNextAnimation(0, _animState));
                 }
-                currentState = state;
+                _currentState = state;
             }
 
             return _isStateSet;
@@ -112,12 +121,17 @@ namespace CrowdAI
 
         /// <summary>
         /// Attempts to find the animation state then plays it if it exists
+        /// and it is not in the middle of transisitioning between animations
         /// </summary>
         /// <param name="state">  The name of the state that will be looked for</param>
         /// <param name="delay"> Time in seconds before the animation starts playing</param>
         /// <returns>True if the state has been changed</returns>
         public bool SetState(string state, float delay)
         {
+            if (_isTransitioning || state == _currentState)
+            {
+                return false;
+            }
             string _animState;
 
             bool _isStateSet = _animDict.TryGetValue(state, out _animState);
@@ -126,7 +140,7 @@ namespace CrowdAI
             {
               
                 StartCoroutine(StartNextAnimation(delay, _animState));
-                currentState = state;
+                _currentState = state;
             }
 
             return _isStateSet;
@@ -136,38 +150,48 @@ namespace CrowdAI
         /// Transistions to next animation after a delay
         /// </summary>
         /// <param name="delay"> time in seconds before start transistion</param>
-        /// <param name="animName">assumed correct name of the animation clip to be played</param>
+        /// <param name="newAnimName">assumed correct name of the animation clip to be played</param>
         /// <returns></returns>
-        IEnumerator StartNextAnimation(float delay, string animName)
+        IEnumerator StartNextAnimation(float delay, string newAnimName)
         {
-           
+            _isTransitioning = true;
+            _animator.GetClip(newAnimName).wrapMode = WrapMode.Loop;
 
             if (delay > 0)
             {
                 yield return new WaitForSeconds(delay);
             }
 
-            if (_animator.clip == null)
+            if (!_animator.isPlaying)
             {
-                _animator.Play(animName);
+                
+                _animator.Play(newAnimName);
+                _currentAnimName = newAnimName;
+                _isTransitioning = false;
                 yield break;
             }
-
-            _animator.clip.wrapMode = WrapMode.Once;
-
-         
-            _animator.GetClip(animName).wrapMode = WrapMode.Loop;
-
-            _animator.Play();
-
-            do
+            else
             {
+                _animator.GetClip(_currentAnimName).wrapMode = WrapMode.Once;
+                _animator.Stop();
+
+             
                 yield return null;
+               
+
+                _animator.Play(_currentAnimName);
+
+                do
+                {
+                    
+                    yield return null;
+                }
+                while (_animator.isPlaying);
+
+                //_animator.Play(newAnimName);
+               // _currentAnimName = newAnimName;
+                _isTransitioning = false;
             }
-            while (_animator.isPlaying);
-
-            _animator.CrossFade(animName);
-
         }
 
         /// <summary>
