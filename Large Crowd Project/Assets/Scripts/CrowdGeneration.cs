@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 namespace CrowdAI
 {
+    /// <summary>
+    /// Class that generates crowd members in a formation
+    /// </summary>
     public class CrowdGeneration 
     {
 
@@ -18,6 +21,7 @@ namespace CrowdAI
 
         private GameObject _crowdObject;
         
+     
        public CrowdGeneration(int rows, int columns, float minOffset, float maxOffset, float tiltAmount, float startHeight, GameObject crowdObject)
         {
             

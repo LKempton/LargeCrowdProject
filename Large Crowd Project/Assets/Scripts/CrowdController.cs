@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace CrowdAI
 {
+    /// <summary>
+    /// Master controlling class 
+    /// </summary>
     public class CrowdController : MonoBehaviour
     {
 
@@ -31,27 +34,27 @@ namespace CrowdAI
         // Update is called once per frame
         void Awake()
         {
-
+            // creates a new instance of CrowdGeneration and passes in all the values (needs cleaning)
             var _generator = new CrowdGeneration(_rows,_columns,_minOffset,_maxOffset,_tiltAmount,_startHeight,_crowdObject);
 
        
-            
-            if (_groupNames.Length>0)
+             // If there are no groups then it will just create one
+            if (_groupNames.Length<1)
             {
                 _crowdGroups = new CrowdGroup[1];
                 _crowdGroups[0] = new CrowdGroup("default");
             }
             else
-            {
+            {// creates as many crod groups as thier are names
                 _crowdGroups = new CrowdGroup[_groupNames.Length];
 
                 for (int i = 0; i < _crowdStates.Length; i++)
                 {
+                    // adds a new instance of CrowdGroup to an array and passes the name of the CrowdGroup
                     _crowdGroups[i] = new CrowdGroup(_groupNames[i]);
-                    // can add optimisation by sorting and using binary search
                 }
             }
-
+            //All members of the crowd that are generated
             var _crowdMembers = _generator.GenerateCrowd(_crowdFormation, gameObject, _crowdGroups, _randomGroupDist);
 
             if (_randomGroupDist)
@@ -76,6 +79,12 @@ namespace CrowdAI
 
         }
 
+
+        /// <summary>
+        /// Adds crowd members to crowd groups in a linear fashion
+        /// </summary>
+        /// <param name="_crowdMembers">Array of crowd members to be added</param>
+        
         private void AddCrowdUniformly(ICrowd[] _crowdMembers)
         { // add crowd members to the groups in a uniform manner 
 
@@ -113,6 +122,10 @@ namespace CrowdAI
 
         }
 
+        /// <summary>
+        /// Gets all the States that any crowd member may have
+        /// </summary>
+        /// <returns>An array of strings that are the names of the states</returns>
         public string[] GetCrowdStates()
         {
             //copies array since they are passed by reference
@@ -125,6 +138,11 @@ namespace CrowdAI
             return _crowdStatesCopy;
         }
 
+        /// <summary>
+        /// Searches for a state
+        /// </summary>
+        /// <param name="stateName">The name of the state to be searched for</param>
+        /// <returns> true if the state exists</returns>
       public  bool StateExists(string stateName)
         {
             for (int i = 0; i < _crowdStates.Length; i++)
@@ -135,6 +153,11 @@ namespace CrowdAI
             return false;
         }
 
+        /// <summary>
+        /// Sets the animation state of all crowd members
+        /// </summary>
+        /// <param name="state"> The name of the animation state to be set</param>
+        /// <param name="useRandDelay">whether there is a random delay between a state transistion</param>
     public void SetState(string state, bool useRandDelay)
         {
            
@@ -145,6 +168,13 @@ namespace CrowdAI
             
         }
 
+        /// <summary>
+        /// Sets the animation state of a crowd group
+        /// </summary>
+        /// <param name="state">Name of the animation state to be set</param>
+        /// <param name="groupName">Name of the group who's animation state is changing</param>
+        /// <param name="useRandDelay">whether there is a random delay between a state transistion</param>
+        /// <returns> True if the state has been set sucessfully</returns>
         public bool SetState(string state, string groupName, bool useRandDelay)
         {
             for (int i = 0; i < _groupNames.Length; i++)
