@@ -275,8 +275,8 @@ MonoBehaviour:
   _groupNames:
   - Default
   _crowdFormation: 1
-  _rows: 40
-  _columns: 40
+  _rows: 100
+  _columns: 100
   _minOffset: 2
   _maxOffset: 2
   _tiltAmount: 0
