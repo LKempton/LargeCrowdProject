@@ -7,12 +7,12 @@ namespace CrowdAI
 
     public class GenericCrowdMember : MonoBehaviour, ICrowd
     {
-        private Dictionary<string, AnimationClip> _animDict;
+        private Dictionary<string, string> _animDict;
         private Renderer _rend;
         private Animation _animator;
        
         [SerializeField]
-        [Range(0, 1)]
+        [Range(0, 2.2f)]
         private float _minStartDelay = 0, _maxStartDelay = 0.4f;
 
         [SerializeField]
@@ -24,7 +24,7 @@ namespace CrowdAI
 
         private void Start()
         {
-            _animDict = new Dictionary<string, AnimationClip>();
+            _animDict = new Dictionary<string,string>();
 
             
             
@@ -43,17 +43,22 @@ namespace CrowdAI
             for (int i = 0; i < _animStateNames.Length; i++)
             {
                 if (_crowdController.StateExists(_animStateNames[i]))
-                    _animDict.Add(_animStateNames[i], _stateAnimClips[i]);
+                {
+                    if (_animator.GetClip(_stateAnimClips[i].name) == null)
+                    {
+                        _animator.AddClip(_stateAnimClips[i], _stateAnimClips[i].name);
+                    }
+
+                    _animDict.Add(_animStateNames[i], _stateAnimClips[i].name);
+                }
                 else
+                {
                     Debug.LogError("State: " + _animStateNames[i] + " Does not exist in CrowdController Class");
+                }
             }
-            _animator.playAutomatically = false;
             SetState(_animStateNames[0], true);
+            
         }
-
-
-
-
 
         public void ToggleRenderer()
         {
@@ -67,7 +72,7 @@ namespace CrowdAI
 
         public bool SetState(string state, bool useRandDelay)
         {
-            AnimationClip _animState = new AnimationClip();
+            string _animState;
 
             bool _isStateSet = _animDict.TryGetValue(state, out _animState);
 
@@ -77,14 +82,12 @@ namespace CrowdAI
                 if (useRandDelay)
                 {
                     float _delay = Random.Range(_minStartDelay, _maxStartDelay);
-                    StartCoroutine(StartStateDelayed(_delay, _animState));
+                    StartCoroutine(StartNextAnimation(_delay, _animState));
                 }
                 else
                 {
 
-                    _animator.Stop();
-                    _animator.clip = _animState;
-                    _animator.Play();
+                    StartCoroutine(StartNextAnimation(0, _animState));
                 }
                 currentState = state;
             }
@@ -94,27 +97,50 @@ namespace CrowdAI
 
         public bool SetState(string state, float delay)
         {
-            AnimationClip _animState = new AnimationClip();
+            string _animState;
 
             bool _isStateSet = _animDict.TryGetValue(state, out _animState);
 
             if (_isStateSet)
             {
               
-                StartCoroutine(StartStateDelayed(delay, _animState));
+                StartCoroutine(StartNextAnimation(delay, _animState));
                 currentState = state;
             }
 
             return _isStateSet;
         }
 
-        IEnumerator StartStateDelayed(float delay, AnimationClip state)
+        IEnumerator StartNextAnimation(float delay, string animName)
         {
-            yield return new WaitForSeconds(delay);
-            
-            _animator.Stop();
-            _animator.clip = state;
+           
+
+            if (delay > 0)
+            {
+                yield return new WaitForSeconds(delay);
+            }
+
+            if (_animator.clip == null)
+            {
+                _animator.Play(animName);
+                yield break;
+            }
+
+            _animator.clip.wrapMode = WrapMode.Once;
+
+         
+            _animator.GetClip(animName).wrapMode = WrapMode.Loop;
+
             _animator.Play();
+
+            do
+            {
+                yield return null;
+            }
+            while (_animator.isPlaying);
+
+            _animator.CrossFade(animName);
+
         }
         public void ToggleAnimation()
         {
@@ -127,6 +153,8 @@ namespace CrowdAI
                 _animator.Play();
             }
         }
+
+       
 
 
     }
