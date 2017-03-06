@@ -20,6 +20,9 @@ namespace CrowdAI
         [SerializeField]
         [Range(0, 2.2f)] // range that delays the animation switch
         private float _minStartDelay = 0, _maxStartDelay = 0.4f;
+
+        [SerializeField]
+        private float _transistionDelay = 0.4f;
         
         [SerializeField] // clips associated with the crowd member
         private AnimationClip[] _stateAnimClips;
@@ -190,6 +193,8 @@ namespace CrowdAI
                 {
                     yield return null;
                 }
+
+                yield return new WaitForSeconds(_transistionDelay);
 
                 _animator.Play(newAnimName);
                 _animator.wrapMode = WrapMode.Loop;
