@@ -12,6 +12,9 @@ namespace CrowdAI
         private string _groupName;
         private List<ICrowd> _crowdMembers;
 
+       
+        private GameObject[] _groupCrowdModels;
+
         /// <summary>
         /// Constructs a new instance of CrowdGroup
         /// </summary>
@@ -28,17 +31,13 @@ namespace CrowdAI
         /// Constructs a new instance of CrowdGroup
         /// </summary>
         /// <param name="groupName">The name associated with this crowd group</param>
-        /// <param name="crowdMemebers"> The GameObjects that are individual crowd members</param>
-        public CrowdGroup(string groupName, GameObject[] crowdMemebers)
+        /// <param name="models"> group of Models specially for this crowdGroup</param>
+        public CrowdGroup(string groupName, GameObject[] models)
         {
             _groupName = groupName;
 
             _crowdMembers = new List<ICrowd>();
-
-            for (int i = 0; i < crowdMemebers.Length; i++)
-            {
-                _crowdMembers.Add(crowdMemebers[i].GetComponent<ICrowd>());
-            }
+            _groupCrowdModels = models;
 
         }
 
@@ -100,6 +99,17 @@ namespace CrowdAI
             get
             {
                 return _groupName;
+            }
+        }
+
+        public GameObject[] GetCrowdModels
+        {
+            get
+            {
+                    return _groupCrowdModels;
+                
+                
+                
             }
         }
     }

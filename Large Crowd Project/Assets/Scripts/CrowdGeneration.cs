@@ -19,10 +19,10 @@ namespace CrowdAI
 
 
 
-        private GameObject _crowdObject;
+        private GameObject[] _crowdObjects;
         
      
-       public CrowdGeneration(int rows, int columns, float minOffset, float maxOffset, float tiltAmount, float startHeight, GameObject crowdObject)
+       public CrowdGeneration(int rows, int columns, float minOffset, float maxOffset, float tiltAmount, float startHeight, GameObject[] crowdObjects)
         {
             
             _rows = rows;
@@ -31,33 +31,48 @@ namespace CrowdAI
             _maxOffset = maxOffset;
             _tiltAmount = tiltAmount;
             _startHeight = startHeight;
-            _crowdObject = crowdObject;
+            _crowdObjects = crowdObjects;
 
-            var prefabRend = crowdObject.GetComponent<Renderer>();
-
-            // works with any renderer - may want to consider getting mutiple renderer components
-            //May want to consider getting mutiple rendering components and finding the largest value to allow users to have mutiple sprite objects for example.
-            
-
-            if (!prefabRend)
-            {
-                prefabRend = crowdObject.GetComponentInChildren<Renderer>();
-
-            }
-
-            if (prefabRend)
-            {
-                _objWidth = prefabRend.bounds.extents.x * crowdObject.transform.localScale.x;
-                _objHeight = prefabRend.bounds.extents.y * crowdObject.transform.localScale.y;
-            }
-            else
-            {
-                Debug.LogError("Could not find Renderer in the prefab object : " + crowdObject.name + ". You must attach a sprite or mesh renderer on the object or in a direct chlid of the object");
-            }
+          
             
         }
 
 
+
+        private Vector3[] GetObjectBounds(GameObject[] gOs)
+        {
+            var _objectBounds = new Vector3[gOs.Length];
+
+            for (int i = 0; i < gOs.Length; i++)
+            {
+                var prefabRend = gOs[i].GetComponent<Renderer>();
+
+                // works with any renderer - may want to consider getting mutiple renderer components
+                //May want to consider getting mutiple rendering components and finding the largest value to allow users to have mutiple sprite objects for example.
+
+
+                if (!prefabRend)
+                {
+                    prefabRend = gOs[i].GetComponentInChildren<Renderer>();
+
+                }
+
+                if (prefabRend)
+                {
+                    _objectBounds[i].x = prefabRend.bounds.extents.x * gOs[i].transform.localScale.x;
+                    _objectBounds[i].y = prefabRend.bounds.extents.y * gOs[i].transform.localScale.y;
+                }
+                else
+                {
+                    Debug.LogError("Could not find Renderer in the prefab object : " + gOs[i].name + ". You must attach a sprite or mesh renderer on the object or in a direct chlid of the object");
+                }
+            }
+
+            return _objectBounds;
+        }
+
+
+   
             /// <summary>
             /// Generates a crowd in a given formation
             /// </summary>
@@ -65,77 +80,174 @@ namespace CrowdAI
             /// <param name="parent">the object to which all objects are parented to </param>
             /// <param name="groups"> the crowd groups that the crowd members are part of</param>
             /// <param name="randomGroupDist"> if true the different groups are randomly distributed in the crowd, otherwise it is uniform</param>
-       public ICrowd[] GenerateCrowd(CrowdFormation formation, GameObject parent,CrowdGroup[] groups, bool randomGroupDist)
+       public void GenerateCrowd(CrowdFormation formation, GameObject parent, ref CrowdGroup[] groups, bool randomGroupDist)
         {
             switch (formation)
             {
                 case  CrowdFormation.CIRCLE:
-                  return  GenerateCrowdCircle(parent,groups,randomGroupDist);
+                   GenerateCrowdCircle(parent,ref groups,randomGroupDist);
+                    break;
                     
                 case CrowdFormation.RING:
-                   return GenerateCrowdRing(parent, groups, randomGroupDist);
+                   GenerateCrowdRing(parent, ref groups, randomGroupDist);
+                    break;
 
                 default:
-                   return GenerateCrowdSquare(parent, groups, randomGroupDist);
+                    GenerateCrowdSquare(parent, ref groups, randomGroupDist);
+                    break;
 
 
             }
         }
 
-        private ICrowd[] GenerateCrowdCircle(GameObject gameObject, CrowdGroup[] groups, bool randomGroupDist)
+        private void GenerateCrowdCircle(GameObject gameObject, ref CrowdGroup[] groups, bool randomGroupDist)
         {
             // crowd groups are passed because they are to be able to have their own models, still implementing.
-            var _crowdOutMembers = new List<ICrowd>();
+
+           
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
-
             var _transform = gameObject.transform;
             int _objCount = 0;
+
+            bool[] hasModels = new bool[groups.Length];
+            for (int i = 0; i < hasModels.Length; i++)
+            {
+                hasModels[i] = groups[i].GetCrowdModels != null;
+            }
 
             //var _objColliderHeight = _crowdObject.GetComponent<MeshRenderer>().bounds.size.y * _transform.localScale.y;
             //var _objColliderWidth = _crowdObject.GetComponent<MeshRenderer>().bounds.size.x * _transform.localScale.x;
 
-            for (int i = 0; i < _rows; i++)
+            if (randomGroupDist)
             {
-                //radius is number of layers multiplied by rough distance between objs
-                var _radius = (i + 1) * (_objWidth * 2);
-                var _circumference = 2 * Mathf.PI * _radius;
-
-                //number of objs around the circumference of the layer
-                var _objPerLayer = _circumference / (_objWidth * 2);
-
-                for (int j = 0; j < _objPerLayer - (_objWidth / 2); j++)
+                for (int i = 0; i < _rows; i++)
                 {
-                    var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
-                    var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
+                    //radius is number of layers multiplied by rough distance between objs
+                    var _radius = (i + 1) * (_objWidth * 2);
+                    var _circumference = 2 * Mathf.PI * _radius;
 
-                    var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_objHeight / 2) + _startHeight, _transform.position.z + _posZ);
+                    //number of objs around the circumference of the layer
+                    var _objPerLayer = _circumference / (_objWidth * 2);
 
-                    var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
-
-                    var _crowdMemberInfo = _obj.GetComponent<ICrowd>();
-                    if (_crowdMemberInfo == null)
+                    for (int j = 0; j < _objPerLayer - (_objWidth / 2); j++)
                     {
-                        Debug.LogError("Crowd prefab:" +_obj.name +" doesnt contain ICrowd interface");
-                    }
-                    else
-                    {
-                        _crowdOutMembers.Add(_crowdMemberInfo);
+                        var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
+                        var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
+
+                        var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_objHeight / 2) + _startHeight, _transform.position.z + _posZ);
+
+                        int _nextGroupIndex =Random.Range(0, groups.Length - 1);
+
+
+                        // not a var because it has to be defined in the if statement but exist outside of it
+                        GameObject _nextPrefab;
+
+                        int _modelIndex;
+
+                        if (hasModels[_nextGroupIndex])
+                        {
+                             _modelIndex = Random.Range(0, groups[_nextGroupIndex].GetCrowdModels.Length - 1);
+
+                            _nextPrefab = groups[_nextGroupIndex].GetCrowdModels[_modelIndex];
+
+                        }
+                        else
+                        {
+                            _modelIndex = Random.Range(0, _crowdObjects.Length - 1);
+                            _nextPrefab = _crowdObjects[_modelIndex];
+                        }
+
+                        var _newCrowdInstance = GameObject.Instantiate(_nextPrefab, _objPos, Quaternion.identity, _transform);
+
+                        groups[_nextGroupIndex].AddCrowdMember(_newCrowdInstance);
+
+                        _objCount++;
                     }
 
-                    _objCount++;
+                }
+
+            }
+            else
+            {
+               
+                for (int i = 0; i < _rows; i++)
+                {
+                    //radius is number of layers multiplied by rough distance between objs
+                    var _radius = (i + 1) * (_objWidth * 2);
+                    var _circumference = 2 * Mathf.PI * _radius;
+
+                    //number of objs around the circumference of the layer
+                    var _objPerLayer = _circumference / (_objWidth * 2);
+
+                    for (int j = 0; j < _objPerLayer - (_objWidth / 2); j++)
+                    {
+                        var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
+                        var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
+
+                        var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_objHeight / 2) + _startHeight, _transform.position.z + _posZ);
+
+
+
+
+                        var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
+                        var _crowdMemberInfo = _obj.GetComponent<ICrowd>();
+
+
+                        _objCount++;
+                    }
+
                 }
 
             }
 
-            return _crowdOutMembers.ToArray();
+
+
+
         }
 
-       private ICrowd[] GenerateCrowdSquare(GameObject gameObject, CrowdGroup[] groups, bool randomGroupDist)
+        private void AddCrowdUniformly(ICrowd[] _crowdMembers)
+        { // add crowd members to the groups in a uniform manner 
+            /*
+            float _remainder = _crowdMembers.Length / _crowdGroups.Length;
+            int _groupDiv = (int)_remainder;
+            _remainder -= _groupDiv;
+            float _cRemainder = 0;
+
+
+            int _currentCrowdMember = 0;
+
+            for (int i = 0; i < _crowdGroups.Length; i++)
+            {
+                for (int j = 0; j < _groupDiv; j++)
+                {
+                    _crowdGroups[i].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
+                    _currentCrowdMember++;
+                    _cRemainder += _remainder;
+
+                    if (_cRemainder >= 1)
+                    {// helps keep each group even
+                        _cRemainder -= 1;
+                        _crowdGroups[i].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
+                        _currentCrowdMember++;
+                    }
+                }
+            }
+
+
+            while (_currentCrowdMember < _crowdMembers.Length)
+            {//adds any remaining crowd members to the last group abritrarily
+                _crowdGroups[_crowdGroups.Length - 1].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
+                _currentCrowdMember++;
+            }
+            */
+        }
+
+        private void GenerateCrowdSquare(GameObject gameObject, ref CrowdGroup[] groups, bool randomGroupDist)
         {
             
 
-            var _crowdOutMembers = new List<ICrowd>();
+          
 
             // Diagnostic tool to test how long a method takes to run.
             var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -160,14 +272,7 @@ namespace CrowdAI
                     var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
                     var _crowdMemberInfo = _obj.GetComponent<ICrowd>();
-                    if (_crowdMemberInfo == null)
-                    {
-                        Debug.LogError("Crowd prefab object doesnt contain ICrowd interface");
-                    }
-                    else
-                    {
-                        _crowdOutMembers.Add(_crowdMemberInfo);
-                    }
+                  
 
                     _objCount++;
                 }
@@ -183,11 +288,11 @@ namespace CrowdAI
             var _elapsedTime = watch.ElapsedMilliseconds;
 
             Debug.Log(System.String.Format("Generated {0} objects in {1} milliseconds.", _objCount, _elapsedTime));
-            return _crowdOutMembers.ToArray();
+           ;
 
         }
 
-        private ICrowd[] GenerateCrowdRing(GameObject gameObject, CrowdGroup[]groups, bool randomGroupDist)
+        private void GenerateCrowdRing(GameObject gameObject, ref CrowdGroup[]groups, bool randomGroupDist)
         {
             throw new System.NotImplementedException();
         }

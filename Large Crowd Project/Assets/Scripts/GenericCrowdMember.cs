@@ -185,13 +185,14 @@ namespace CrowdAI
             }
             else
             {
-
+               
                 _animator.wrapMode = WrapMode.Once;
 
 
                 while (_animator.isPlaying)
                 {
-                    yield return null;
+                    // done so that it isn't checking too frequently
+                    yield return new WaitForSeconds(0.2f);
                 }
 
                 yield return new WaitForSeconds(_transistionDelay);
