@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 namespace CrowdAI
 {
     public interface ICrowd
@@ -10,7 +12,8 @@ namespace CrowdAI
       
         void ToggleAnimation();
 
-        
+        GameObject Member { get; }
+       
 
         
       

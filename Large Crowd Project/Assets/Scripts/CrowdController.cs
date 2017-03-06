@@ -186,6 +186,15 @@ namespace CrowdAI
             }
             return false;
         }
+
+
+        public void ToggleAnimations()
+        {
+            for (int i = 0; i < _crowdGroups.Length; i++)
+            {
+                _crowdGroups[i].ToggleAnimations();
+            }
+        }
      
 
 

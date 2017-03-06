@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,10 +26,20 @@ namespace CrowdAI
         [SerializeField] // corresponding names and states
         private string[] _animStateNames;
 
+
+
         //current animation state of the model
         private string _currentState;
         private string _currentAnimName;
-       
+
+        public GameObject Member
+        {
+            get
+            {
+                return gameObject;
+            }
+        }
+
         private void Start()
         {
             _animDict = new Dictionary<string,string>();
@@ -71,11 +82,8 @@ namespace CrowdAI
             
         }
 
-        public void ToggleRenderer()
-        {
-            _rend.enabled = !_rend.enabled;
-        }
-
+        
+       
         /// <returns> The name of the animation state playing</returns>
         public string GetCurrentState()
         {
@@ -93,6 +101,7 @@ namespace CrowdAI
         {
             if (_isTransitioning|| state == _currentState)
             {
+               
                 return false;
             }
 
@@ -105,7 +114,7 @@ namespace CrowdAI
                
                 if (useRandDelay)
                 {
-                    float _delay = Random.Range(_minStartDelay, _maxStartDelay);
+                    float _delay = UnityEngine.Random.Range(_minStartDelay, _maxStartDelay);
                     StartCoroutine(StartNextAnimation(_delay, _animState));
                 }
                 else
@@ -130,6 +139,7 @@ namespace CrowdAI
         {
             if (_isTransitioning || state == _currentState)
             {
+                
                 return false;
             }
             string _animState;
@@ -155,8 +165,9 @@ namespace CrowdAI
         IEnumerator StartNextAnimation(float delay, string newAnimName)
         {
             _isTransitioning = true;
-            _animator.GetClip(newAnimName).wrapMode = WrapMode.Loop;
 
+           
+            
             if (delay > 0)
             {
                 yield return new WaitForSeconds(delay);
@@ -164,7 +175,6 @@ namespace CrowdAI
 
             if (!_animator.isPlaying)
             {
-                
                 _animator.Play(newAnimName);
                 _currentAnimName = newAnimName;
                 _isTransitioning = false;
@@ -172,24 +182,21 @@ namespace CrowdAI
             }
             else
             {
-                _animator.GetClip(_currentAnimName).wrapMode = WrapMode.Once;
-                _animator.Stop();
 
-             
-                yield return null;
-               
+                _animator.wrapMode = WrapMode.Once;
 
-                _animator.Play(_currentAnimName);
 
-                do
+                while (_animator.isPlaying)
                 {
-                    
                     yield return null;
                 }
-                while (_animator.isPlaying);
 
-                //_animator.Play(newAnimName);
-               // _currentAnimName = newAnimName;
+                _animator.Play(newAnimName);
+                _animator.wrapMode = WrapMode.Loop;
+               
+
+                
+                _currentAnimName = newAnimName;
                 _isTransitioning = false;
             }
         }
@@ -201,7 +208,8 @@ namespace CrowdAI
         {
             if (_animator.isPlaying)
             {
-                _animator.Stop();
+                _animator.GetClip(_currentAnimName).wrapMode = WrapMode.Once;
+                _animator.CrossFadeQueued(_currentAnimName);
             }
             else
             {
@@ -209,8 +217,41 @@ namespace CrowdAI
             }
         }
 
-       
+       void OnDisable()
+        {
+            StopAllCoroutines();
+        }
 
+        void OnEnable()
+        {
+            if (_isTransitioning)
+            {
+                
+                string _animName;
+                _animDict.TryGetValue(_currentState,out _animName);
+
+                if (_animName != null)
+                {
+
+                    float _delay = UnityEngine.Random.Range(_minStartDelay, _maxStartDelay);
+
+                    StartCoroutine(StartNextAnimation(_delay, _animName));
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Returns true if the processing for changing an animation state is still active
+        /// During this process, changing states is disabled
+        /// </summary>
+        public bool IsTransistioning
+        {
+            get
+            {
+                return _isTransitioning;
+            }
+        }
 
     }
 

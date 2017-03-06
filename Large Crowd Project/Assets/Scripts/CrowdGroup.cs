@@ -84,6 +84,14 @@ namespace CrowdAI
             _crowdMembers.Clear();
         }
 
+        public void ToggleAnimations()
+        {
+            for (int i = 0; i < _crowdMembers.Count; i++)
+            {
+                _crowdMembers[i].ToggleAnimation();
+            }
+        }
+
         /// <summary>
         /// The name of the group
         /// </summary>

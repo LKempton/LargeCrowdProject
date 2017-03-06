@@ -45,6 +45,10 @@ namespace CrowdAI
                 print("Changed to : "+states[_cState]+" state");
 
             }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                _crowdController.ToggleAnimations();
+            }
         }
     }
 }
