@@ -6,25 +6,25 @@ namespace CrowdAI
     /// <summary>
     /// Class that generates crowd members in a formation
     /// </summary>
-    public class CrowdGeneration 
+    public class CrowdGeneration
     {
 
-       
+
         private int _rows, _columns;
 
-        
+
         private float _minOffset, _maxOffset, _tiltAmount, _startHeight;
 
-        float _objWidth = 0, _objHeight = 0;
+        float _spacing = 0, _objHeight = 0;
 
-
+        private bool _is3D = true;
 
         private GameObject[] _crowdObjects;
-        
-     
-       public CrowdGeneration(int rows, int columns, float minOffset, float maxOffset, float tiltAmount, float startHeight, GameObject[] crowdObjects)
+
+
+        public CrowdGeneration(int rows, int columns, float minOffset, float maxOffset, float tiltAmount, float startHeight, GameObject[] crowdObjects)
         {
-            
+
             _rows = rows;
             _columns = columns;
             _minOffset = minOffset;
@@ -33,63 +33,119 @@ namespace CrowdAI
             _startHeight = startHeight;
             _crowdObjects = crowdObjects;
 
-          
-            
+
+
+        }
+
+        public CrowdGeneration(int rows, int columns, float minOffset, float maxOffset, float tiltAmount, float startHeight, GameObject[] crowdObjects, bool is3D)
+        {
+
+            _rows = rows;
+            _columns = columns;
+            _minOffset = minOffset;
+            _maxOffset = maxOffset;
+            _tiltAmount = tiltAmount;
+            _startHeight = startHeight;
+            _crowdObjects = crowdObjects;
+
+
+            _is3D = is3D;
         }
 
 
 
-        private Vector3[] GetObjectBounds(GameObject[] gOs)
+        private Vector3 GetObjectBounds(GameObject gO)
         {
-            var _objectBounds = new Vector3[gOs.Length];
+            var _outBounds = new Vector3();
 
-            for (int i = 0; i < gOs.Length; i++)
+            if (_is3D)
             {
-                var prefabRend = gOs[i].GetComponent<Renderer>();
+                var _rend = gO.GetComponents<MeshRenderer>();
 
-                // works with any renderer - may want to consider getting mutiple renderer components
-                //May want to consider getting mutiple rendering components and finding the largest value to allow users to have mutiple sprite objects for example.
-
-
-                if (!prefabRend)
+                if (_rend == null)
                 {
-                    prefabRend = gOs[i].GetComponentInChildren<Renderer>();
-
+                    _rend = gO.GetComponentsInChildren<MeshRenderer>();
                 }
 
-                if (prefabRend)
+                for (int i = 0; i < _rend.Length; i++)
                 {
-                    _objectBounds[i].x = prefabRend.bounds.extents.x * gOs[i].transform.localScale.x;
-                    _objectBounds[i].y = prefabRend.bounds.extents.y * gOs[i].transform.localScale.y;
+                    var _newBounds = _rend[i].bounds.extents;
+
+                    if (_outBounds.x < _newBounds.x)
+                    {
+                        _outBounds.x = _newBounds.x;
+                    }
+
+                    if (_outBounds.y < _newBounds.y)
+                    {
+                        _outBounds.y = _newBounds.y;
+                    }
+
+                    if (_outBounds.z < _newBounds.z)
+                    {
+                        _outBounds.z = _newBounds.z;
+                    }
                 }
-                else
+            }
+            else
+            {
+                var _spriteRend = gO.GetComponents<SpriteRenderer>();
+
+                if (_spriteRend == null)
                 {
-                    Debug.LogError("Could not find Renderer in the prefab object : " + gOs[i].name + ". You must attach a sprite or mesh renderer on the object or in a direct chlid of the object");
+                    _spriteRend = gO.GetComponentsInChildren<SpriteRenderer>();
+                }
+
+                for (int i = 0; i < _spriteRend.Length; i++)
+                {
+                    var _newBounds = _spriteRend[i].bounds.extents;
+
+                    if (_outBounds.x < _newBounds.x)
+                    {
+                        _outBounds.x = _newBounds.x;
+                    }
+
+                    if (_outBounds.y < _newBounds.y)
+                    {
+                        _outBounds.y = _newBounds.y;
+                    }
+
+                    if (_outBounds.z < _newBounds.z)
+                    {
+                        _outBounds.z = _newBounds.z;
+                    }
+
+
                 }
             }
 
-            return _objectBounds;
+            _outBounds.x *= gO.transform.localScale.x * 2;
+            _outBounds.y *= gO.transform.localScale.y * 2;
+            _outBounds.z *= gO.transform.localScale.z * 2;
+
+            return _outBounds;
+
         }
 
 
-   
-            /// <summary>
-            /// Generates a crowd in a given formation
-            /// </summary>
-            /// <param name="formation"> The formation of the crowd desired</param>
-            /// <param name="parent">the object to which all objects are parented to </param>
-            /// <param name="groups"> the crowd groups that the crowd members are part of</param>
-            /// <param name="randomGroupDist"> if true the different groups are randomly distributed in the crowd, otherwise it is uniform</param>
-       public void GenerateCrowd(CrowdFormation formation, GameObject parent, ref CrowdGroup[] groups, bool randomGroupDist)
+
+        /// <summary>
+        /// Generates a crowd in a given formation
+        /// </summary>
+        /// <param name="formation"> The formation of the crowd desired</param>
+        /// <param name="parent">the object to which all objects are parented to </param>
+        /// <param name="groups"> the crowd groups that the crowd members are part of</param>
+        /// <param name="randomGroupDist"> if true the different groups are randomly distributed in the crowd, otherwise it is uniform</param>
+        public void GenerateCrowd(CrowdFormation formation, GameObject parent, ref CrowdGroup[] groups, bool randomGroupDist)
         {
             switch (formation)
             {
-                case  CrowdFormation.CIRCLE:
-                   GenerateCrowdCircle(parent,ref groups,randomGroupDist);
+                case CrowdFormation.CIRCLE:
+                    GenerateCrowdCircle(parent, ref groups, randomGroupDist);
                     break;
-                    
+
                 case CrowdFormation.RING:
-                   GenerateCrowdRing(parent, ref groups, randomGroupDist);
+                    GenerateCrowdRing(parent, ref groups, randomGroupDist);
                     break;
 
                 default:
@@ -104,7 +160,7 @@ namespace CrowdAI
         {
             // crowd groups are passed because they are to be able to have their own models, still implementing.
 
-           
+
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
             var _transform = gameObject.transform;
@@ -116,28 +172,30 @@ namespace CrowdAI
                 hasModels[i] = groups[i].GetCrowdModels != null;
             }
 
-            //var _objColliderHeight = _crowdObject.GetComponent<MeshRenderer>().bounds.size.y * _transform.localScale.y;
-            //var _objColliderWidth = _crowdObject.GetComponent<MeshRenderer>().bounds.size.x * _transform.localScale.x;
 
+            var _bounds = GetObjectBounds(_crowdObjects[0]);
+            
             if (randomGroupDist)
             {
                 for (int i = 0; i < _rows; i++)
                 {
                     //radius is number of layers multiplied by rough distance between objs
-                    var _radius = (i + 1) * (_objWidth * 2);
+                    var _radius = (i + 1) * ((_bounds.z + _spacing) );
                     var _circumference = 2 * Mathf.PI * _radius;
 
                     //number of objs around the circumference of the layer
-                    var _objPerLayer = _circumference / (_objWidth * 2);
+                    var _objPerLayer = _circumference / (_bounds.x + _spacing);
 
-                    for (int j = 0; j < _objPerLayer - (_objWidth / 2); j++)
+
+
+                    for (int j = 0; j < _objPerLayer - (_spacing / 2); j++)
                     {
                         var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
                         var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
 
-                        var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_objHeight / 2) + _startHeight, _transform.position.z + _posZ);
+                        var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_bounds.y / 2) + _startHeight, _transform.position.z + _posZ);
 
-                        int _nextGroupIndex =Random.Range(0, groups.Length - 1);
+                        int _nextGroupIndex = Random.Range(0, groups.Length - 1);
 
 
                         // not a var because it has to be defined in the if statement but exist outside of it
@@ -147,7 +205,7 @@ namespace CrowdAI
 
                         if (hasModels[_nextGroupIndex])
                         {
-                             _modelIndex = Random.Range(0, groups[_nextGroupIndex].GetCrowdModels.Length - 1);
+                            _modelIndex = Random.Range(0, groups[_nextGroupIndex].GetCrowdModels.Length - 1);
 
                             _nextPrefab = groups[_nextGroupIndex].GetCrowdModels[_modelIndex];
 
@@ -170,17 +228,17 @@ namespace CrowdAI
             }
             else
             {
-               
+
                 for (int i = 0; i < _rows; i++)
                 {
                     //radius is number of layers multiplied by rough distance between objs
-                    var _radius = (i + 1) * (_objWidth * 2);
+                    var _radius = (i + 1) * (_spacing * 2);
                     var _circumference = 2 * Mathf.PI * _radius;
 
                     //number of objs around the circumference of the layer
-                    var _objPerLayer = _circumference / (_objWidth * 2);
+                    var _objPerLayer = _circumference / (_spacing * 2);
 
-                    for (int j = 0; j < _objPerLayer - (_objWidth / 2); j++)
+                    for (int j = 0; j < _objPerLayer - (_spacing / 2); j++)
                     {
                         var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
                         var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
@@ -245,9 +303,9 @@ namespace CrowdAI
 
         private void GenerateCrowdSquare(GameObject gameObject, ref CrowdGroup[] groups, bool randomGroupDist)
         {
-            
 
-          
+
+
 
             // Diagnostic tool to test how long a method takes to run.
             var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -272,7 +330,7 @@ namespace CrowdAI
                     var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
 
                     var _crowdMemberInfo = _obj.GetComponent<ICrowd>();
-                  
+
 
                     _objCount++;
                 }
@@ -288,16 +346,16 @@ namespace CrowdAI
             var _elapsedTime = watch.ElapsedMilliseconds;
 
             Debug.Log(System.String.Format("Generated {0} objects in {1} milliseconds.", _objCount, _elapsedTime));
-           ;
+            ;
 
         }
 
-        private void GenerateCrowdRing(GameObject gameObject, ref CrowdGroup[]groups, bool randomGroupDist)
+        private void GenerateCrowdRing(GameObject gameObject, ref CrowdGroup[] groups, bool randomGroupDist)
         {
             throw new System.NotImplementedException();
         }
 
     }
 
-    
+
 }
