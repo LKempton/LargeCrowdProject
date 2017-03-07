@@ -228,34 +228,62 @@ namespace CrowdAI
             }
             else
             {
+                int _totalModels = _rows *(int)(6*(_bounds.z + _spacing)/(_bounds.x+_spacing));
+                float _groupDivRemainder = _totalModels / groups.Length;
+                int _objectsPerGroup = (int)_groupDivRemainder;
+                _groupDivRemainder -= _objectsPerGroup;
+
+                int _nextGroupIndex = 0;
+                float cRemainder = 0;
 
                 for (int i = 0; i < _rows; i++)
                 {
                     //radius is number of layers multiplied by rough distance between objs
-                    var _radius = (i + 1) * (_spacing * 2);
+                    var _radius = (i + 1) * ((_bounds.z + _spacing));
                     var _circumference = 2 * Mathf.PI * _radius;
 
                     //number of objs around the circumference of the layer
-                    var _objPerLayer = _circumference / (_spacing * 2);
+                    var _objPerLayer = _circumference / (_bounds.x + _spacing);
+
+
 
                     for (int j = 0; j < _objPerLayer - (_spacing / 2); j++)
                     {
                         var _posX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
                         var _posZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _objPerLayer)));
 
-                        var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_objHeight / 2) + _startHeight, _transform.position.z + _posZ);
+                        var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_bounds.y / 2) + _startHeight, _transform.position.z + _posZ);
+
+                        
 
 
+                        // not a var because it has to be defined in the if statement but exist outside of it
+                        GameObject _nextPrefab;
 
+                        int _modelIndex;
 
-                        var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
-                        var _crowdMemberInfo = _obj.GetComponent<ICrowd>();
+                        if (hasModels[_nextGroupIndex])
+                        {
+                            _modelIndex = Random.Range(0, groups[_nextGroupIndex].GetCrowdModels.Length - 1);
 
+                            _nextPrefab = groups[_nextGroupIndex].GetCrowdModels[_modelIndex];
+
+                        }
+                        else
+                        {
+                            _modelIndex = Random.Range(0, _crowdObjects.Length - 1);
+                            _nextPrefab = _crowdObjects[_modelIndex];
+                        }
+
+                        var _newCrowdInstance = GameObject.Instantiate(_nextPrefab, _objPos, Quaternion.identity, _transform);
+
+                        groups[_nextGroupIndex].AddCrowdMember(_newCrowdInstance);
 
                         _objCount++;
                     }
 
                 }
+
 
             }
 
