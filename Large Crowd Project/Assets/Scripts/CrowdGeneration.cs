@@ -230,12 +230,21 @@ namespace CrowdAI
             else
             {
                 // the total number of models that will be generated below (it's correct)
-                int _totalModels = (int)(_rows * (((((_bounds.z + _spacing))*2*Mathf.PI)/(_bounds.x+_spacing) - _spacing/2)));
-               
+
+                float _maxRadius = _rows * (_bounds.z + _spacing);
+
+                float _maxCircum = 2 * Mathf.PI * _maxRadius;
+                float _maxObjLayer = _maxCircum / (_bounds.x + _spacing);
+                
+                // NEEDS THE TOTAL NUMBER OF MODELS THAT WILL BE CREATED TO FUNCTION this is when layers =50 & spacing  = 0
+                int _totalModels = 8036;
+
                 int _nextGroupIndex = 0;
               
                 int _objCount = 0;
                 int _membersPGroup = _totalModels / groups.Length;
+
+                Debug.Log("Total Models: " + _totalModels);
 
                 for (int i = 0; i < _rows; i++)
                 {
