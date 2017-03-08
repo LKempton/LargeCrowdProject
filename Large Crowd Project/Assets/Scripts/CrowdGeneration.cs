@@ -212,7 +212,8 @@ namespace CrowdAI
                         }
                         else
                         {
-                            _modelIndex = Random.Range(0, _crowdObjects.Length - 1);
+                           
+                            _modelIndex = Random.Range(0, _crowdObjects.Length );
                             _nextPrefab = _crowdObjects[_modelIndex];
                         }
 

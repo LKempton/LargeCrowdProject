@@ -14,6 +14,7 @@ public class CrowdEditorScript : Editor {
         startHeight_Prop,
         crowdObject_Prop,
         groupNames_Prop,
+        randomGroupDistribution_Prop,
         crowdStates_Prop;
     
 
@@ -29,6 +30,7 @@ public class CrowdEditorScript : Editor {
         crowdObject_Prop = serializedObject.FindProperty("_crowdObject");
         groupNames_Prop = serializedObject.FindProperty("_groupNames");
         crowdStates_Prop = serializedObject.FindProperty("_crowdStates");
+        randomGroupDistribution_Prop = serializedObject.FindProperty("_randomGroupDist");
     }
 
     public override void OnInspectorGUI()
@@ -44,6 +46,7 @@ public class CrowdEditorScript : Editor {
         {
             case CrowdAI.CrowdFormation.SQUARE:
                 GUIArray(crowdObject_Prop);
+                EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
                 EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Rows"));
                 EditorGUILayout.PropertyField(columns_Prop, new GUIContent("Columns"));
                 EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
@@ -56,6 +59,7 @@ public class CrowdEditorScript : Editor {
             case CrowdAI.CrowdFormation.CIRCLE:
                 GUIArray(crowdObject_Prop);
                 EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Layers"));
+                EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
                 //EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
                 //EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("Maximum Offset"));
                 EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
@@ -65,6 +69,7 @@ public class CrowdEditorScript : Editor {
             case CrowdAI.CrowdFormation.RING:
                 //EditorGUILayout.ObjectField(crowdObject_Prop, new GUIContent("Crowd Object"));
                 //EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Layers"));
+                //EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
                 //EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
                 //EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("Maximum Offset"));
                 //EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
