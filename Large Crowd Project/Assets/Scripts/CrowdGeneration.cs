@@ -62,7 +62,7 @@ namespace CrowdAI
             {
                 var _rend = gO.GetComponents<MeshRenderer>();
 
-                if (_rend == null)
+                if (_rend.Length<1)
                 {
                     _rend = gO.GetComponentsInChildren<MeshRenderer>();
                 }
@@ -141,6 +141,7 @@ namespace CrowdAI
             switch (formation)
             {
                 case CrowdFormation.CIRCLE:
+                   
                     GenerateCrowdCircle(parent, ref groups, randomGroupDist);
                     break;
 
@@ -161,10 +162,9 @@ namespace CrowdAI
             // crowd groups are passed because they are to be able to have their own models, still implementing.
 
 
-
             var watch = System.Diagnostics.Stopwatch.StartNew();
             var _transform = gameObject.transform;
-            int _objCount = 0;
+           
 
             bool[] hasModels = new bool[groups.Length];
             for (int i = 0; i < hasModels.Length; i++)
@@ -197,7 +197,7 @@ namespace CrowdAI
 
                         int _nextGroupIndex = Random.Range(0, groups.Length - 1);
 
-
+                       
                         // not a var because it has to be defined in the if statement but exist outside of it
                         GameObject _nextPrefab;
 
@@ -220,7 +220,7 @@ namespace CrowdAI
 
                         groups[_nextGroupIndex].AddCrowdMember(_newCrowdInstance);
 
-                        _objCount++;
+                       
                     }
 
                 }
@@ -228,13 +228,13 @@ namespace CrowdAI
             }
             else
             {
+                // the total number of models that will be generated below
                 int _totalModels = _rows *(int)(6*(_bounds.z + _spacing)/(_bounds.x+_spacing));
-                float _groupDivRemainder = _totalModels / groups.Length;
-                int _objectsPerGroup = (int)_groupDivRemainder;
-                _groupDivRemainder -= _objectsPerGroup;
-
+               
                 int _nextGroupIndex = 0;
-                float cRemainder = 0;
+              
+                int _objCount = 0;
+
 
                 for (int i = 0; i < _rows; i++)
                 {
@@ -254,13 +254,15 @@ namespace CrowdAI
 
                         var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_bounds.y / 2) + _startHeight, _transform.position.z + _posZ);
 
-                        
+                       
 
 
                         // not a var because it has to be defined in the if statement but exist outside of it
                         GameObject _nextPrefab;
 
                         int _modelIndex;
+
+                        _nextGroupIndex = _objCount / _totalModels;
 
                         if (hasModels[_nextGroupIndex])
                         {
@@ -290,43 +292,6 @@ namespace CrowdAI
 
 
 
-        }
-
-        private void AddCrowdUniformly(ICrowd[] _crowdMembers)
-        { // add crowd members to the groups in a uniform manner 
-            /*
-            float _remainder = _crowdMembers.Length / _crowdGroups.Length;
-            int _groupDiv = (int)_remainder;
-            _remainder -= _groupDiv;
-            float _cRemainder = 0;
-
-
-            int _currentCrowdMember = 0;
-
-            for (int i = 0; i < _crowdGroups.Length; i++)
-            {
-                for (int j = 0; j < _groupDiv; j++)
-                {
-                    _crowdGroups[i].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
-                    _currentCrowdMember++;
-                    _cRemainder += _remainder;
-
-                    if (_cRemainder >= 1)
-                    {// helps keep each group even
-                        _cRemainder -= 1;
-                        _crowdGroups[i].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
-                        _currentCrowdMember++;
-                    }
-                }
-            }
-
-
-            while (_currentCrowdMember < _crowdMembers.Length)
-            {//adds any remaining crowd members to the last group abritrarily
-                _crowdGroups[_crowdGroups.Length - 1].AddCrowdMember(_crowdMembers[_currentCrowdMember]);
-                _currentCrowdMember++;
-            }
-            */
         }
 
         private void GenerateCrowdSquare(GameObject gameObject, ref CrowdGroup[] groups, bool randomGroupDist)
@@ -355,7 +320,7 @@ namespace CrowdAI
                     var _offset = Random.Range(_minOffset, _maxOffset);
                     var _objPos = new Vector3(_transform.position.x + i * _offset, gameObject.transform.position.y + _startHeight, _transform.position.z + j * _offset);
 
-                    var _obj = GameObject.Instantiate(_crowdObject, _objPos, _transform.rotation, _transform);
+                    var _obj = GameObject.Instantiate(_crowdObjects[0], _objPos, _transform.rotation, _transform);
 
                     var _crowdMemberInfo = _obj.GetComponent<ICrowd>();
 

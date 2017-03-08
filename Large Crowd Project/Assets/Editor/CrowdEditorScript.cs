@@ -43,7 +43,7 @@ public class CrowdEditorScript : Editor {
         switch (cF)
         {
             case CrowdAI.CrowdFormation.SQUARE:
-                EditorGUILayout.ObjectField(crowdObject_Prop, new GUIContent("Crowd Object"));
+                GUIArray(crowdObject_Prop);
                 EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Rows"));
                 EditorGUILayout.PropertyField(columns_Prop, new GUIContent("Columns"));
                 EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
@@ -54,7 +54,7 @@ public class CrowdEditorScript : Editor {
                 GUIArray(crowdStates_Prop);
                 break;
             case CrowdAI.CrowdFormation.CIRCLE:
-                EditorGUILayout.ObjectField(crowdObject_Prop, new GUIContent("Crowd Object"));
+                GUIArray(crowdObject_Prop);
                 EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Layers"));
                 //EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
                 //EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("Maximum Offset"));

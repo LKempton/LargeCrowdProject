@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 426635660}
   - component: {fileID: 426635659}
   - component: {fileID: 426635658}
+  - component: {fileID: 426635663}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -171,13 +172,35 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 426635657}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18, y: -49.383606, z: -58}
+  m_LocalRotation: {x: 0.14566477, y: -0, z: -0, w: 0.989334}
+  m_LocalPosition: {x: 0, y: 33.3, z: -146.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 16.752, y: 0, z: 0}
+--- !u!114 &426635663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 426635657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436275a13d4459746955fc6db5953473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialSpeed: 10
+  increaseSpeed: 1.25
+  allowMovement: 1
+  allowRotation: 1
+  forwardButton: 119
+  backwardButton: 115
+  rightButton: 100
+  leftButton: 97
+  cursorSensitivity: 0.025
+  cursorToggleAllowed: 1
+  cursorToggleButton: 27
 --- !u!1 &1377606133
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,16 +296,18 @@ MonoBehaviour:
   - Bob
   - Sway
   _groupNames:
-  - Default
-  _crowdFormation: 1
-  _rows: 100
+  - Red
+  - Blue
+  _crowdFormation: 0
+  _rows: 50
   _columns: 100
   _minOffset: 2
   _maxOffset: 2
   _tiltAmount: 0
-  _startHeight: 0
-  _crowdObject: {fileID: 1054051684950950, guid: a028fc942c340154690e9ab783aba7ae,
-    type: 2}
+  _startHeight: 0.5
+  _crowdObject:
+  - {fileID: 1054051684950950, guid: a028fc942c340154690e9ab783aba7ae, type: 2}
+  - {fileID: 1054051684950950, guid: a2166dac391e1a046b5e1453f41bca8a, type: 2}
   _randomGroupDist: 1
 --- !u!4 &1407463989
 Transform:

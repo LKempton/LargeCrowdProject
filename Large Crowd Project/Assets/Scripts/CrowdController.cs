@@ -27,7 +27,7 @@ namespace CrowdAI
         [SerializeField]
         private float _minOffset, _maxOffset, _tiltAmount, _startHeight;
         [SerializeField]
-        private GameObject _crowdObject;
+        private GameObject[] _crowdObject;
         [SerializeField]
         bool _randomGroupDist = true;
         
