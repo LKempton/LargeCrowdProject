@@ -104,7 +104,11 @@ namespace CrowdAI
         /// <returns>True if the state has been changed</returns>
         public bool SetState(string state, bool useRandDelay)
         {
-            if (_isTransitioning|| state == _currentState)
+            if (_currentState == state)
+            {
+                return true;
+            }
+            if (_isTransitioning|| !enabled)
             {
                
                 return false;
@@ -142,7 +146,11 @@ namespace CrowdAI
         /// <returns>True if the state has been changed</returns>
         public bool SetState(string state, float delay)
         {
-            if (_isTransitioning || state == _currentState)
+            if (_currentState == state)
+            {
+                return true;
+            }
+            if (_isTransitioning ||! enabled)
             {
                 
                 return false;

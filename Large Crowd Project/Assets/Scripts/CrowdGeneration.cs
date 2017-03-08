@@ -195,7 +195,7 @@ namespace CrowdAI
 
                         var _objPos = new Vector3(_transform.position.x + _posX, _transform.position.y + (_bounds.y / 2) + _startHeight, _transform.position.z + _posZ);
 
-                        int _nextGroupIndex = Random.Range(0, groups.Length - 1);
+                        int _nextGroupIndex = Random.Range(0, groups.Length);
 
 
                        
@@ -229,13 +229,13 @@ namespace CrowdAI
             }
             else
             {
-                // the total number of models that will be generated below
-                int _totalModels = _rows *(int)(6*(_bounds.z + _spacing)/(_bounds.x+_spacing));
+                // the total number of models that will be generated below (it's correct)
+                int _totalModels = (int)(_rows * (((((_bounds.z + _spacing))*2*Mathf.PI)/(_bounds.x+_spacing) - _spacing/2)));
                
                 int _nextGroupIndex = 0;
               
                 int _objCount = 0;
-
+                int _membersPGroup = _totalModels / groups.Length;
 
                 for (int i = 0; i < _rows; i++)
                 {
@@ -258,23 +258,23 @@ namespace CrowdAI
                        
 
 
-                        // not a var because it has to be defined in the if statement but exist outside of it
-                        GameObject _nextPrefab;
+                        
+                        var _nextPrefab = (GameObject) null;
 
                         int _modelIndex;
 
-                        _nextGroupIndex = _objCount / _totalModels;
+                        _nextGroupIndex = _objCount / _membersPGroup;
 
                         if (hasModels[_nextGroupIndex])
                         {
-                            _modelIndex = Random.Range(0, groups[_nextGroupIndex].GetCrowdModels.Length - 1);
+                            _modelIndex = Random.Range(0, groups[_nextGroupIndex].GetCrowdModels.Length);
 
                             _nextPrefab = groups[_nextGroupIndex].GetCrowdModels[_modelIndex];
 
                         }
                         else
                         {
-                            _modelIndex = Random.Range(0, _crowdObjects.Length - 1);
+                            _modelIndex = Random.Range(0, _crowdObjects.Length);
                             _nextPrefab = _crowdObjects[_modelIndex];
                         }
 
@@ -287,7 +287,7 @@ namespace CrowdAI
 
                 }
 
-
+                Debug.Log("total models: " + _totalModels + " object count: " + _objCount);
             }
 
 

@@ -14,6 +14,8 @@ namespace CrowdAI
         private  string[] _crowdStates;
         [SerializeField]
         private string[] _groupNames;
+        [SerializeField]
+        private GameObject[][] _groupModels;
 
         private CrowdGroup[] _crowdGroups;
         [SerializeField]
@@ -45,13 +47,15 @@ namespace CrowdAI
                 _crowdGroups[0] = new CrowdGroup("default");
             }
             else
-            {// creates as many crod groups as thier are names
+            {// creates as many crowd groups as thier are names
                 _crowdGroups = new CrowdGroup[_groupNames.Length];
 
                 for (int i = 0; i < _groupNames.Length; i++)
                 {
-                    // adds a new instance of CrowdGroup to an array and passes the name of the CrowdGroup
-                    _crowdGroups[i] = new CrowdGroup(_groupNames[i]);
+                   
+                        _crowdGroups[i] = new CrowdGroup(_groupNames[i]);
+                    
+                    
                 }
             }
             //All members of the crowd that are generated
