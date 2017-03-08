@@ -197,15 +197,15 @@ namespace CrowdAI
 
                         int _nextGroupIndex = Random.Range(0, groups.Length - 1);
 
+
                        
-                        // not a var because it has to be defined in the if statement but exist outside of it
-                        GameObject _nextPrefab;
+                        var _nextPrefab = (GameObject)null;
 
                         int _modelIndex;
 
                         if (hasModels[_nextGroupIndex])
                         {
-                            _modelIndex = Random.Range(0, groups[_nextGroupIndex].GetCrowdModels.Length - 1);
+                            _modelIndex = Random.Range(0, groups[_nextGroupIndex].GetCrowdModels.Length);
 
                             _nextPrefab = groups[_nextGroupIndex].GetCrowdModels[_modelIndex];
 

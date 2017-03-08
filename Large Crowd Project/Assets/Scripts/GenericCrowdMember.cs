@@ -51,7 +51,8 @@ namespace CrowdAI
             
             _rend = gameObject.GetComponent<Renderer>();
             _animator = GetComponent<Animation>();
-            
+          
+
             // if the animator or the Rendere can't be found in the parent it must be in the child
             if (!_animator)
                 _animator = GetComponentInChildren<Animation>();
@@ -81,6 +82,7 @@ namespace CrowdAI
                 }
             }
             // start playing the first animation 
+            _animator.wrapMode = WrapMode.Loop;
             SetState(_animStateNames[0], true);
             
         }
@@ -214,8 +216,8 @@ namespace CrowdAI
         {
             if (_animator.isPlaying)
             {
-                _animator.GetClip(_currentAnimName).wrapMode = WrapMode.Once;
-                _animator.CrossFadeQueued(_currentAnimName);
+                _animator.wrapMode = WrapMode.Once;
+              
             }
             else
             {
@@ -230,6 +232,7 @@ namespace CrowdAI
 
         void OnEnable()
         {
+            // done in case if the object is disabled while using it's coroutine.
             if (_isTransitioning)
             {
                 

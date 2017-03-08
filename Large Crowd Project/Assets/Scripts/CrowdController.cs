@@ -63,7 +63,17 @@ namespace CrowdAI
 
 
        
-        
+        public string[] GetGroupNames()
+        {
+            var _namesCopy = new string[_groupNames.Length];
+
+            for (int i = 0; i < _groupNames.Length; i++)
+            {
+                _namesCopy[i] = _groupNames[i];
+            }
+
+            return _namesCopy;
+        }
       
 
         /// <summary>
