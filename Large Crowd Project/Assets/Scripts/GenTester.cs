@@ -11,9 +11,11 @@ namespace CrowdAI
         [SerializeField]
         private int _xActors = 4, _yActors = 7;
         [SerializeField]
-        private float _yOffset = 0.5f, _minGapSize = 0, _maxGapSize = 3;
+        private float _yOffset = 0.5f, _minGapSize = 0, _maxGapSize = 3,_crowdDensity=0.8f;
         [SerializeField]
         private GameObject _prefab;
+        [SerializeField]
+        private Vector3 _bounds;
 
         // Use this for initialization
         void Start()
@@ -30,10 +32,7 @@ namespace CrowdAI
                     break;
 
                 case CrowdFormation.SQUARE:
-                    if(!_prefab)
-                    CrowdGen.GenCrowdSquare(_xActors, _yActors, gameObject, Vector3.one, _yOffset, _minGapSize, _maxGapSize);
-                    else
-                        CrowdGen.GenCrowdSquare(_xActors, _yActors, gameObject, Vector3.one, _yOffset, _minGapSize, _maxGapSize,_prefab);
+                    CrowdGen.GenCrowdSquare(_crowdDensity, gameObject, _size, _bounds, _yActors, 0);
                     break;
             }
 
