@@ -41,6 +41,8 @@ public class CrowdEditorScript : Editor {
 
         CrowdAI.CrowdFormation cF = (CrowdAI.CrowdFormation)crowdFormation_Prop.enumValueIndex;
 
+        CrowdAI.CrowdController script = (CrowdAI.CrowdController)target;
+
         // Commented stuff is not yet implemented.
         switch (cF)
         {
@@ -55,6 +57,11 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
                 GUIArray(groupNames_Prop);
                 GUIArray(crowdStates_Prop);
+                
+                if (GUILayout.Button("Generate Crowd"))
+                {
+                    script.GenerateCrowd();
+                }
                 break;
             case CrowdAI.CrowdFormation.CIRCLE:
                 GUIArray(crowdObject_Prop);
@@ -65,6 +72,11 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
                 GUIArray(groupNames_Prop);
                 GUIArray(crowdStates_Prop);
+
+                if (GUILayout.Button("Generate Crowd"))
+                {
+                    script.GenerateCrowd();
+                }
                 break;
             case CrowdAI.CrowdFormation.RING:
                 //EditorGUILayout.ObjectField(crowdObject_Prop, new GUIContent("Crowd Object"));
@@ -75,6 +87,10 @@ public class CrowdEditorScript : Editor {
                 //EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
                 //GUIArray(groupNames_Prop);
                 //GUIArray(crowdStates_Prop);
+                //if (GUILayout.Button("Generate Crowd"))
+                //{
+                //    script.GenerateCrowd();
+                //}
                 break;
         }
 

@@ -69,9 +69,9 @@ MonoBehaviour:
   _groupNames:
   - Red
   - Blue
-  _crowdFormation: 0
-  _rows: 50
-  _columns: 100
+  _crowdFormation: 1
+  _rows: 10
+  _columns: 10
   _minOffset: 2
   _maxOffset: 2
   _tiltAmount: 0
