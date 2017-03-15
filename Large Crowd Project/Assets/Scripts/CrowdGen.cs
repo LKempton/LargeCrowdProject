@@ -12,25 +12,56 @@ namespace CrowdAI
 
         }
 
-        public static void GenCrowdSquare(int columns, int rows, GameObject parent, Vector3 size, bool randomDist, float yOffset, float minGapSize, float maxGapSize)
+        public static GameObject[,] GenCrowdSquare(int columns, int rows, GameObject parent, Vector3 size,  float yOffset, float minGapSize, float maxGapSize)
         {
             var _placeHolder = new GameObject();
-            _placeHolder.AddComponent<GenericCrowdMember>();
             var _parentPos = parent.transform.position;
 
+            var _crowdMembers = new GameObject[columns, rows];
             
+            for (int i = 0; i < columns; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    var offset = new Vector3();
+                    offset.x += Random.Range(minGapSize, maxGapSize);
+                    
+                    offset.z = Random.Range(minGapSize, maxGapSize);
+                    var _newPos = _parentPos + new Vector3(i*(offset.x+size.x),yOffset, (offset.z+size.z)*j );
+
+                    _crowdMembers[i, j] = GameObject.Instantiate(_placeHolder, parent.transform);
+                    _crowdMembers[i, j].transform.position = _newPos;
+                }
+            }
+
+            return _crowdMembers;
+
+        }
+
+
+        public static GameObject[,] GenCrowdSquare(int columns, int rows, GameObject parent, Vector3 size, float yOffset, float minGapSize, float maxGapSize, GameObject prefab)
+        {
+         
+            var _parentPos = parent.transform.position;
+
+            var _crowdMembers = new GameObject[columns, rows];
 
             for (int i = 0; i < columns; i++)
             {
                 for (int j = 0; j < rows; j++)
                 {
-                    var offset = size;
+                    var offset = new Vector3();
                     offset.x += Random.Range(minGapSize, maxGapSize);
-                    
+
                     offset.z = Random.Range(minGapSize, maxGapSize);
-                    var _newPos = _parentPos + new Vector3(i*offset.x,yOffset, offset.z*j );
+                    var _newPos = _parentPos + new Vector3(i * (offset.x +size.x), yOffset, (offset.z + size.z) * j);
+
+                    _crowdMembers[i, j] = GameObject.Instantiate(prefab, parent.transform);
+                    _crowdMembers[i, j].transform.position = _newPos;
                 }
             }
+
+            return _crowdMembers;
 
         }
 
@@ -42,13 +73,17 @@ namespace CrowdAI
             if (is3D)
             {
                 var _rend = gO.GetComponents<MeshRenderer>();
+               
 
                 if (_rend.Length < 1)
                 {
+
                     _rend = gO.GetComponentsInChildren<MeshRenderer>();
                 }
 
-                for (int i = 0; i < _rend.Length; i++)
+                _outBounds = _rend[0].bounds.extents;
+
+                for (int i = 1; i < _rend.Length; i++)
                 {
                     var _newBounds = _rend[i].bounds.extents;
 
@@ -76,6 +111,8 @@ namespace CrowdAI
                 {
                     _spriteRend = gO.GetComponentsInChildren<SpriteRenderer>();
                 }
+
+                _outBounds = _spriteRend[0].bounds.extents;
 
                 for (int i = 0; i < _spriteRend.Length; i++)
                 {
