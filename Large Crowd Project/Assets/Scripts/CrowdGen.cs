@@ -18,25 +18,27 @@ namespace CrowdAI
             var _parentTrans = parent.transform;
             var _parentPos = _parentTrans.position;
 
-            int _rows = Mathf.RoundToInt(crowdDensity*bounds.x);
-            int _coloumns = Mathf.RoundToInt(crowdDensity * bounds.z);
+            int _rows = Mathf.RoundToInt(crowdDensity * bounds.x);
+            int _columns = Mathf.RoundToInt(crowdDensity * bounds.z);
             float _buffer = 0;
 
             var _placeholder = new GameObject();
             _placeholder.name = "CrowdMemberPosition";
 
-            var _crowdMembers = new GameObject[_rows,_coloumns];
+            var _crowdMembers = new GameObject[_rows,_columns];
 
-            for (int i = 0; i < _coloumns; i++)
+            for (int i = 0; i < _columns; i++)
             {
                 for (int j = 0; j < _rows; j++)
                 {
                     var _newPos = _parentPos + new Vector3(((i+1)/bounds.x) * crowdDensity , yOffset, bounds.z * ((j+1)/bounds.z)*crowdDensity );
 
                     _crowdMembers[i, j] = GameObject.Instantiate(_placeholder, _parentTrans);
+
+                    _crowdMembers[i, j].transform.position = _newPos;
                 }
             }
-            Debug.Log(_coloumns.ToString() + " " +_rows.ToString());
+            Debug.Log(_columns.ToString() + " " +_rows.ToString());
             return _crowdMembers;
           
          }
