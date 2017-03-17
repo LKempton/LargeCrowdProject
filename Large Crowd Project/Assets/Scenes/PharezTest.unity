@@ -221,11 +221,10 @@ MonoBehaviour:
   _xActors: 50
   _yActors: 50
   _yOffset: 0.5
-  _minGapSize: 0.2
-  _maxGapSize: 0.4
+  _randomRange: 0.2
   _crowdDensity: 0.8
   _prefab: {fileID: 1000011580907342, guid: 3d15ae3f8a133854e9576ade790b5f36, type: 2}
-  _bounds: {x: 50, y: 50, z: 50}
+  _bounds: {x: 10, y: 10, z: 10}
 --- !u!1 &1377606133
 GameObject:
   m_ObjectHideFlags: 0

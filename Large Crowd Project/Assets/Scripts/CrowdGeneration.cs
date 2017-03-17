@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 namespace CrowdAI
 {
-    /// <summary>
+    /// <summary>C:\Users\pvitalis\Documents\LargeCrowdProject\Large Crowd Project\Assets\Scripts\CrowdCircleGen.cs
     /// Class that generates crowd members in a formation
     /// </summary>
     public class CrowdGeneration
