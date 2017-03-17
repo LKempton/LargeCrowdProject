@@ -32,14 +32,14 @@ namespace CrowdAI
                     break;
 
                 case CrowdFormation.SQUARE:
-                    CrowdGen.GenCrowdSquare(_crowdDensity, gameObject, _size, _bounds, _yActors, 0);
+                    CrowdGen.GenCrowdSquare(_crowdDensity, gameObject, _size, _bounds, _yOffset, 0,_prefab);
                     break;
             }
 
             
         }
 
-
+            
     }
 
 }

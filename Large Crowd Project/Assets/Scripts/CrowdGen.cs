@@ -20,7 +20,7 @@ namespace CrowdAI
 
             int _rows = Mathf.RoundToInt(crowdDensity * bounds.x);
             int _columns = Mathf.RoundToInt(crowdDensity * bounds.z);
-            float _buffer = 0;
+            
 
             var _placeholder = new GameObject();
             _placeholder.name = "CrowdMemberPosition";
@@ -31,47 +31,57 @@ namespace CrowdAI
             {
                 for (int j = 0; j < _rows; j++)
                 {
-                    var _newPos = _parentPos + new Vector3(((i+1)/bounds.x) * crowdDensity , yOffset, bounds.z * ((j+1)/bounds.z)*crowdDensity );
+                    var _newPos = _parentPos;
+                    _newPos += new Vector3(j / crowdDensity, yOffset, i / crowdDensity);
+
 
                     _crowdMembers[i, j] = GameObject.Instantiate(_placeholder, _parentTrans);
 
-                    _crowdMembers[i, j].transform.position = _newPos;
+                    _crowdMembers[i, j].transform.position = _newPos; ;
                 }
             }
-            Debug.Log(_columns.ToString() + " " +_rows.ToString());
+           
             return _crowdMembers;
           
          }
 
 
-        public static GameObject[] GenCrowdSquare(int columns, int rows, GameObject parent,  float yOffset, float minGapSize, float maxGapSize, GameObject prefab, bool is3D)
-        {
-            throw new System.NotImplementedException();
-            var _size = GetObjectBounds(prefab, is3D);
+        public static GameObject[,] GenCrowdSquare(float crowdDensity, GameObject parent, Vector3 modelSize, Vector3 bounds, float yOffset, float densityRange,GameObject prefab)
+        { // e = m/v, e = crowdDensity, m = n of people , v = bounds. Therefore n of people  =  CrowdDensity * bounds
 
-            var _parentPos = parent.transform.position;
+            var _parentTrans = parent.transform;
+            var _parentPos = _parentTrans.position;
 
-            var _crowdMembers = new GameObject[columns, rows];
+            int _rows = Mathf.RoundToInt(crowdDensity * bounds.x);
+            int _columns = Mathf.RoundToInt(crowdDensity * bounds.z);
+            
+           
 
-            for (int i = 0; i < columns; i++)
+            
+
+            var _crowdMembers = new GameObject[_columns, _rows];
+         
+
+            for (int i = 0; i < _columns; i++)
             {
-                for (int j = 0; j < rows; j++)
+                for (int j = 0; j < _rows; j++)
                 {
-                    var offset = new Vector3();
-                    offset.x += Random.Range(minGapSize, maxGapSize);
+                    var _newPos = _parentPos;
+                    _newPos += new Vector3(j / crowdDensity, yOffset, i / crowdDensity);
+                        
 
-                    offset.z = Random.Range(minGapSize, maxGapSize);
-                    var _newPos = _parentPos + new Vector3(i * (offset.x +_size.x), yOffset, (offset.z + _size.z) * j);
+                    _crowdMembers[i, j] = GameObject.Instantiate(prefab, _parentTrans);
 
-                    _crowdMembers[i, j] = GameObject.Instantiate(prefab, parent.transform);
-                    _crowdMembers[i, j].transform.position = _newPos;
+                    _crowdMembers[i, j].transform.position =_newPos;
                 }
             }
+            
+            return _crowdMembers;
 
-          
+
 
         }
-
+        
 
         public static Vector3 GetObjectBounds(GameObject gO, bool is3D)
         {
