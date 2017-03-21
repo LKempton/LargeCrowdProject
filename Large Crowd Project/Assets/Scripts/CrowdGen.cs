@@ -22,7 +22,7 @@ namespace CrowdAI
 
                 for (int j = 0; j < _yMax; j++)
                 {
-                    float _newPosx = 
+                   // float _newPosx = 
                 }
             }
 
