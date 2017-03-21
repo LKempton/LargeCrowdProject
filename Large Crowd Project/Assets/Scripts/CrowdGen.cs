@@ -7,9 +7,25 @@ namespace CrowdAI
     public static class CrowdGen
     {
 
-        public static GameObject[] GenCrowdCicle(int layers, int objPerLayer, GameObject parent, Vector3 size, float yOffset, float minGapSize, float maxGapSize )
+        public static GameObject[,] GenCrowdCicle(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset )
         {
             throw new System.NotImplementedException();
+
+            // average size of the bounds = circumference
+            float _radius = (bounds.x + bounds.z) / 4;
+
+            int _xMax = Mathf.RoundToInt(_radius * crowdDensity);
+
+            for (int i = 0; i < _xMax; i++)
+            {
+                int _yMax = Mathf.RoundToInt(Mathf.PI * 2 * (i + 1) * crowdDensity);
+
+                for (int j = 0; j < _yMax; j++)
+                {
+                    float _newPosx = 
+                }
+            }
+
         }
 
         public static GameObject[,] GenCrowdSquare(float crowdDensity, GameObject parent,  Vector3 bounds,  float yOffset)
@@ -118,7 +134,6 @@ namespace CrowdAI
 
 
         }
-        
 
         public static Vector3 GetObjectBounds(GameObject gO, bool is3D)
         {
