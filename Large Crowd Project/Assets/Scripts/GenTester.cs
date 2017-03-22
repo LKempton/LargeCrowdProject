@@ -9,8 +9,6 @@ namespace CrowdAI
         [SerializeField]
         CrowdFormation _formation = 0;
         [SerializeField]
-        private int _xActors = 4, _yActors = 7;
-        [SerializeField]
         private float _yOffset = 0.5f, _randomRange,_crowdDensity=0.8f;
         [SerializeField]
         private GameObject _prefab;
@@ -28,7 +26,7 @@ namespace CrowdAI
             switch (_formation)
             {
                 case CrowdFormation.CIRCLE:
-
+                    CrowdGen.GenCrowdCicle(_crowdDensity, gameObject, _bounds, _yOffset,_prefab);
                     break;
 
                 case CrowdFormation.SQUARE:

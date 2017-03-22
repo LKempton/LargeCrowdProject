@@ -9,12 +9,21 @@ namespace CrowdAI
 
         public static GameObject[,] GenCrowdCicle(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset )
         {
-            throw new System.NotImplementedException();
+          // Not currently functional
+
+            var _placeholder = new GameObject();
+
+            _placeholder.name = "CrowdMemberPosition";
 
             // average size of the bounds = circumference
             float _radius = (bounds.x + bounds.z) / 4;
 
             int _xMax = Mathf.RoundToInt(_radius * crowdDensity);
+
+            var _parentTrans = parent.transform;
+            var _parentPos = _parentTrans.position;
+           
+
 
             for (int i = 0; i < _xMax; i++)
             {
@@ -22,11 +31,58 @@ namespace CrowdAI
 
                 for (int j = 0; j < _yMax; j++)
                 {
-                   // float _newPosx = 
+                    float _newPosX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 * crowdDensity)));
+                    float _newPosZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 * crowdDensity)));
+
+                    var _objPos = new Vector3(_parentPos.x + _newPosX, yOffset, _parentPos.z + _newPosZ);
+
+                    var _crowdInstance = GameObject.Instantiate(_placeholder,_parentTrans);
+
+                    _crowdInstance.transform.position = _objPos;
                 }
             }
 
+            return null;
         }
+
+        public static GameObject[,] GenCrowdCicle(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset, GameObject prefab)
+        {
+
+
+
+            // average size of the bounds = circumference
+            float _maxRadius = (bounds.x + bounds.z) / 4;
+
+            int _xMax = Mathf.RoundToInt(_maxRadius * crowdDensity);
+
+            var _parentTrans = parent.transform;
+            var _parentPos = _parentTrans.position;
+
+
+
+            for (int i = 0; i < _xMax; i++)
+            {
+
+                float _radius = ((i + 1 / _xMax) * _maxRadius);
+                int _yMax = Mathf.RoundToInt(Mathf.PI * 2 * _radius * crowdDensity);
+
+
+                for (int j = 0; j < _yMax; j++)
+                {
+                    float _newPosX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _yMax)));
+                    float _newPosZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _yMax)));
+
+                    var _objPos = new Vector3(_parentPos.x + _newPosX, yOffset, _parentPos.z + _newPosZ);
+
+                    var _crowdInstance = GameObject.Instantiate(prefab, _parentTrans);
+
+                    _crowdInstance.transform.position = _objPos;
+                }
+            }
+
+            return null;
+        }
+
 
         public static GameObject[,] GenCrowdSquare(float crowdDensity, GameObject parent,  Vector3 bounds,  float yOffset)
         {
