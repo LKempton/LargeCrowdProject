@@ -48,39 +48,39 @@ namespace CrowdAI
         public static GameObject[,] GenCrowdCicle(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset, GameObject prefab)
         {
 
-
+            float _maxRadius = (bounds.x + bounds.z) / 4;
 
             // average size of the bounds = circumference
-            float _maxRadius = (bounds.x + bounds.z) / 4;
+           
 
             int _xMax = Mathf.RoundToInt(_maxRadius * crowdDensity);
 
+            GenerateRing(_maxRadius, crowdDensity, parent, yOffset,prefab);
+
+            return null;
+        }
+
+        private static GameObject[] GenerateRing(float radius, float density, GameObject parent, float yOffset, GameObject prefab)
+        {
+
+
+            int _objCount = Mathf.RoundToInt(2 * Mathf.PI * radius);
+
+            var _outRing = new GameObject[_objCount];
             var _parentTrans = parent.transform;
             var _parentPos = _parentTrans.position;
 
-
-
-            for (int i = 0; i < _xMax; i++)
+            for (int i = 0; i < _objCount; i++)
             {
+                float _posX = Mathf.Cos(Mathf.Deg2Rad * (i *(360 / _objCount)));
+                float _posZ = Mathf.Sin(Mathf.Deg2Rad * (i *density* (360 / _objCount)));
 
-                float _radius = ((i + 1 / _xMax) * _maxRadius);
-                int _yMax = Mathf.RoundToInt(Mathf.PI * 2 * _radius * crowdDensity);
-
-
-                for (int j = 0; j < _yMax; j++)
-                {
-                    float _newPosX = _radius * Mathf.Cos(Mathf.Deg2Rad * (j * (360 / _yMax)));
-                    float _newPosZ = _radius * Mathf.Sin(Mathf.Deg2Rad * (j * (360 / _yMax)));
-
-                    var _objPos = new Vector3(_parentPos.x + _newPosX, yOffset, _parentPos.z + _newPosZ);
-
-                    var _crowdInstance = GameObject.Instantiate(prefab, _parentTrans);
-
-                    _crowdInstance.transform.position = _objPos;
-                }
+                var _newObj = GameObject.Instantiate(prefab,_parentTrans);
+                _newObj.transform.position = new Vector3(_parentPos.x + _posX, yOffset, _parentPos.z + _posZ);
+                _outRing[i] = _newObj;
             }
 
-            return null;
+            return _outRing;
         }
 
 
