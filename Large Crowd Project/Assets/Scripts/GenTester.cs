@@ -22,7 +22,7 @@ namespace CrowdAI
             var _size = CrowdGen.GetObjectBounds(_prefab, true);
 
 
-            print("size: "+_size );
+           
             switch (_formation)
             {
                 case CrowdFormation.CIRCLE:

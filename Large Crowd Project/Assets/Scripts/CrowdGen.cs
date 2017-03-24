@@ -48,23 +48,29 @@ namespace CrowdAI
         public static GameObject[,] GenCrowdCicle(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset, GameObject prefab)
         {
 
-            float _maxRadius = (bounds.x + bounds.z) / 4;
+            float _radius = (bounds.x + bounds.z) / 4;
 
             // average size of the bounds = circumference
            
 
-            int _xMax = Mathf.RoundToInt(_maxRadius * crowdDensity);
+            int _xMax = Mathf.RoundToInt(_radius * crowdDensity);
 
-            GenerateRing(_maxRadius, crowdDensity, parent, yOffset,prefab);
+            do
+            {
+                GenerateRing(_radius, crowdDensity, parent, yOffset, prefab);
+                _radius -= crowdDensity;
 
+            }
+            while (_radius > 0);
             return null;
         }
 
         private static GameObject[] GenerateRing(float radius, float density, GameObject parent, float yOffset, GameObject prefab)
         {
 
+            Debug.Log(radius);
 
-            int _objCount = Mathf.RoundToInt(2 * Mathf.PI * radius);
+            int _objCount = Mathf.RoundToInt(2 * Mathf.PI * radius*density);
 
             var _outRing = new GameObject[_objCount];
             var _parentTrans = parent.transform;
@@ -72,8 +78,8 @@ namespace CrowdAI
 
             for (int i = 0; i < _objCount; i++)
             {
-                float _posX = Mathf.Cos(Mathf.Deg2Rad * (i *(360 / _objCount)));
-                float _posZ = Mathf.Sin(Mathf.Deg2Rad * (i *density* (360 / _objCount)));
+                float _posX = radius *Mathf.Cos(Mathf.Deg2Rad * (i *(360 / _objCount)));
+                float _posZ = radius *Mathf.Sin(Mathf.Deg2Rad * (i * (360 / _objCount)));
 
                 var _newObj = GameObject.Instantiate(prefab,_parentTrans);
                 _newObj.transform.position = new Vector3(_parentPos.x + _posX, yOffset, _parentPos.z + _posZ);
