@@ -7,7 +7,7 @@ namespace CrowdAI
     public static class CrowdGen
     {
 
-        public static GameObject[,] GenCrowdCicle(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset )
+        public static GameObject[,] GenCrowdCircle(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset )
         {
           // Not currently functional
 
@@ -45,7 +45,7 @@ namespace CrowdAI
             return null;
         }
 
-        public static GameObject[,] GenCrowdCicle(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset, GameObject prefab)
+        public static GameObject[,] GenCrowdCircle(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset, GameObject prefab)
         {
 
             float _radius = (bounds.x + bounds.z) / 4;
@@ -69,44 +69,43 @@ namespace CrowdAI
         private static GameObject[] GenerateRing(float radius, float density, GameObject parent, float yOffset, GameObject prefab)
         {
 
-            float _objCountUnround = 2 * Mathf.PI * radius * density;
+      
 
-            int _objCount = Mathf.RoundToInt(2 * Mathf.PI * radius*density);
-            
-            var _outRing = new GameObject[_objCount];
+            float _objCount =2 * Mathf.PI * radius*density;
+            int index = 0;
+
+            var _outRing = new GameObject[Mathf.RoundToInt(_objCount+2)];
             var _parentTrans = parent.transform;
             var _parentPos = _parentTrans.position;
 
-            for (int i = 0; i < _objCount; i++)
+            for (float i = 0; i <= _objCount; i++)
             {
-                float _posX = radius * Mathf.Cos(Mathf.Deg2Rad * (i*density *(360 / _objCount)));
-                float _posZ = radius * Mathf.Sin(Mathf.Deg2Rad * (i *density* (360 / _objCount)));
+                float _posX = radius * Mathf.Cos(Mathf.Deg2Rad * (i *(360 / _objCount)));
+                float _posZ = radius * Mathf.Sin(Mathf.Deg2Rad * (i *(360 / _objCount)));
 
                 var _newObj = GameObject.Instantiate(prefab,_parentTrans);
                 _newObj.transform.position = new Vector3(_parentPos.x + _posX, yOffset, _parentPos.z + _posZ);
-                _outRing[i] = _newObj;
+                _outRing[index] = _newObj;
 
-             //   Debug.Log("Loop iteration: " + i + " |posX: " + _posX + " |posZ: " + _posZ);
+                index++;
             }
 
-            float _gapDist = Vector3.Distance(_outRing[0].transform.position, _outRing[_objCount - 1].transform.position);
-            int _objectsToBePlaced = Mathf.RoundToInt(_gapDist * density);
-
-            Debug.Log("linear distance: " + _gapDist);
-            _gapDist =radius * Mathf.Acos(1.0f - ((_gapDist * _gapDist) / (2 * radius * radius)));
+           
 
 
                             
 
            // Debug.Log("Loop Complete");
-            Debug.Log("Radius: "+ radius+ " |Density: " +density+ " |Distance: " + _gapDist + " |_actual count: " +_objCountUnround +" |rounded:" +_objCount+ " |Missing:" +_objectsToBePlaced);
+           
 
             return _outRing;
         }
 
 
-        public static GameObject[,] GenCrowdSquare(float crowdDensity, GameObject parent,  Vector3 bounds,  float yOffset)
+        public static GameObject[,] GenCrowdSquare(float crowdDensity, GameObject parent,  Vector3 bounds,  float yOffset, GameObject prefab)
         {
+
+            
 
             var _parentTrans = parent.transform;
             var _parentPos = _parentTrans.position;
@@ -116,9 +115,7 @@ namespace CrowdAI
             
 
 
-            var _placeholder = new GameObject();
-            _placeholder.name = "CrowdMemberPosition";
-
+           
             var _crowdMembers = new GameObject[_rows,_columns];
 
             for (int i = 0; i < _columns; i++)
@@ -129,7 +126,7 @@ namespace CrowdAI
                     _newPos += new Vector3(j / crowdDensity, yOffset, i / crowdDensity);
 
 
-                    _crowdMembers[i, j] = GameObject.Instantiate(_placeholder, _parentTrans);
+                    _crowdMembers[i, j] = GameObject.Instantiate(prefab, _parentTrans);
 
                     _crowdMembers[i, j].transform.position = _newPos; ;
                 }
@@ -209,8 +206,12 @@ namespace CrowdAI
             
             return _crowdMembers;
 
+        }
 
+       public static GameObject[,] GenCrowdRing(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset, GameObject prefab, float innerRadius)
+        {
 
+            return null;
         }
 
         public static Vector3 GetObjectBounds(GameObject gO, bool is3D)

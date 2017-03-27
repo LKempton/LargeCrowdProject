@@ -26,7 +26,7 @@ namespace CrowdAI
             switch (_formation)
             {
                 case CrowdFormation.CIRCLE:
-                    CrowdGen.GenCrowdCicle(_crowdDensity, gameObject, _bounds, _yOffset,_prefab);
+                    CrowdGen.GenCrowdCircle(_crowdDensity, gameObject, _bounds, _yOffset,_prefab);
                     break;
 
                 case CrowdFormation.SQUARE:
