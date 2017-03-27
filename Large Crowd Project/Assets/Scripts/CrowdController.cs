@@ -140,7 +140,7 @@ namespace CrowdAI
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
-                    _newCrowd = CrowdGen.GenCrowdCicle(_density, parent, bounds, _startHeight, _placeholderPrefab);
+                    _newCrowd = CrowdGen.GenCrowdCircle(_density, parent, bounds, _startHeight, _placeholderPrefab);
 
                     if (_newCrowd.Length > 0)
                     {
@@ -172,6 +172,18 @@ namespace CrowdAI
 
             GenerateCrowd(bounds, new GameObject("CrowdSource"));
 
+        }
+
+        public int CrowdSizeTotal()
+        {
+            int size = 0;
+
+            for (int i = 0; i < _allCrowdMembers.Count; i++)
+            {
+                size += _allCrowdMembers[i].Length;
+            }
+
+            return size;
         }
 
     }
