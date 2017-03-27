@@ -53,38 +53,53 @@ namespace CrowdAI
             // average size of the bounds = circumference
            
 
-            int _xMax = Mathf.RoundToInt(_radius * crowdDensity);
+           
 
             do
             {
                 GenerateRing(_radius, crowdDensity, parent, yOffset, prefab);
-                _radius -= crowdDensity;
+                _radius -= 1/crowdDensity;
 
             }
             while (_radius > 0);
+
             return null;
         }
 
         private static GameObject[] GenerateRing(float radius, float density, GameObject parent, float yOffset, GameObject prefab)
         {
 
-            Debug.Log(radius);
+            float _objCountUnround = 2 * Mathf.PI * radius * density;
 
             int _objCount = Mathf.RoundToInt(2 * Mathf.PI * radius*density);
-
+            
             var _outRing = new GameObject[_objCount];
             var _parentTrans = parent.transform;
             var _parentPos = _parentTrans.position;
 
             for (int i = 0; i < _objCount; i++)
             {
-                float _posX = radius *Mathf.Cos(Mathf.Deg2Rad * (i *(360 / _objCount)));
-                float _posZ = radius *Mathf.Sin(Mathf.Deg2Rad * (i * (360 / _objCount)));
+                float _posX = radius * Mathf.Cos(Mathf.Deg2Rad * (i*density *(360 / _objCount)));
+                float _posZ = radius * Mathf.Sin(Mathf.Deg2Rad * (i *density* (360 / _objCount)));
 
                 var _newObj = GameObject.Instantiate(prefab,_parentTrans);
                 _newObj.transform.position = new Vector3(_parentPos.x + _posX, yOffset, _parentPos.z + _posZ);
                 _outRing[i] = _newObj;
+
+             //   Debug.Log("Loop iteration: " + i + " |posX: " + _posX + " |posZ: " + _posZ);
             }
+
+            float _gapDist = Vector3.Distance(_outRing[0].transform.position, _outRing[_objCount - 1].transform.position);
+            int _objectsToBePlaced = Mathf.RoundToInt(_gapDist * density);
+
+            Debug.Log("linear distance: " + _gapDist);
+            _gapDist =radius * Mathf.Acos(1.0f - ((_gapDist * _gapDist) / (2 * radius * radius)));
+
+
+                            
+
+           // Debug.Log("Loop Complete");
+            Debug.Log("Radius: "+ radius+ " |Density: " +density+ " |Distance: " + _gapDist + " |_actual count: " +_objCountUnround +" |rounded:" +_objCount+ " |Missing:" +_objectsToBePlaced);
 
             return _outRing;
         }
@@ -121,6 +136,7 @@ namespace CrowdAI
             }
            
             return _crowdMembers;
+            
           
          }
 

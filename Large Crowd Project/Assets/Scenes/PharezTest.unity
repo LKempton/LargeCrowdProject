@@ -173,7 +173,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 426635657}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 67.2, y: 2, z: -62.6}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -217,14 +217,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e0a2dec83f23694098652a4f6aa7b3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _formation: 1
-  _xActors: 3
-  _yActors: 3
+  _formation: 0
   _yOffset: 0.5
   _randomRange: 0.4
-  _crowdDensity: 0.5
+  _crowdDensity: 1
   _prefab: {fileID: 1000011580907342, guid: 3d15ae3f8a133854e9576ade790b5f36, type: 2}
-  _bounds: {x: 20, y: 20, z: 10}
+  _bounds: {x: 20, y: 20, z: 20}
 --- !u!1 &1377606133
 GameObject:
   m_ObjectHideFlags: 0
