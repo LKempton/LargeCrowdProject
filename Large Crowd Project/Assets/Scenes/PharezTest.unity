@@ -220,7 +220,7 @@ MonoBehaviour:
   _formation: 0
   _yOffset: 0.5
   _randomRange: 0.4
-  _crowdDensity: 1
+  _crowdDensity: 0.7572
   _prefab: {fileID: 1000011580907342, guid: 3d15ae3f8a133854e9576ade790b5f36, type: 2}
   _bounds: {x: 20, y: 20, z: 20}
 --- !u!1 &1377606133

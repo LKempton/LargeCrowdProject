@@ -58,7 +58,7 @@ namespace CrowdAI
         {
             if (mainPool.ContainsKey(name))
             {
-                tempList = mainPool[name] as List<GameObject>;
+                tempList =  (List<GameObject> )mainPool[name];
 
                 for (int i = 0; i < tempList.Count; i++)
                 {

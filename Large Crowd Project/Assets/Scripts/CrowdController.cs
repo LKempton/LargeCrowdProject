@@ -15,7 +15,10 @@ namespace CrowdAI
         [SerializeField]
         private string[] _groupNames;
         [SerializeField]
-        private GameObject[][] _groupModels;
+        private GameObject[][][] _groupModels;
+
+        [SerializeField]
+        private GameObject[] _crowdModels;
 
         private CrowdGroup[] _crowdGroups;
         [SerializeField]
@@ -36,6 +39,9 @@ namespace CrowdAI
         bool _randomGroupDist = true;
 
 
+        private LODPoolManager _poolManager;
+
+       
 
         public string[] GetGroupNames()
         {
@@ -48,6 +54,8 @@ namespace CrowdAI
 
             return _namesCopy;
         }
+
+
 
 
         /// <summary>
