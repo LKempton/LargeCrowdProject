@@ -5,31 +5,35 @@ using System.Collections.Generic;
 namespace CrowdAI
 {
 
-    public class LODPoolManager : MonoBehaviour
+    public class LODPoolManager
     {
-        [SerializeField]
         private int crowdNumber;
-        [SerializeField]
         private int lodLayers;
-
-        [SerializeField]
+        
         private string[] objectNames;
-        [SerializeField]
         private GameObject[] crowdLODObjects;
-        [SerializeField]
         private int[] objectAmounts;
 
         private Hashtable mainPool = new Hashtable();
 
         private List<GameObject> tempList;
 
-        void Start()
+        public LODPoolManager(int size, int layers, GameObject[] objects)
         {
+            crowdNumber = size;
+            lodLayers = layers;
+            crowdLODObjects = objects;
+
             tempList = new List<GameObject>();
 
             objectNames = new string[lodLayers];
             crowdLODObjects = new GameObject[lodLayers];
             objectAmounts = new int[lodLayers];
+
+            for (int i = 0; i < objectNames.Length; i++)
+            {
+                objectNames[i] = i.ToString();
+            }
 
             for (int i = 0; i < objectAmounts.Length; i++)
             {
@@ -42,8 +46,7 @@ namespace CrowdAI
 
                 for (int j = 0; j < objectAmounts[i]; j++)
                 {
-                    GameObject obj = Instantiate(crowdLODObjects[i]);
-                    obj.transform.parent = transform;
+                    GameObject obj = GameObject.Instantiate(crowdLODObjects[i]);
                     objList.Add(obj);
                 }
 
