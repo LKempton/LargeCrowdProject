@@ -11,7 +11,7 @@ namespace CrowdAI
     {
 
         [SerializeField]
-        private  string[] _crowdStates;
+        private string[] _crowdStates;
         [SerializeField]
         private string[] _groupNames;
         [SerializeField]
@@ -26,12 +26,9 @@ namespace CrowdAI
         List<GameObject[,]> _allCrowdMembers;
 
         // crowd gen parameters
-      
+
         [SerializeField]
         private float _density, _tiltAmount, _startHeight;
-        [SerializeField]
-        private Vector3 _bounds = Vector3.one;
-        
 
         [SerializeField]
         private GameObject _placeholderPrefab;
@@ -39,7 +36,7 @@ namespace CrowdAI
         bool _randomGroupDist = true;
 
 
-       
+
         public string[] GetGroupNames()
         {
             var _namesCopy = new string[_groupNames.Length];
@@ -51,7 +48,7 @@ namespace CrowdAI
 
             return _namesCopy;
         }
-      
+
 
         /// <summary>
         /// Gets all the States that any crowd member may have
@@ -74,7 +71,7 @@ namespace CrowdAI
         /// </summary>
         /// <param name="stateName">The name of the state to be searched for</param>
         /// <returns> true if the state exists</returns>
-      public  bool StateExists(string stateName)
+        public bool StateExists(string stateName)
         {
             for (int i = 0; i < _crowdStates.Length; i++)
             {
@@ -89,14 +86,14 @@ namespace CrowdAI
         /// </summary>
         /// <param name="state"> The name of the animation state to be set</param>
         /// <param name="useRandDelay">whether there is a random delay between a state transistion</param>
-    public void SetState(string state, bool useRandDelay)
+        public void SetState(string state, bool useRandDelay)
         {
-           
-                for (int i = 0; i < _crowdGroups.Length; i++)
-                {
-                    _crowdGroups[i].SetState(state,useRandDelay);
-                }
-            
+
+            for (int i = 0; i < _crowdGroups.Length; i++)
+            {
+                _crowdGroups[i].SetState(state, useRandDelay);
+            }
+
         }
 
         /// <summary>
@@ -112,7 +109,7 @@ namespace CrowdAI
             {
                 if (groupName == _groupNames[i])
                 {
-                    _crowdGroups[i].SetState(state,useRandDelay);
+                    _crowdGroups[i].SetState(state, useRandDelay);
 
                     return true;
                 }
@@ -129,11 +126,11 @@ namespace CrowdAI
                 _crowdGroups[i].ToggleAnimations();
             }
         }
-     
 
-        public void GenerateCrowd()
+
+        public void GenerateCrowd(Vector3 bounds, GameObject parent)
         {
-            if ( _allCrowdMembers == null)
+            if (_allCrowdMembers == null)
             {
                 _allCrowdMembers = new List<GameObject[,]>();
             }
@@ -143,33 +140,39 @@ namespace CrowdAI
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
-                     _newCrowd = CrowdGen.GenCrowdCicle(_density, gameObject, _bounds, _startHeight, _placeholderPrefab);
+                    _newCrowd = CrowdGen.GenCrowdCicle(_density, parent, bounds, _startHeight, _placeholderPrefab);
 
                     if (_newCrowd.Length > 0)
                     {
-                        _allCrowdMembers.Add(CrowdGen.GenCrowdCicle(_density, gameObject, _bounds, _startHeight, _placeholderPrefab));
+                        _allCrowdMembers.Add(_newCrowd);
                     }
 
                     break;
                 case CrowdFormation.SQUARE:
-                     _newCrowd = CrowdGen.GenCrowdSquare(_density, gameObject, _bounds, _startHeight, 0,_placeholderPrefab);
+                    _newCrowd = CrowdGen.GenCrowdSquare(_density, parent, bounds, _startHeight, 0, _placeholderPrefab);
 
                     if (_newCrowd.Length > 0)
                     {
-                        _allCrowdMembers.Add(CrowdGen.GenCrowdCicle(_density, gameObject, _bounds, _startHeight, _placeholderPrefab));
+                        _allCrowdMembers.Add(_newCrowd);
                     }
                     break;
                 case CrowdFormation.RING:
                     break;
             }
 
-            
-            }
-            //All members of the crowd that are generated
-            
 
+        }
+        //All members of the crowd that are generated
 
+        public void IntialiseGeneration()
+        {
+            Vector3 bounds = transform.GetChild(0).transform.localPosition;
+
+            print(bounds);
+
+            GenerateCrowd(bounds, new GameObject("CrowdSource"));
 
         }
 
     }
+}
