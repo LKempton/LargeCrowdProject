@@ -15,19 +15,18 @@ public class CrowdEditorScript : Editor {
         crowdObject_Prop,
         groupNames_Prop,
         randomGroupDistribution_Prop,
+        crowdDensity_Prop,
         crowdStates_Prop;
     
 
     void OnEnable()
     {
         crowdFormation_Prop = serializedObject.FindProperty("_crowdFormation");
-        rows_Prop = serializedObject.FindProperty("_rows");
-        columns_Prop = serializedObject.FindProperty("_columns");
-        minOffset_Prop = serializedObject.FindProperty("_minOffset");
-        maxOffset_Prop = serializedObject.FindProperty("_maxOffset");
+
+        crowdDensity_Prop = serializedObject.FindProperty("_density");
         tiltAmount_Prop = serializedObject.FindProperty("_tiltAmount");
         startHeight_Prop = serializedObject.FindProperty("_startHeight");
-        crowdObject_Prop = serializedObject.FindProperty("_crowdObject");
+        crowdObject_Prop = serializedObject.FindProperty("_placeholderPrefab");
         groupNames_Prop = serializedObject.FindProperty("_groupNames");
         crowdStates_Prop = serializedObject.FindProperty("_crowdStates");
         randomGroupDistribution_Prop = serializedObject.FindProperty("_randomGroupDist");
@@ -47,12 +46,9 @@ public class CrowdEditorScript : Editor {
         switch (cF)
         {
             case CrowdAI.CrowdFormation.SQUARE:
-                GUIArray(crowdObject_Prop);
+                EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
+                EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
-                EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Rows"));
-                EditorGUILayout.PropertyField(columns_Prop, new GUIContent("Columns"));
-                EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
-                EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("Maximum Offset"));
                 EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
                 EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
                 GUIArray(groupNames_Prop);
@@ -64,11 +60,9 @@ public class CrowdEditorScript : Editor {
                 }
                 break;
             case CrowdAI.CrowdFormation.CIRCLE:
-                GUIArray(crowdObject_Prop);
-                EditorGUILayout.PropertyField(rows_Prop, new GUIContent("Layers"));
+                EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
+                EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
-                //EditorGUILayout.PropertyField(minOffset_Prop, new GUIContent("Minimum Offset"));
-                //EditorGUILayout.PropertyField(maxOffset_Prop, new GUIContent("Maximum Offset"));
                 EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
                 GUIArray(groupNames_Prop);
                 GUIArray(crowdStates_Prop);

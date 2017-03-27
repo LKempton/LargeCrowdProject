@@ -23,47 +23,20 @@ namespace CrowdAI
 
         float animationStagger = 0.25f;
 
+        List<GameObject[,]> _allCrowdMembers;
+
         // crowd gen parameters
+      
         [SerializeField]
-        private int _rows, _columns;
+        private float _density, _tiltAmount, _startHeight;
         [SerializeField]
-        private float _minOffset, _maxOffset, _tiltAmount, _startHeight;
+        private Vector3 _bounds = Vector3.one;
+        
+
         [SerializeField]
-        private GameObject[] _crowdObject;
+        private GameObject _placeholderPrefab;
         [SerializeField]
         bool _randomGroupDist = true;
-        
-      
-        //void Awake()
-        //{
-        //    // creates a new instance of CrowdGeneration and passes in all the values (needs cleaning)
-        //    var _generator = new CrowdGeneration(_rows,_columns,_minOffset,_maxOffset,_tiltAmount,_startHeight,_crowdObject);
-
-       
-        //     // If there are no groups then it will just create one
-        //    if (_groupNames.Length<1)
-        //    {
-        //        _crowdGroups = new CrowdGroup[1];
-        //        _crowdGroups[0] = new CrowdGroup("default");
-        //    }
-        //    else
-        //    {// creates as many crowd groups as thier are names
-        //        _crowdGroups = new CrowdGroup[_groupNames.Length];
-
-        //        for (int i = 0; i < _groupNames.Length; i++)
-        //        {
-                   
-        //                _crowdGroups[i] = new CrowdGroup(_groupNames[i]);
-                    
-                    
-        //        }
-        //    }
-        //    //All members of the crowd that are generated
-        //    _generator.GenerateCrowd(_crowdFormation, gameObject, ref _crowdGroups, _randomGroupDist);
-
-            
-
-        //}
 
 
        
@@ -160,31 +133,43 @@ namespace CrowdAI
 
         public void GenerateCrowd()
         {
-            // creates a new instance of CrowdGeneration and passes in all the values (needs cleaning)
-            var _generator = new CrowdGeneration(_rows, _columns, _minOffset, _maxOffset, _tiltAmount, _startHeight, _crowdObject);
-
-
-            // If there are no groups then it will just create one
-            if (_groupNames.Length < 1)
+            if ( _allCrowdMembers == null)
             {
-                _crowdGroups = new CrowdGroup[1];
-                _crowdGroups[0] = new CrowdGroup("default");
+                _allCrowdMembers = new List<GameObject[,]>();
             }
-            else
-            {// creates as many crowd groups as thier are names
-                _crowdGroups = new CrowdGroup[_groupNames.Length];
 
-                for (int i = 0; i < _groupNames.Length; i++)
-                {
+            GameObject[,] _newCrowd;
 
-                    _crowdGroups[i] = new CrowdGroup(_groupNames[i]);
+            switch (_crowdFormation)
+            {
+                case CrowdFormation.CIRCLE:
+                     _newCrowd = CrowdGen.GenCrowdCicle(_density, gameObject, _bounds, _startHeight, _placeholderPrefab);
 
+                    if (_newCrowd.Length > 0)
+                    {
+                        _allCrowdMembers.Add(CrowdGen.GenCrowdCicle(_density, gameObject, _bounds, _startHeight, _placeholderPrefab));
+                    }
 
-                }
+                    break;
+                case CrowdFormation.SQUARE:
+                     _newCrowd = CrowdGen.GenCrowdSquare(_density, gameObject, _bounds, _startHeight, 0,_placeholderPrefab);
+
+                    if (_newCrowd.Length > 0)
+                    {
+                        _allCrowdMembers.Add(CrowdGen.GenCrowdCicle(_density, gameObject, _bounds, _startHeight, _placeholderPrefab));
+                    }
+                    break;
+                case CrowdFormation.RING:
+                    break;
+            }
+
+            
             }
             //All members of the crowd that are generated
-            _generator.GenerateCrowd(_crowdFormation, gameObject, ref _crowdGroups, _randomGroupDist);
+            
+
+
+
         }
 
     }
-}
