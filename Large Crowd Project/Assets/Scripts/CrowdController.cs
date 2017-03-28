@@ -136,8 +136,12 @@ namespace CrowdAI
         }
 
 
-        public void GenerateCrowd(Vector3 bounds, GameObject parent)
+        public void GenerateCrowd()
         {
+            var _parent = new GameObject();
+
+            var _bounds = transform.GetChild(0).transform.localPosition;
+
             if (_allCrowdMembers == null)
             {
                 _allCrowdMembers = new List<GameObject[]>();
@@ -148,14 +152,14 @@ namespace CrowdAI
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
-                    _newCrowd = CrowdGen.GenCrowdCircle(_density, parent, bounds, _startHeight, _placeholderPrefab);
+                    _newCrowd = CrowdGen.GenCrowdCircle(_density, _parent, _bounds, _startHeight, _placeholderPrefab);
                     break;
                 case CrowdFormation.SQUARE:
-                    _newCrowd = CrowdGen.GenCrowdSquare(_density, parent, bounds, _startHeight, 0, _placeholderPrefab,_tiltAmount);
+                    _newCrowd = CrowdGen.GenCrowdSquare(_density, _parent, _bounds, _startHeight, 0, _placeholderPrefab,_tiltAmount);
                     break;
 
                  default:
-                    _newCrowd = CrowdGen.GenCrowdRing(_density, parent, bounds, _startHeight, _placeholderPrefab, _innerRadius, _tiltAmount);
+                    _newCrowd = CrowdGen.GenCrowdRing(_density, _parent, _bounds, _startHeight, _placeholderPrefab, _innerRadius, _tiltAmount);
                     break;
             }
 
@@ -167,16 +171,7 @@ namespace CrowdAI
         }
         //All members of the crowd that are generated
 
-        public void IntialiseGeneration()
-        {
-            Vector3 bounds = transform.GetChild(0).transform.localPosition;
-
-            print(bounds);
-
-            GenerateCrowd(bounds, new GameObject("CrowdSource"));
-
-        }
-
+        
         public int CrowdSizeTotal()
         {
             int size = 0;
@@ -187,6 +182,18 @@ namespace CrowdAI
             }
 
             return size;
+        }
+
+        public void RemoveMembers(GameObject parent)
+        {
+            for (int i = 0; i < _allCrowdMembers.Count; i++)
+            {
+                if(_allCrowdMembers[i][0].transform.parent.gameObject == parent)
+                {
+                    Debug.Log("Got Rid of the bastard");
+                    _allCrowdMembers.RemoveAt(i);
+                }
+            }
         }
 
     }

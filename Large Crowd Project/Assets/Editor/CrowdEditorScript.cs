@@ -56,7 +56,7 @@ public class CrowdEditorScript : Editor {
                 
                 if (GUILayout.Button("Generate Crowd"))
                 {
-                    script.IntialiseGeneration();
+                    script.GenerateCrowd();
                 }
                 break;
             case CrowdAI.CrowdFormation.CIRCLE:
@@ -69,7 +69,7 @@ public class CrowdEditorScript : Editor {
 
                 if (GUILayout.Button("Generate Crowd"))
                 {
-                    script.IntialiseGeneration();
+                    script.GenerateCrowd();
                 }
                 break;
             case CrowdAI.CrowdFormation.RING:
