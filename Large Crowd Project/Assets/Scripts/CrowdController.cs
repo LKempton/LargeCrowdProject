@@ -26,12 +26,12 @@ namespace CrowdAI
 
         float animationStagger = 0.25f;
 
-        List<GameObject[,]> _allCrowdMembers;
+        List<GameObject[]> _allCrowdMembers;
 
         // crowd gen parameters
 
         [SerializeField]
-        private float _density, _tiltAmount, _startHeight;
+        private float _density, _tiltAmount, _startHeight, _innerRadius;
 
         [SerializeField]
         private GameObject _placeholderPrefab;
@@ -140,34 +140,29 @@ namespace CrowdAI
         {
             if (_allCrowdMembers == null)
             {
-                _allCrowdMembers = new List<GameObject[,]>();
+                _allCrowdMembers = new List<GameObject[]>();
             }
 
-            GameObject[,] _newCrowd;
+            GameObject[] _newCrowd;
 
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
                     _newCrowd = CrowdGen.GenCrowdCircle(_density, parent, bounds, _startHeight, _placeholderPrefab);
-
-                    if (_newCrowd.Length > 0)
-                    {
-                        _allCrowdMembers.Add(_newCrowd);
-                    }
-
                     break;
                 case CrowdFormation.SQUARE:
-                    _newCrowd = CrowdGen.GenCrowdSquare(_density, parent, bounds, _startHeight, 0, _placeholderPrefab);
-
-                    if (_newCrowd.Length > 0)
-                    {
-                        _allCrowdMembers.Add(_newCrowd);
-                    }
+                    _newCrowd = CrowdGen.GenCrowdSquare(_density, parent, bounds, _startHeight, 0, _placeholderPrefab,_tiltAmount);
                     break;
-                case CrowdFormation.RING:
+
+                 default:
+                    _newCrowd = CrowdGen.GenCrowdRing(_density, parent, bounds, _startHeight, _placeholderPrefab, _innerRadius, _tiltAmount);
                     break;
             }
 
+            if (_newCrowd.Length > 0)
+            {
+                _allCrowdMembers.Add(_newCrowd);
+            }
 
         }
         //All members of the crowd that are generated
