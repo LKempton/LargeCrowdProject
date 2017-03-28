@@ -142,7 +142,8 @@ namespace CrowdAI
         {
             var _parent = new GameObject();
 
-            _parent.name = "Crowd Source";
+
+            
 
             var _cleaner = _parent.AddComponent<CrowdCleaner>();
             _cleaner.Controller = this;
@@ -152,7 +153,20 @@ namespace CrowdAI
             if (_allCrowdMembers == null)
             {
                 _allCrowdMembers = new List<GameObject[]>();
+                _parent.name = "Crowd Source";
             }
+            else
+            {
+                if (_allCrowdMembers.Count>0)
+                {
+                    _parent.name = "Crowd Source (" + _allCrowdMembers.Count + ")";
+                }
+                else
+                {
+                    _parent.name = "Crowd Source";
+                }
+            }
+
 
             GameObject[] _newCrowd;
 
