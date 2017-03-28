@@ -13,6 +13,8 @@ namespace CrowdAI
         [SerializeField]
         private string[] _crowdStates;
         [SerializeField]
+        private int _totalCrowdMembers;
+        [SerializeField]
         private string[] _groupNames;
         [SerializeField]
         private GameObject[][][] _groupModels;
@@ -140,6 +142,9 @@ namespace CrowdAI
         {
             var _parent = new GameObject();
 
+            var _cleaner = _parent.AddComponent<CrowdCleaner>();
+            _cleaner.Controller = this;
+
             var _bounds = transform.GetChild(0).transform.localPosition;
 
             if (_allCrowdMembers == null)
@@ -168,11 +173,22 @@ namespace CrowdAI
                 _allCrowdMembers.Add(_newCrowd);
             }
 
+            _totalCrowdMembers = CrowdSizeTotal();
+
+            print("Curret total = " + _totalCrowdMembers);
         }
         //All members of the crowd that are generated
 
         
-        public int CrowdSizeTotal()
+      public int Size
+        {
+            get
+            {
+                return _totalCrowdMembers;
+            }
+        }
+
+       private int CrowdSizeTotal()
         {
             int size = 0;
 
@@ -190,7 +206,6 @@ namespace CrowdAI
             {
                 if(_allCrowdMembers[i][0].transform.parent.gameObject == parent)
                 {
-                    Debug.Log("Got Rid of the bastard");
                     _allCrowdMembers.RemoveAt(i);
                 }
             }
