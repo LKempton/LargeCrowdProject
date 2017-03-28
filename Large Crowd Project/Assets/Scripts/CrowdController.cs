@@ -142,6 +142,8 @@ namespace CrowdAI
         {
             var _parent = new GameObject();
 
+            _parent.name = "Crowd Source";
+
             var _cleaner = _parent.AddComponent<CrowdCleaner>();
             _cleaner.Controller = this;
 
