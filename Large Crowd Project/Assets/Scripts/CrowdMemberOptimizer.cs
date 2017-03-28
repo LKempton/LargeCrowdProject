@@ -13,7 +13,7 @@ public class CrowdMemberOptimizer : MonoBehaviour {
         render = GetComponent<Renderer>();
     }
 
-    void Update()
+    private void UpdateLOD()
     {
         distanceToCam = CalculateDistance();
         Debug.Log(distanceToCam);
@@ -35,14 +35,12 @@ public class CrowdMemberOptimizer : MonoBehaviour {
 
 	void OnBecameVisible()
     {
-        //render.enabled = true;
-        //Debug.Log("MeshOn");
+        InvokeRepeating("UpdateLOD", 0, 0.1f);
     }
 
     void OnBecameInvisible()
     {
-        //render.enabled = false;
-        //Debug.Log("Mesh gone");
+        CancelInvoke();
     }
 
     private float CalculateDistance()
