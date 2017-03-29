@@ -103,12 +103,14 @@ namespace CrowdAI
        public static GameObject[] GenCrowdRing(float crowdDensity, GameObject parent, Vector3 bounds, float yOffset, GameObject prefab, float innerRadius, float tiltAmount)
         {
             float _radius = (bounds.x + bounds.z) / 4;
-            
+
+           
 
             var _outList = new List<GameObject>();
 
-            for (float i = _radius; i >innerRadius ; i-= 1/tiltAmount)
+            for (float i = _radius; i >innerRadius ; i-= 1/crowdDensity)
             {
+                Debug.Log(i);
                 GenerateRing(i, crowdDensity, parent, yOffset +i*tiltAmount, prefab, ref _outList);
             }
             
