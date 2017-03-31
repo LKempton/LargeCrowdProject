@@ -121,7 +121,7 @@ MonoBehaviour:
   _crowdStates:
   - Bob
   - Sway
-  _totalCrowdMembers: 0
+  _totalCrowdMembers: 21
   _groupNames:
   - Red
   - Blue

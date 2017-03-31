@@ -51,7 +51,8 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
                 EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
-                if (GUILayout.Button("Generate Crowd"))
+
+                if (GUILayout.Button("Generate Crowd" ,GUILayout.Width(200), GUILayout.Height(25)))
                 {
                     script.GenerateCrowd();
                 }
@@ -99,5 +100,6 @@ public class CrowdEditorScript : Editor {
             serializedObject.ApplyModifiedProperties();
         }
     }
+
 
 }
