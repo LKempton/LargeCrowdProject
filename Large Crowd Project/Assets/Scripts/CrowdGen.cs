@@ -219,7 +219,7 @@ namespace CrowdAI
             return Mathf.RoundToInt(bounds.x * bounds.z * crowdDensity * crowdDensity);
         }
 
-        public static int EstimateCicrle(float crowdDensity, Vector3 bounds)
+        public static int EstimateCircle(float crowdDensity, Vector3 bounds)
         {
             int _count = 0;
 

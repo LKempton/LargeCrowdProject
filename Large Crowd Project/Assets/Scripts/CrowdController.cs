@@ -33,7 +33,7 @@ namespace CrowdAI
 
         [SerializeField]
         private float _density, _tiltAmount, _startHeight, _innerRadius;
-        
+
         [SerializeField]
         private GameObject _placeholderPrefab;
         [SerializeField]
@@ -175,6 +175,7 @@ namespace CrowdAI
 
             GameObject[] _newCrowd;
             _parent.transform.position = transform.position;
+           
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
@@ -199,10 +200,34 @@ namespace CrowdAI
 
             _totalCrowdMembers = CrowdSizeTotal();
 
-            print("Curret total = " + _totalCrowdMembers);
+            
         }
         //All members of the crowd that are generated
+        public int GetPrediction()
+        {
+            int _prediction = 0;
 
+            var _bounds = transform.GetChild(0).transform.localPosition;
+
+            switch (_crowdFormation)
+            {
+                case CrowdFormation.CIRCLE:
+                    _prediction = CrowdGen.EstimateCircle(_density, _bounds);
+                    break;
+
+                case CrowdFormation.RING:
+                    _prediction = CrowdGen.EstimateRing(_density, _bounds, _innerRadius);
+
+                    break;
+
+                case CrowdFormation.SQUARE:
+                    _prediction = CrowdGen.EstimateSquare(_density, _bounds);
+                    break;
+            }
+
+
+            return _prediction;
+        }
         
       public int Size
         {
