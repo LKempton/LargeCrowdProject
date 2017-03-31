@@ -12,18 +12,38 @@ public class EditorSquareScript : MonoBehaviour {
 
     void OnDrawGizmosSelected()
     {
-        source = transform;
-        bounds = transform.GetChild(0).transform;
-
-        if (bounds != null && source != null)
+        if (transform.parent == null)
         {
-            Gizmos.color = selectedColour;
+            source = transform;
+            bounds = transform.GetChild(0).transform;
 
-            Gizmos.DrawLine(source.position, new Vector3(source.position.x, source.position.y, bounds.position.z));
-            Gizmos.DrawLine(source.position, new Vector3(bounds.position.x, source.position.y, source.position.z));
+            if (bounds != null && source != null)
+            {
+                Gizmos.color = selectedColour;
 
-            Gizmos.DrawLine(bounds.position, new Vector3(bounds.position.x, bounds.position.y, source.position.z));
-            Gizmos.DrawLine(bounds.position, new Vector3(source.position.x, bounds.position.y, bounds.position.z));
+                Gizmos.DrawLine(source.position, new Vector3(source.position.x, source.position.y, bounds.position.z));
+                Gizmos.DrawLine(source.position, new Vector3(bounds.position.x, source.position.y, source.position.z));
+
+                Gizmos.DrawLine(bounds.position, new Vector3(bounds.position.x, bounds.position.y, source.position.z));
+                Gizmos.DrawLine(bounds.position, new Vector3(source.position.x, bounds.position.y, bounds.position.z));
+            }
         }
+        else
+        {
+            bounds = transform;
+            source = transform.parent;
+
+                        if (bounds != null && source != null)
+            {
+                Gizmos.color = selectedColour;
+
+                Gizmos.DrawLine(source.position, new Vector3(source.position.x, source.position.y, bounds.position.z));
+                Gizmos.DrawLine(source.position, new Vector3(bounds.position.x, source.position.y, source.position.z));
+
+                Gizmos.DrawLine(bounds.position, new Vector3(bounds.position.x, bounds.position.y, source.position.z));
+                Gizmos.DrawLine(bounds.position, new Vector3(source.position.x, bounds.position.y, bounds.position.z));
+            }
+        }
+
     }
 }
