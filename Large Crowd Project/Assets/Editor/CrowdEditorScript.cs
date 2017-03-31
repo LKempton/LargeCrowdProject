@@ -43,6 +43,10 @@ public class CrowdEditorScript : Editor {
 
         CrowdAI.CrowdController script = (CrowdAI.CrowdController)target;
 
+        string descriptionText = "\nEdit the settings above to change how the crowd spawns, then press 'Generate Crowd' to create a new 'Crowd Source' object.\nYou can move 'Crowd Source around like any other model in Unity.";
+
+        EditorStyles.label.wordWrap = true;
+
         // Commented stuff is not yet implemented.
         switch (cF)
         {
@@ -50,7 +54,7 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
-                EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
+                //EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
 
                 if (GUILayout.Button("Generate Crowd" ,GUILayout.Width(200), GUILayout.Height(25)))
                 {
@@ -58,32 +62,38 @@ public class CrowdEditorScript : Editor {
                 }
                 GUIArray(groupNames_Prop);
                 GUIArray(crowdStates_Prop);
-                
+            
+                EditorGUILayout.LabelField(descriptionText);
+
                 break;
             case CrowdAI.CrowdFormation.CIRCLE:
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
-                if (GUILayout.Button("Generate Crowd"))
+                if (GUILayout.Button("Generate Crowd", GUILayout.Width(200), GUILayout.Height(25)))
                 {
                     script.GenerateCrowd();
                 }
                 GUIArray(groupNames_Prop);
                 GUIArray(crowdStates_Prop);
 
+                EditorGUILayout.LabelField(descriptionText);
+
                 break;
             case CrowdAI.CrowdFormation.RING:
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
-                EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
+                //EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
                 EditorGUILayout.PropertyField(innerRadius_Prop, new GUIContent("Hole Radius"));
-                if (GUILayout.Button("Generate Crowd"))
+                if (GUILayout.Button("Generate Crowd", GUILayout.Width(200), GUILayout.Height(25)))
                 {
                     script.GenerateCrowd();
                 }
                 GUIArray(groupNames_Prop);
                 GUIArray(crowdStates_Prop);
+
+                EditorGUILayout.LabelField(descriptionText);
 
                 break;
         }

@@ -7,6 +7,9 @@ public class EditorSquareScript : MonoBehaviour {
     private Transform source;
     private Transform bounds;
 
+    private Vector3 corner1;
+    private Vector3 corner2;
+
     [SerializeField]
     private Color selectedColour;
 
@@ -17,15 +20,20 @@ public class EditorSquareScript : MonoBehaviour {
             source = transform;
             bounds = transform.GetChild(0).transform;
 
+            corner1 = new Vector3(bounds.position.x, bounds.position.y, source.position.z);
+            corner2 = new Vector3(source.position.x, source.position.y, bounds.position.z);
+
             if (bounds != null && source != null)
             {
                 Gizmos.color = selectedColour;
 
-                Gizmos.DrawLine(source.position, new Vector3(source.position.x, source.position.y, bounds.position.z));
-                Gizmos.DrawLine(source.position, new Vector3(bounds.position.x, source.position.y, source.position.z));
+                Gizmos.DrawLine(source.position, corner1);
+                Gizmos.DrawLine(corner2, bounds.position);
 
-                Gizmos.DrawLine(bounds.position, new Vector3(bounds.position.x, bounds.position.y, source.position.z));
-                Gizmos.DrawLine(bounds.position, new Vector3(source.position.x, bounds.position.y, bounds.position.z));
+                Gizmos.DrawLine(source.position, corner2);
+                Gizmos.DrawLine(corner1, bounds.position);
+
+                Gizmos.DrawLine(source.position, bounds.position);
             }
         }
         else
@@ -33,15 +41,20 @@ public class EditorSquareScript : MonoBehaviour {
             bounds = transform;
             source = transform.parent;
 
-                        if (bounds != null && source != null)
+            corner1 = new Vector3(bounds.position.x, bounds.position.y, source.position.z);
+            corner2 = new Vector3(source.position.x, source.position.y, bounds.position.z);
+
+            if (bounds != null && source != null)
             {
                 Gizmos.color = selectedColour;
 
-                Gizmos.DrawLine(source.position, new Vector3(source.position.x, source.position.y, bounds.position.z));
-                Gizmos.DrawLine(source.position, new Vector3(bounds.position.x, source.position.y, source.position.z));
+                Gizmos.DrawLine(source.position, corner1);
+                Gizmos.DrawLine(corner2, bounds.position);
 
-                Gizmos.DrawLine(bounds.position, new Vector3(bounds.position.x, bounds.position.y, source.position.z));
-                Gizmos.DrawLine(bounds.position, new Vector3(source.position.x, bounds.position.y, bounds.position.z));
+                Gizmos.DrawLine(source.position, corner2);
+                Gizmos.DrawLine(corner1, bounds.position);
+
+                Gizmos.DrawLine(source.position, bounds.position);
             }
         }
 

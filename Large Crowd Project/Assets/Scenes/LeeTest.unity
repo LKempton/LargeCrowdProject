@@ -285,41 +285,6 @@ Prefab:
       propertyPath: _crowdFormation
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114548163683692152, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b,
-        type: 2}
-      propertyPath: _totalCrowdMembers
-      value: 21
-      objectReference: {fileID: 0}
-    - target: {fileID: 114534631932774460, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b,
-        type: 2}
-      propertyPath: selectedColour.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114534631932774460, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b,
-        type: 2}
-      propertyPath: selectedColour.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114534631932774460, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b,
-        type: 2}
-      propertyPath: selectedColour.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114121685208731630, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b,
-        type: 2}
-      propertyPath: selectedColour.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114121685208731630, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b,
-        type: 2}
-      propertyPath: selectedColour.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114121685208731630, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b,
-        type: 2}
-      propertyPath: selectedColour.b
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b, type: 2}
   m_IsPrefabParent: 0
