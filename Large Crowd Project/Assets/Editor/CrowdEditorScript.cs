@@ -51,43 +51,39 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
                 EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
-                EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
-                GUIArray(groupNames_Prop);
-                GUIArray(crowdStates_Prop);
-                
                 if (GUILayout.Button("Generate Crowd"))
                 {
                     script.GenerateCrowd();
                 }
+                GUIArray(groupNames_Prop);
+                GUIArray(crowdStates_Prop);
+                
                 break;
             case CrowdAI.CrowdFormation.CIRCLE:
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
-                EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
-                GUIArray(groupNames_Prop);
-                GUIArray(crowdStates_Prop);
-
                 if (GUILayout.Button("Generate Crowd"))
                 {
                     script.GenerateCrowd();
                 }
+                GUIArray(groupNames_Prop);
+                GUIArray(crowdStates_Prop);
+
                 break;
             case CrowdAI.CrowdFormation.RING:
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
                 EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
-                EditorGUILayout.PropertyField(startHeight_Prop, new GUIContent("Height Offset"));
                 EditorGUILayout.PropertyField(innerRadius_Prop, new GUIContent("Hole Radius"));
-                GUIArray(groupNames_Prop);
-                GUIArray(crowdStates_Prop);
-
-
                 if (GUILayout.Button("Generate Crowd"))
                 {
                     script.GenerateCrowd();
                 }
+                GUIArray(groupNames_Prop);
+                GUIArray(crowdStates_Prop);
+
                 break;
         }
 
