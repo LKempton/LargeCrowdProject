@@ -11,7 +11,17 @@ namespace CrowdAI
 
         void OnDestroy()
         {
-            _controller.RemoveMembers(gameObject);
+            try
+            {
+                _controller.RemoveMembers(gameObject);
+            }
+            catch (System.Exception)
+            {
+
+                Debug.LogError("Reference lost from undoing ");
+            }
+
+            
         }
 
         public CrowdController Controller

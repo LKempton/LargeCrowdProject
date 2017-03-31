@@ -19,22 +19,21 @@ namespace CrowdAI
         [SerializeField]
         private GameObject[][][] _groupModels;
 
-        [SerializeField]
-        private GameObject[] _crowdModels;
+       
 
         private CrowdGroup[] _crowdGroups;
         [SerializeField]
         private CrowdFormation _crowdFormation;
 
         float animationStagger = 0.25f;
-
+       
         List<GameObject[]> _allCrowdMembers;
 
         // crowd gen parameters
 
         [SerializeField]
         private float _density, _tiltAmount, _startHeight, _innerRadius;
-
+        
         [SerializeField]
         private GameObject _placeholderPrefab;
         [SerializeField]
@@ -43,6 +42,8 @@ namespace CrowdAI
 
         private LODPoolManager _poolManager;
 
+        [SerializeField][Range(0,1)]
+        float _percentModelsPooled = 0.5f;
        
 
         public string[] GetGroupNames()
@@ -58,7 +59,10 @@ namespace CrowdAI
         }
 
 
-
+        void Awake()
+        {
+            
+        }
 
         /// <summary>
         /// Gets all the States that any crowd member may have
