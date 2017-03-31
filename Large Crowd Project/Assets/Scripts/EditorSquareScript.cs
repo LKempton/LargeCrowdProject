@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EditorSquareScript : MonoBehaviour {
-
+public class EditorSquareScript : MonoBehaviour
+{
     private Transform source;
     private Transform bounds;
 
@@ -13,50 +13,86 @@ public class EditorSquareScript : MonoBehaviour {
     [SerializeField]
     private Color selectedColour;
 
+    public bool isCircle;
+
+    private CrowdAI.CrowdController cc;
+
+
     void OnDrawGizmosSelected()
     {
-        if (transform.parent == null)
+        if (!isCircle)
         {
-            source = transform;
-            bounds = transform.GetChild(0).transform;
-
-            corner1 = new Vector3(bounds.position.x, bounds.position.y, source.position.z);
-            corner2 = new Vector3(source.position.x, source.position.y, bounds.position.z);
-
-            if (bounds != null && source != null)
+            if (transform.parent == null)
             {
-                Gizmos.color = selectedColour;
+                source = transform;
+                bounds = transform.GetChild(0).transform;
 
-                Gizmos.DrawLine(source.position, corner1);
-                Gizmos.DrawLine(corner2, bounds.position);
+                corner1 = new Vector3(bounds.position.x, bounds.position.y, source.position.z);
+                corner2 = new Vector3(source.position.x, source.position.y, bounds.position.z);
 
-                Gizmos.DrawLine(source.position, corner2);
-                Gizmos.DrawLine(corner1, bounds.position);
+                if (bounds != null && source != null)
+                {
+                    Gizmos.color = selectedColour;
 
-                Gizmos.DrawLine(source.position, bounds.position);
+                    Gizmos.DrawLine(source.position, corner1);
+                    Gizmos.DrawLine(corner2, bounds.position);
+
+                    Gizmos.DrawLine(source.position, corner2);
+                    Gizmos.DrawLine(corner1, bounds.position);
+
+                    Gizmos.DrawLine(source.position, bounds.position);
+                }
+            }
+            else
+            {
+                bounds = transform;
+                source = transform.parent;
+
+                corner1 = new Vector3(bounds.position.x, bounds.position.y, source.position.z);
+                corner2 = new Vector3(source.position.x, source.position.y, bounds.position.z);
+
+                if (bounds != null && source != null)
+                {
+                    Gizmos.color = selectedColour;
+
+                    Gizmos.DrawLine(source.position, corner1);
+                    Gizmos.DrawLine(corner2, bounds.position);
+
+                    Gizmos.DrawLine(source.position, corner2);
+                    Gizmos.DrawLine(corner1, bounds.position);
+
+                    Gizmos.DrawLine(source.position, bounds.position);
+                }
             }
         }
-        else
+        else if (isCircle)
         {
-            bounds = transform;
-            source = transform.parent;
-
-            corner1 = new Vector3(bounds.position.x, bounds.position.y, source.position.z);
-            corner2 = new Vector3(source.position.x, source.position.y, bounds.position.z);
-
-            if (bounds != null && source != null)
+            if (transform.parent == null)
             {
-                Gizmos.color = selectedColour;
+                source = transform;
+                bounds = transform.GetChild(0).transform;
 
-                Gizmos.DrawLine(source.position, corner1);
-                Gizmos.DrawLine(corner2, bounds.position);
+                Vector3 midPoint = (source.position + bounds.position) / 2;
 
-                Gizmos.DrawLine(source.position, corner2);
-                Gizmos.DrawLine(corner1, bounds.position);
+                if (bounds != null && source != null)
+                {
+                    UnityEditor.Handles.color = selectedColour;
+                    UnityEditor.Handles.DrawWireDisc(midPoint, Vector3.up, bounds.position.magnitude / 3);
+                }
+            }
+            else
+            {
+                bounds = transform;
+                source = transform.parent;
 
-                Gizmos.DrawLine(source.position, bounds.position);
+                Vector3 midPoint = (source.position + bounds.position) / 2;
+
+                if (bounds != null && source != null)
+                {
+                    UnityEditor.Handles.color = selectedColour;
+                    UnityEditor.Handles.DrawWireDisc(midPoint, Vector3.up, bounds.position.magnitude / 3);
+                }
             }
         }
-
     }
 }

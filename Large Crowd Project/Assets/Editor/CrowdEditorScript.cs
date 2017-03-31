@@ -4,6 +4,9 @@ using UnityEditor;
 [CustomEditor(typeof(CrowdAI.CrowdController)), CanEditMultipleObjects]
 public class CrowdEditorScript : Editor {
 
+    private EditorSquareScript editorScript;
+    private EditorSquareScript childScript;
+
     public SerializedProperty
         crowdFormation_Prop,
         rows_Prop,
@@ -21,7 +24,7 @@ public class CrowdEditorScript : Editor {
     
 
     void OnEnable()
-    {
+    { 
         crowdFormation_Prop = serializedObject.FindProperty("_crowdFormation");
         innerRadius_Prop = serializedObject.FindProperty("_innerRadius");
         crowdDensity_Prop = serializedObject.FindProperty("_density");
@@ -43,6 +46,10 @@ public class CrowdEditorScript : Editor {
 
         CrowdAI.CrowdController script = (CrowdAI.CrowdController)target;
 
+        editorScript = script.gameObject.GetComponent<EditorSquareScript>();
+
+        childScript = script.gameObject.GetComponentsInChildren<EditorSquareScript>()[1];
+
         string descriptionText = "\nEdit the settings above to change how the crowd spawns, then press 'Generate Crowd' to create a new 'Crowd Source' object.\nYou can move 'Crowd Source around like any other model in Unity.";
 
         EditorStyles.label.wordWrap = true;
@@ -51,6 +58,8 @@ public class CrowdEditorScript : Editor {
         switch (cF)
         {
             case CrowdAI.CrowdFormation.SQUARE:
+                editorScript.isCircle = false;
+                childScript.isCircle = false;
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
@@ -67,6 +76,8 @@ public class CrowdEditorScript : Editor {
 
                 break;
             case CrowdAI.CrowdFormation.CIRCLE:
+                editorScript.isCircle = true;
+                childScript.isCircle = true;
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
@@ -81,6 +92,8 @@ public class CrowdEditorScript : Editor {
 
                 break;
             case CrowdAI.CrowdFormation.RING:
+                editorScript.isCircle = true;
+                childScript.isCircle = true;
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
                 EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
