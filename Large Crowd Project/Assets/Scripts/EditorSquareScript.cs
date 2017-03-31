@@ -13,6 +13,7 @@ public class EditorSquareScript : MonoBehaviour
     [SerializeField]
     private Color selectedColour;
 
+    [HideInInspector]
     public bool isCircle;
 
     private CrowdAI.CrowdController cc;

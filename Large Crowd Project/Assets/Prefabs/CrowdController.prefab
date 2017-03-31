@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedColour: {r: 1, g: 0, b: 0, a: 1}
+  isCircle: 0
 --- !u!114 &114383026525269594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -107,6 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedColour: {r: 1, g: 0, b: 0, a: 1}
+  isCircle: 0
 --- !u!114 &114548163683692152
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,7 +127,6 @@ MonoBehaviour:
   _groupNames:
   - Red
   - Blue
-  _crowdModels: []
   _crowdFormation: 1
   _density: 0.8
   _tiltAmount: 0
@@ -134,3 +135,4 @@ MonoBehaviour:
   _placeholderPrefab: {fileID: 1054051684950950, guid: a028fc942c340154690e9ab783aba7ae,
     type: 2}
   _randomGroupDist: 0
+  _percentModelsPooled: 0.5
