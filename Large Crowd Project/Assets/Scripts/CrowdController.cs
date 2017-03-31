@@ -39,6 +39,7 @@ namespace CrowdAI
         [SerializeField]
         bool _randomGroupDist = true;
 
+       
 
         private LODPoolManager _poolManager;
 
@@ -173,7 +174,7 @@ namespace CrowdAI
 
 
             GameObject[] _newCrowd;
-
+            _parent.transform.position = transform.position;
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
@@ -181,6 +182,7 @@ namespace CrowdAI
                     _newCrowd = CrowdGen.GenCrowdCircle(_density, _parent, _bounds, _placeholderPrefab);
                     break;
                 case CrowdFormation.SQUARE:
+                    _parent.transform.position += .5f * CrowdGen.GetObjectBounds(_placeholderPrefab, true);
                     _newCrowd = CrowdGen.GenCrowdSquare(_density, _parent, _bounds, _placeholderPrefab);
                     break;
 
