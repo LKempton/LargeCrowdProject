@@ -28,8 +28,8 @@ public class EditorSquareScript : MonoBehaviour
                 source = transform;
                 bounds = transform.GetChild(0).transform;
 
-                corner1 = new Vector3(bounds.position.x, bounds.position.y, source.position.z);
-                corner2 = new Vector3(source.position.x, source.position.y, bounds.position.z);
+                corner1 = new Vector3(bounds.position.x, source.position.y, source.position.z);
+                corner2 = new Vector3(source.position.x, bounds.position.y, bounds.position.z);
 
                 if (bounds != null && source != null)
                 {
@@ -49,8 +49,8 @@ public class EditorSquareScript : MonoBehaviour
                 bounds = transform;
                 source = transform.parent;
 
-                corner1 = new Vector3(bounds.position.x, bounds.position.y, source.position.z);
-                corner2 = new Vector3(source.position.x, source.position.y, bounds.position.z);
+                corner1 = new Vector3(bounds.position.x, source.position.y, source.position.z);
+                corner2 = new Vector3(source.position.x, bounds.position.y, bounds.position.z);
 
                 if (bounds != null && source != null)
                 {
