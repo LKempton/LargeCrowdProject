@@ -42,6 +42,8 @@ namespace CrowdAI
 
             int _arrDiv = (_columns > _rows) ? _rows : _columns;
 
+            float _tilt = bounds.y /  _columns;
+
             var _crowdMembers = new GameObject[_rows*_columns];
 
             for (int i = 0; i < _columns; i++)
@@ -49,7 +51,7 @@ namespace CrowdAI
                 for (int j = 0; j < _rows; j++)
                 {
                     var _newPos = _parentPos;
-                    _newPos += new Vector3(j / crowdDensity, 0, i / crowdDensity);
+                    _newPos += new Vector3(j / crowdDensity, i*_tilt, i / crowdDensity);
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
                     _newObj.transform.position = _newPos; ;
