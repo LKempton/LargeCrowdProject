@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class CrowdMemberOptimizer : MonoBehaviour {
 
-    private Renderer render;
-
     private float distanceToCam;
+
+    [SerializeField]
+    private bool dynamicCrowdModel;
 
     [SerializeField]
     private float highLODDistance;
@@ -14,12 +15,6 @@ public class CrowdMemberOptimizer : MonoBehaviour {
     private float midLODDistance;
     [SerializeField]
     private float lowLODDistance;
-
-
-    void Start()
-    {
-        render = GetComponent<Renderer>();
-    }
 
     private void UpdateLOD()
     {
@@ -43,12 +38,18 @@ public class CrowdMemberOptimizer : MonoBehaviour {
 
 	void OnBecameVisible()
     {
-        InvokeRepeating("UpdateLOD", 0, 0.1f);
+        if (dynamicCrowdModel)
+        {
+            InvokeRepeating("UpdateLOD", 0, 0.1f);
+        }
     }
 
     void OnBecameInvisible()
     {
-        CancelInvoke();
+        if (dynamicCrowdModel)
+        {
+            CancelInvoke("UpdateLOD");
+        }
     }
 
     private float CalculateDistance()
