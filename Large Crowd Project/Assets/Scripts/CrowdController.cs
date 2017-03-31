@@ -173,14 +173,14 @@ namespace CrowdAI
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
-                    _newCrowd = CrowdGen.GenCrowdCircle(_density, _parent, _bounds, _startHeight, _placeholderPrefab);
+                    _newCrowd = CrowdGen.GenCrowdCircle(_density, _parent, _bounds, _placeholderPrefab);
                     break;
                 case CrowdFormation.SQUARE:
-                    _newCrowd = CrowdGen.GenCrowdSquare(_density, _parent, _bounds, _startHeight, 0, _placeholderPrefab,_tiltAmount);
+                    _newCrowd = CrowdGen.GenCrowdSquare(_density, _parent, _bounds, _placeholderPrefab);
                     break;
 
                  default:
-                    _newCrowd = CrowdGen.GenCrowdRing(_density, _parent, _bounds, _startHeight, _placeholderPrefab, _innerRadius, _tiltAmount);
+                    _newCrowd = CrowdGen.GenCrowdRing(_density, _parent, _bounds,  _placeholderPrefab, _innerRadius);
                     break;
             }
 
