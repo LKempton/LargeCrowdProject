@@ -61,7 +61,7 @@ namespace CrowdAI
 
         void Awake()
         {
-            
+               
         }
 
         /// <summary>
@@ -177,6 +177,7 @@ namespace CrowdAI
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
+                    _parent.transform.position += .5f * _bounds;
                     _newCrowd = CrowdGen.GenCrowdCircle(_density, _parent, _bounds, _placeholderPrefab);
                     break;
                 case CrowdFormation.SQUARE:
@@ -184,6 +185,7 @@ namespace CrowdAI
                     break;
 
                  default:
+                    _parent.transform.position += .5f * _bounds;
                     _newCrowd = CrowdGen.GenCrowdRing(_density, _parent, _bounds,  _placeholderPrefab, _innerRadius);
                     break;
             }
