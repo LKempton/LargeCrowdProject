@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4472861272711716}
   - component: {fileID: 114822844978273278}
+  - component: {fileID: 114994526084368796}
   m_Layer: 0
   m_Name: CrowdHolderAnimatedStates
   m_TagString: Untagged
@@ -51,13 +52,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1205891536930750}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1.6, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4472861272711716}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 13.919999, y: 0, z: -0.10620367}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!4 &4472861272711716
 Transform:
   m_ObjectHideFlags: 1
@@ -109,7 +110,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1205891536930750}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: 404cf9e0098da964582dc9ef0e005210, type: 3}
 --- !u!111 &111048192051693304
 Animation:
   m_ObjectHideFlags: 1
@@ -139,9 +140,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minStartDelay: 0.004
   _maxStartDelay: 1
+  _transistionDelay: 0.4
   _stateAnimClips:
   - {fileID: 7400000, guid: 0edaafc6c62a52f4d96d0cba16e72bf1, type: 2}
   - {fileID: 7400000, guid: 690067eb5d836a74182cceb3b49f6378, type: 2}
   _animStateNames:
   - Bob
   - Sway
+--- !u!114 &114994526084368796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1054051684950950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c44d13eb0f77384bb72d6c3eb2c1ca4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

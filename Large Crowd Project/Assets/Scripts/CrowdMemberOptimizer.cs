@@ -8,6 +8,14 @@ public class CrowdMemberOptimizer : MonoBehaviour {
 
     private float distanceToCam;
 
+    [SerializeField]
+    private float highLODDistance;
+    [SerializeField]
+    private float midLODDistance;
+    [SerializeField]
+    private float lowLODDistance;
+
+
     void Start()
     {
         render = GetComponent<Renderer>();
@@ -19,15 +27,15 @@ public class CrowdMemberOptimizer : MonoBehaviour {
         Debug.Log(distanceToCam);
 
         //!distance boundaries to change!
-        if (distanceToCam <= 15f)
+        if (distanceToCam <= highLODDistance)
         {
             //set high detail model
         }
-        else if (distanceToCam > 15 && distanceToCam <= 50)
+        else if (distanceToCam > highLODDistance && distanceToCam <= lowLODDistance)
         {
             //set medium detail model
         }
-        else if (distanceToCam > 50)
+        else if (distanceToCam > lowLODDistance)
         {
             //set far away model
         }
