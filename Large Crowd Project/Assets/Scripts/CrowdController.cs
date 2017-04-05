@@ -264,6 +264,7 @@ namespace CrowdAI
                     _allCrowdMembers.RemoveAt(i);
                 }
             }
+            _totalCrowdMembers = CrowdSizeTotal();
         }
 
     }

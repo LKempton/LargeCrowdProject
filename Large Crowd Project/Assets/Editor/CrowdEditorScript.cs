@@ -7,7 +7,7 @@ public class CrowdEditorScript : Editor {
     private EditorSquareScript editorScript;
     private EditorSquareScript childScript;
     CrowdAI.CrowdController script;
-    private int _estimatedCount = 0;
+   
 
     public SerializedProperty
         crowdFormation_Prop,
@@ -36,13 +36,20 @@ public class CrowdEditorScript : Editor {
         groupNames_Prop = serializedObject.FindProperty("_groupNames");
         crowdStates_Prop = serializedObject.FindProperty("_crowdStates");
         randomGroupDistribution_Prop = serializedObject.FindProperty("_randomGroupDist");
-        script = (CrowdAI.CrowdController)target;
+
+        
+            script = (CrowdAI.CrowdController)target;
+        
     }
 
     public override void OnInspectorGUI()
     {
-        _estimatedCount = script.GetPrediction();
+       int _estimatedCount = script.GetPrediction();
+        int _currentTotal = script.Size;    
+
         serializedObject.Update();
+
+        EditorGUILayout.LabelField("Crowd Size: ", _currentTotal.ToString());
 
         EditorGUILayout.PropertyField(crowdFormation_Prop);
 
@@ -79,6 +86,8 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.LabelField(descriptionText);
 
                 break;
+
+
             case CrowdAI.CrowdFormation.CIRCLE:
                 editorScript.isCircle = true;
                 childScript.isCircle = true;
@@ -95,6 +104,8 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.LabelField(descriptionText);
 
                 break;
+
+
             case CrowdAI.CrowdFormation.RING:
                 editorScript.isCircle = true;
                 childScript.isCircle = true;
