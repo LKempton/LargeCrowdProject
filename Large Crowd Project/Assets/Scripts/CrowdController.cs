@@ -146,7 +146,7 @@ namespace CrowdAI
         public void GenerateCrowd()
         {
             var _parent = new GameObject();
-
+            int _estCrowdCount = 0; 
 
             
 
@@ -179,16 +179,21 @@ namespace CrowdAI
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
+                    _estCrowdCount = CrowdGen.EstimateCircle(_density, _bounds);
                     _parent.transform.position += .5f * _bounds;
                     _newCrowd = CrowdGen.GenCrowdCircle(_density, _parent, _bounds, _placeholderPrefab);
                     break;
+
+
                 case CrowdFormation.SQUARE:
-                    _parent.transform.position += .5f * CrowdGen.GetObjectBounds(_placeholderPrefab, true);
+                    _estCrowdCount =  CrowdGen.EstimateSquare(_density, _bounds);
+                    _parent.transform.position += .5f * CrowdGen.GetObjectBounds(_placeholderPrefab);
                     _newCrowd = CrowdGen.GenCrowdSquare(_density, _parent, _bounds, _placeholderPrefab);
                     break;
 
                  default:
                     _parent.transform.position += .5f * _bounds;
+                    _estCrowdCount = CrowdGen.EstimateRing(_density, _bounds, _innerRadius);
                     _newCrowd = CrowdGen.GenCrowdRing(_density, _parent, _bounds,  _placeholderPrefab, _innerRadius);
                     break;
             }
@@ -198,6 +203,7 @@ namespace CrowdAI
                 _allCrowdMembers.Add(_newCrowd);
             }
 
+            print("Estimated = " + _estCrowdCount + "  | Actual = " + _newCrowd.Length);
             _totalCrowdMembers = CrowdSizeTotal();
 
             

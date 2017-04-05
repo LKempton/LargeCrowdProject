@@ -7,6 +7,8 @@ public class CrowdEditorScript : Editor {
     private EditorSquareScript editorScript;
     private EditorSquareScript childScript;
 
+
+
     public SerializedProperty
         crowdFormation_Prop,
         rows_Prop,

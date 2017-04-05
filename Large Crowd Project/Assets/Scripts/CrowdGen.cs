@@ -13,17 +13,17 @@ namespace CrowdAI
             //used list since the number of game objects generated isn't determined in a linear manner
 
             float _radius = (bounds.x + bounds.z) / 4;
+            float _yOffset = GetObjectBounds(prefab).y / 2;
 
-           
 
-           
+
 
             // average size of the bounds = circumference
 
             for (float i = 0; i <=_radius; i+= 1/crowdDensity)
             {
                float  _tilt = (i / _radius) * bounds.y;
-                GenerateRing(i, crowdDensity, _tilt, parent,  prefab,ref _outList);
+                GenerateRing(i, crowdDensity,_yOffset+ _tilt, parent,  prefab,ref _outList);
                 
 
             }
@@ -43,6 +43,7 @@ namespace CrowdAI
             int _arrDiv = (_columns > _rows) ? _rows : _columns;
 
             float _tilt = bounds.y /  _columns;
+            float _yOffset = GetObjectBounds(prefab).y / 2;
 
             var _crowdMembers = new GameObject[_rows*_columns];
 
@@ -51,7 +52,7 @@ namespace CrowdAI
                 for (int j = 0; j < _rows; j++)
                 {
                     var _newPos = _parentPos;
-                    _newPos += new Vector3(j / crowdDensity, i*_tilt, i / crowdDensity);
+                    _newPos += new Vector3(j / crowdDensity, _yOffset+i*_tilt, i / crowdDensity);
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
                     _newObj.transform.position = _newPos; ;
@@ -79,6 +80,7 @@ namespace CrowdAI
             int _arrDiv = (_columns > _rows) ? _rows : _columns;
 
             float _tilt = bounds.y / (_rows * _columns);
+            float _yOffset = GetObjectBounds(prefab).y / 2;
 
             var _crowdMembers = new GameObject[_columns* _rows];
 
@@ -88,7 +90,7 @@ namespace CrowdAI
                 {
                     var _newPos = _parentPos;
                     float _newDensity = crowdDensity + Random.Range(-densityRange, densityRange);
-                    _newPos += new Vector3(j / _newDensity, i*_tilt, i / _newDensity);
+                    _newPos += new Vector3(j / _newDensity, _yOffset+i*_tilt, i / _newDensity);
                         
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
@@ -107,7 +109,7 @@ namespace CrowdAI
         {
             float _radius = (bounds.x + bounds.z) / 4;
 
-            
+            float _yOffset = GetObjectBounds(prefab).y / 2;
 
             var _outList = new List<GameObject>();
 
@@ -115,86 +117,46 @@ namespace CrowdAI
             {
                 float _tilt = (i / _radius) * bounds.y;
 
-                GenerateRing(i, crowdDensity,_tilt, parent, prefab, ref _outList);
+                GenerateRing(i, crowdDensity,_tilt+_yOffset, parent, prefab, ref _outList);
             }
             
             return _outList.ToArray();
         }
 
-        public static Vector3 GetObjectBounds(GameObject gO, bool is3D)
+        public static Vector3 GetObjectBounds(GameObject gO)
         {
             var _outBounds = new Vector3();
 
-            if (is3D)
+            var _rend = gO.GetComponentsInChildren<Renderer>();
+
+            for (int i = 0; i < _rend.Length; i++)
             {
-                var _rend = gO.GetComponents<MeshRenderer>();
-               
+                var _cRend = _rend[i];
 
-                if (_rend.Length < 1)
+                if ( _cRend is  MeshRenderer || _cRend is SpriteRenderer)
                 {
+                    var _cBounds = _cRend.bounds.extents;
 
-                    _rend = gO.GetComponentsInChildren<MeshRenderer>();
-                }
-
-                _outBounds = _rend[0].bounds.extents;
-
-                for (int i = 1; i < _rend.Length; i++)
-                {
-                    var _newBounds = _rend[i].bounds.extents;
-
-                    if (_outBounds.x < _newBounds.x)
+                    if (_cBounds.x > _outBounds.x)
                     {
-                        _outBounds.x = _newBounds.x;
+                        _outBounds.x = _cBounds.x;
                     }
 
-                    if (_outBounds.y < _newBounds.y)
+                    if (_cBounds.y > _outBounds.y)
                     {
-                        _outBounds.y = _newBounds.y;
+                        _outBounds.y = _cBounds.y;
                     }
 
-                    if (_outBounds.z < _newBounds.z)
+                    if (_cBounds.z > _outBounds.z)
                     {
-                        _outBounds.z = _newBounds.z;
+                        _outBounds.z = _cBounds.z;
                     }
                 }
             }
-            else
-            {
-                var _spriteRend = gO.GetComponents<SpriteRenderer>();
 
-                if (_spriteRend == null)
-                {
-                    _spriteRend = gO.GetComponentsInChildren<SpriteRenderer>();
-                }
-
-                _outBounds = _spriteRend[0].bounds.extents;
-
-                for (int i = 0; i < _spriteRend.Length; i++)
-                {
-                    var _newBounds = _spriteRend[i].bounds.extents;
-
-                    if (_outBounds.x < _newBounds.x)
-                    {
-                        _outBounds.x = _newBounds.x;
-                    }
-
-                    if (_outBounds.y < _newBounds.y)
-                    {
-                        _outBounds.y = _newBounds.y;
-                    }
-
-                    if (_outBounds.z < _newBounds.z)
-                    {
-                        _outBounds.z = _newBounds.z;
-                    }
-
-
-                }
-            }
-
-            _outBounds.x *= gO.transform.localScale.x * 2;
-            _outBounds.y *= gO.transform.localScale.y * 2;
-            _outBounds.z *= gO.transform.localScale.z * 2;
+            _outBounds.x *= gO.transform.localScale.x*2;
+            _outBounds.y *= gO.transform.localScale.y*2;
+            _outBounds.z *= gO.transform.localScale.z*2;
 
             return _outBounds;
 
@@ -203,15 +165,20 @@ namespace CrowdAI
         public static int EstimateRing(float crowdDensity, Vector3 bounds, float innerRadius)
         {
             float _radius = (bounds.x + bounds.z) / 4;
-            int _count = 0;
 
-            do
+            if (innerRadius >= _radius)
             {
-                _count += EstRing(crowdDensity, _radius);
-                _radius -= 1 / crowdDensity;
-            } while (_radius>innerRadius);
+                return 0;
+            }
 
-            return _count;
+            float _count = 0;
+
+           for (float i  =_radius; i>innerRadius; i -= 1 / crowdDensity)
+            {
+               _count+= EstRing(crowdDensity, i);
+            }
+
+            return Mathf.RoundToInt(_count)+1;
         }
 
         public static int EstimateSquare(float crowdDensity, Vector3 bounds)
@@ -221,35 +188,33 @@ namespace CrowdAI
 
         public static int EstimateCircle(float crowdDensity, Vector3 bounds)
         {
-            int _count = 0;
+            float _count = 0;
 
             float _radius = (bounds.x + bounds.z) / 4;
 
-            do
+            for (float i = 0; i <= _radius; i += 1 / crowdDensity)
             {
-                _count += EstRing(crowdDensity, _radius);
+                _count += EstRing(crowdDensity, i);
+            }
 
-                _radius -= 1 / crowdDensity;
-            } while (_radius>0);
-
-            return _count;
+            return Mathf.RoundToInt(_count)+1;
         }
 
-        private static int EstRing(float crowdDensity, float radius)
+        private static float EstRing(float crowdDensity, float radius)
         {
-            return Mathf.RoundToInt(2 * Mathf.PI * radius * crowdDensity);
+            return(float)2 * Mathf.PI * radius * crowdDensity;
         }
 
         private static void GenerateRing(float radius, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
         {
             float _objCount = 2 * Mathf.PI * radius * density;
-            int index = 0;
+         
 
 
             var _parentTrans = parent.transform;
             var _parentPos = _parentTrans.position;
 
-            for (float i = 0; i < _objCount; i++)
+            for (int i = 0; i < _objCount; i++)
             {
                 float _posX = radius * Mathf.Cos(Mathf.Deg2Rad * (i * (360 / _objCount)));
                 float _posZ = radius * Mathf.Sin(Mathf.Deg2Rad * (i * (360 / _objCount)));
@@ -258,7 +223,7 @@ namespace CrowdAI
                 _newObj.transform.position = new Vector3(_parentPos.x + _posX, _yPos, _parentPos.z + _posZ);
                 list.Add(_newObj);
 
-                index++;
+               
             }
 
 

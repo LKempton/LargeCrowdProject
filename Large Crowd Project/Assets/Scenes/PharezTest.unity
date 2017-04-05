@@ -201,28 +201,6 @@ MonoBehaviour:
   cursorSensitivity: 0.025
   cursorToggleAllowed: 1
   cursorToggleButton: 27
---- !u!1 &1213585082 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1737945247874084, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b,
-    type: 2}
-  m_PrefabInternal: {fileID: 1894049786}
---- !u!114 &1213585084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1213585082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e0a2dec83f23694098652a4f6aa7b3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _formation: 0
-  _yOffset: 0.5
-  _randomRange: 0.4
-  _crowdDensity: 0.7572
-  _prefab: {fileID: 1000011580907342, guid: 3d15ae3f8a133854e9576ade790b5f36, type: 2}
-  _bounds: {x: 20, y: 20, z: 20}
 --- !u!1 &1377606133
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,13 +303,7 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114383026525269594, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114548163683692152, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &2086973589
