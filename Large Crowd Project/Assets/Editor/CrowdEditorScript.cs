@@ -6,8 +6,8 @@ public class CrowdEditorScript : Editor {
 
     private EditorSquareScript editorScript;
     private EditorSquareScript childScript;
-
-
+    CrowdAI.CrowdController script;
+    private int _estimatedCount = 0;
 
     public SerializedProperty
         crowdFormation_Prop,
@@ -36,17 +36,19 @@ public class CrowdEditorScript : Editor {
         groupNames_Prop = serializedObject.FindProperty("_groupNames");
         crowdStates_Prop = serializedObject.FindProperty("_crowdStates");
         randomGroupDistribution_Prop = serializedObject.FindProperty("_randomGroupDist");
+        script = (CrowdAI.CrowdController)target;
     }
 
     public override void OnInspectorGUI()
     {
+        _estimatedCount = script.GetPrediction();
         serializedObject.Update();
 
         EditorGUILayout.PropertyField(crowdFormation_Prop);
 
         CrowdAI.CrowdFormation cF = (CrowdAI.CrowdFormation)crowdFormation_Prop.enumValueIndex;
 
-        CrowdAI.CrowdController script = (CrowdAI.CrowdController)target;
+        EditorGUILayout.LabelField("Approx Crowd: ", _estimatedCount.ToString());
 
         editorScript = script.gameObject.GetComponent<EditorSquareScript>();
 
@@ -126,5 +128,6 @@ public class CrowdEditorScript : Editor {
         }
     }
 
+   
 
 }
