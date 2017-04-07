@@ -43,8 +43,7 @@ namespace CrowdAI
 
         private LODPoolManager _poolManager;
 
-        [SerializeField][Range(0,1)]
-        float _percentModelsPooled = 0.5f;
+        
        
 
         public string[] GetGroupNames()

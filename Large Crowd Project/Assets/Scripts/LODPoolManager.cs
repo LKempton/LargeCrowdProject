@@ -7,66 +7,66 @@ namespace CrowdAI
 
     public class LODPoolManager
     {
-        private int crowdNumber;
-        private int lodLayers;
+        private int _crowdNumber;
+        private int _lodLayers;
         
-        private string[] objectNames;
-        private GameObject[] crowdLODObjects;
-        private int[] objectAmounts;
+        private string[] _objectNames;
+        private GameObject[] _crowdLODObjects;
+        private int[] _objectAmounts;
 
-        private Hashtable mainPool = new Hashtable();
+        private Hashtable _mainPool = new Hashtable();
 
-        private List<GameObject> tempList;
+        private List<GameObject> _tempList;
 
-        public LODPoolManager(int size, int layers, GameObject[] objects)
+        public LODPoolManager(int size, int layers, GameObject[] objects, string[] objectNames)
         {
-            crowdNumber = size;
-            lodLayers = layers;
-            crowdLODObjects = objects;
+            _crowdNumber = size;
+            _lodLayers = layers;
+            _crowdLODObjects = objects;
 
-            tempList = new List<GameObject>();
+            _tempList = new List<GameObject>();
 
-            objectNames = new string[lodLayers];
-            crowdLODObjects = new GameObject[lodLayers];
-            objectAmounts = new int[lodLayers];
+            objectNames = new string[_lodLayers];
+            _crowdLODObjects = new GameObject[_lodLayers];
+            _objectAmounts = new int[_lodLayers];
 
             for (int i = 0; i < objectNames.Length; i++)
             {
                 objectNames[i] = i.ToString();
             }
 
-            for (int i = 0; i < objectAmounts.Length; i++)
+            for (int i = 0; i < _objectAmounts.Length; i++)
             {
-                objectAmounts[i] = crowdNumber;
+                _objectAmounts[i] = _crowdNumber;
             }
 
             for (int i = 0; i < objectNames.Length; i++)
             {
                 List<GameObject> objList = new List<GameObject>();
 
-                for (int j = 0; j < objectAmounts[i]; j++)
+                for (int j = 0; j < _objectAmounts[i]; j++)
                 {
-                    GameObject obj = GameObject.Instantiate(crowdLODObjects[i]);
+                    GameObject obj = GameObject.Instantiate(_crowdLODObjects[i]);
                     objList.Add(obj);
                 }
 
-                mainPool.Add(objectNames[i], objList);
+                _mainPool.Add(objectNames[i], objList);
             }
         }
 
         public GameObject GetPooledObject(string name)
         {
-            if (mainPool.ContainsKey(name))
+            if (_mainPool.ContainsKey(name))
             {
-                tempList =  (List<GameObject> )mainPool[name];
+                _tempList =  (List<GameObject> )_mainPool[name];
 
-                for (int i = 0; i < tempList.Count; i++)
+                for (int i = 0; i < _tempList.Count; i++)
                 {
-                    if (tempList[i] != null)
+                    if (_tempList[i] != null)
                     {
-                        if (!tempList[i].activeInHierarchy)
+                        if (!_tempList[i].activeInHierarchy)
                         {
-                            return tempList[i];
+                            return _tempList[i];
                         }
                     }
                 }
@@ -78,11 +78,11 @@ namespace CrowdAI
 
         public void ResetPool()
         {
-            for (int i = 0; i < tempList.Count; i++)
+            for (int i = 0; i < _tempList.Count; i++)
             {
-                if (tempList[i] != null)
+                if (_tempList[i] != null)
                 {
-                    tempList[i].SetActive(false);
+                    _tempList[i].SetActive(false);
                 }
             }
         }

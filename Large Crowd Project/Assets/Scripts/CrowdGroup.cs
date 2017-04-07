@@ -100,6 +100,10 @@ namespace CrowdAI
             {
                 return _groupName;
             }
+            set
+            {
+                _groupName = value;
+            }
         }
 
         public GameObject[] GetCrowdModels
