@@ -32,7 +32,7 @@ namespace CrowdAI
         // crowd gen parameters
 
         [SerializeField]
-        private float _density, _tiltAmount, _startHeight, _innerRadius;
+        private float _density, _tiltAmount, _startHeight, _innerRadius,_rotDir = 0;
 
         [SerializeField]
         private GameObject _placeholderPrefab;
@@ -230,20 +230,20 @@ namespace CrowdAI
                 case CrowdFormation.CIRCLE:
                   
                     _parent.transform.position += .5f * _bounds;
-                    _newCrowd = CrowdGen.GenCrowdCircle(_density, _parent, _bounds, _placeholderPrefab);
+                    _newCrowd = CrowdGen.GenCrowdCircle(_density, _rotDir, _parent, _bounds, _placeholderPrefab);
                     break;
 
 
                 case CrowdFormation.SQUARE:
                     
                     _parent.transform.position += .5f * CrowdGen.GetObjectBounds(_placeholderPrefab);
-                    _newCrowd = CrowdGen.GenCrowdSquare(_density, _parent, _bounds, _placeholderPrefab);
+                    _newCrowd = CrowdGen.GenCrowdSquare(_density, _rotDir, _parent, _bounds, _placeholderPrefab);
                     break;
 
                  default:
                     _parent.transform.position += .5f * _bounds;
                   
-                    _newCrowd = CrowdGen.GenCrowdRing(_density, _parent, _bounds,  _placeholderPrefab, _innerRadius);
+                    _newCrowd = CrowdGen.GenCrowdRing(_density, _rotDir, _parent, _bounds,  _placeholderPrefab, _innerRadius);
                     break;
             }
 

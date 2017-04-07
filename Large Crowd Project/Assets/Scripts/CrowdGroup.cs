@@ -75,13 +75,14 @@ namespace CrowdAI
 
        /// <summary>
        /// Removes all crowd Members from the group
-       /// Does not dispose of them
+       /// Does not dispose of them !
        /// </summary>
 
         public void ClearAll()
         {
             _crowdMembers.Clear();
         }
+        
 
         public void ToggleAnimations()
         {
@@ -105,7 +106,9 @@ namespace CrowdAI
                 _groupName = value;
             }
         }
-
+        /// <summary>
+        /// Returns all the models that are in the group
+        /// </summary>
         public GameObject[] GetCrowdModels
         {
             get

@@ -7,10 +7,12 @@ namespace CrowdAI
     public static class CrowdGen
     {
 
-        public static GameObject[] GenCrowdCircle(float crowdDensity, GameObject parent, Vector3 bounds,  GameObject prefab)
+        public static GameObject[] GenCrowdCircle(float crowdDensity, float rotDir, GameObject parent, Vector3 bounds,  GameObject prefab)
         {
-            var _outList = new List<GameObject>(); 
+            var _outList = new List<GameObject>();
             //used list since the number of game objects generated isn't determined in a linear manner
+
+            prefab.transform.Rotate(0, rotDir, 0);
 
             float _radius = (bounds.x + bounds.z) / 4;
           
@@ -27,12 +29,12 @@ namespace CrowdAI
                 
 
             }
-            
 
+            prefab.transform.Rotate(0, -rotDir, 0);
             return _outList.ToArray() ;
         }
 
-        public static GameObject[] GenCrowdSquare(float crowdDensity, GameObject parent,  Vector3 bounds,   GameObject prefab)
+        public static GameObject[] GenCrowdSquare(float crowdDensity, float rotDir, GameObject parent,  Vector3 bounds,   GameObject prefab)
         {
 
 
@@ -41,6 +43,8 @@ namespace CrowdAI
 
             int _rows = Mathf.RoundToInt(crowdDensity * bounds.x);
             int _columns = Mathf.RoundToInt(crowdDensity * bounds.z);
+
+            prefab.transform.Rotate(0, rotDir, 0);
 
             if (_rows <0)
             {
@@ -72,18 +76,21 @@ namespace CrowdAI
                     _crowdMembers[i * _arrDiv+ j] = _newObj;
                 }
             }
-           
+
+            prefab.transform.Rotate(0, -rotDir, 0);
+
             return _crowdMembers;
             
           
          }
 
-        public static GameObject[] GenCrowdSquare(float crowdDensity, GameObject parent, Vector3 bounds, float densityRange, GameObject prefab )
+        public static GameObject[] GenCrowdSquare(float crowdDensity,float rotDir, GameObject parent, Vector3 bounds, float densityRange, GameObject prefab )
         { // e = m/v, e = crowdDensity, m = n of people , v = bounds. Therefore n of people  =  CrowdDensity * bounds
 
             var _parentTrans = parent.transform;
             var _parentPos = _parentTrans.position;
-            
+
+            prefab.transform.Rotate(0,rotDir,0);
 
             int _rows = Mathf.RoundToInt(crowdDensity * bounds.x);
             int _columns = Mathf.RoundToInt(crowdDensity * bounds.z);
@@ -111,16 +118,19 @@ namespace CrowdAI
                    
                 }
             }
-            
+
+            prefab.transform.Rotate(0, -rotDir, 0);
+
             return _crowdMembers;
 
         }
 
-        public static GameObject[] GenCrowdRing(float crowdDensity, GameObject parent, Vector3 bounds, GameObject prefab, float innerRadius )
+        public static GameObject[] GenCrowdRing(float crowdDensity,float rotDir, GameObject parent, Vector3 bounds, GameObject prefab, float innerRadius )
         {
             float _radius = (bounds.x + bounds.z) / 4;
 
             var _outList = new List<GameObject>();
+            
 
             for (float i = _radius; i >innerRadius ; i-= 1/crowdDensity)
             {
@@ -240,6 +250,31 @@ namespace CrowdAI
             }
 
 
+        }
+
+        private static void GenRingCentreFacing(float radius, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
+        {
+            float _objCount = 2 * Mathf.PI * radius * density;
+
+
+
+            var _parentTrans = parent.transform;
+            var _parentPos = _parentTrans.position;
+
+            for (int i = 0; i < _objCount; i++)
+            {
+                float _posX = radius * Mathf.Cos(Mathf.Deg2Rad * (i * (360 / _objCount)));
+                float _posZ = radius * Mathf.Sin(Mathf.Deg2Rad * (i * (360 / _objCount)));
+
+                var _newObj = GameObject.Instantiate(prefab, _parentTrans);
+                _newObj.transform.LookAt(parent.transform.position);
+
+
+                _newObj.transform.position = new Vector3(_parentPos.x + _posX, _yPos, _parentPos.z + _posZ);
+                list.Add(_newObj);
+
+
+            }
         }
 
     }
