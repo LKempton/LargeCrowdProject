@@ -26,19 +26,17 @@ namespace CrowdAI
 
             _tempList = new List<GameObject>();
 
-            objectNames = new string[_lodLayers];
+            _objectNames = objectNames;
             _crowdLODObjects = new GameObject[_lodLayers];
             _objectAmounts = new int[_lodLayers];
 
-            for (int i = 0; i < objectNames.Length; i++)
-            {
-                objectNames[i] = i.ToString();
-            }
-
+           
             for (int i = 0; i < _objectAmounts.Length; i++)
             {
                 _objectAmounts[i] = _crowdNumber;
             }
+
+
 
             for (int i = 0; i < objectNames.Length; i++)
             {

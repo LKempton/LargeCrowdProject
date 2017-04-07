@@ -61,7 +61,40 @@ namespace CrowdAI
 
         void Awake()
         {
-               
+            int _groupLength = _groupNames.Length;
+
+            int _totalElements = 0;
+            int _currentIndex = 0;
+
+            for (int i = 0; i < _groupLength; i++)
+            {
+                int _modelsInGroup = _groupModels[i].Length;
+
+                for (int j = 0; j < _modelsInGroup; j++)
+                {
+                    _totalElements += _groupModels[i][j].Length;
+                }
+            }
+
+            var _names = new string[_totalElements];
+
+            for (int i = 0; i < _groupLength; i++)
+            {
+                int _modelsInGroup = _groupModels[i].Length;
+
+                for (int j = 0; j < _modelsInGroup; j++)
+                {
+                    int _LODCount = _groupModels[i][j].Length;
+
+                    for (int k = 0; k <_LODCount ; k++)
+                    {
+                        _names[_currentIndex] = _groupNames[i] + "_" +j.ToString()+"_" +k.ToString();
+                    }
+                }
+            }
+
+            
+
         }
 
         /// <summary>
