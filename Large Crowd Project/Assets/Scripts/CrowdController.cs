@@ -186,6 +186,23 @@ namespace CrowdAI
             _cleaner.Controller = this;
 
             var _bounds = transform.GetChild(0).transform.localPosition;
+            _parent.transform.position = transform.position;
+
+            var _posModifier = Vector3.zero;
+
+            if (_bounds.x < 0)
+            {
+                _posModifier.x += _bounds.x;
+                _bounds.x *= -1;
+            }
+
+            if (_bounds.z < 0)
+            {
+                _posModifier.z += _bounds.z;
+                _bounds.z *= -1;
+            }
+
+            _parent.transform.position += _posModifier;
 
             if (_allCrowdMembers == null)
             {
@@ -206,7 +223,7 @@ namespace CrowdAI
 
 
             GameObject[] _newCrowd;
-            _parent.transform.position = transform.position;
+            
            
             switch (_crowdFormation)
             {

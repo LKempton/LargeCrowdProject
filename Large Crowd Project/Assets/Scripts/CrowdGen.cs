@@ -13,7 +13,7 @@ namespace CrowdAI
             //used list since the number of game objects generated isn't determined in a linear manner
 
             float _radius = (bounds.x + bounds.z) / 4;
-            float _yOffset = GetObjectBounds(prefab).y / 2;
+          
 
 
 
@@ -23,7 +23,7 @@ namespace CrowdAI
             for (float i = 0; i <=_radius; i+= 1/crowdDensity)
             {
                float  _tilt = (i / _radius) * bounds.y;
-                GenerateRing(i, crowdDensity,_yOffset+ _tilt, parent,  prefab,ref _outList);
+                GenerateRing(i, crowdDensity, _tilt, parent,  prefab,ref _outList);
                 
 
             }
@@ -54,7 +54,7 @@ namespace CrowdAI
             int _arrDiv = (_columns > _rows) ? _rows : _columns;
 
             float _tilt = bounds.y /  _columns;
-            float _yOffset = GetObjectBounds(prefab).y / 2;
+          
 
             var _crowdMembers = new GameObject[_rows*_columns];
 
@@ -63,7 +63,7 @@ namespace CrowdAI
                 for (int j = 0; j < _rows; j++)
                 {
                     var _newPos = _parentPos;
-                    _newPos += new Vector3(j / crowdDensity, _yOffset+i*_tilt, i / crowdDensity);
+                    _newPos += new Vector3(j / crowdDensity,i*_tilt, i / crowdDensity);
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
                     _newObj.transform.position = _newPos; ;
@@ -91,7 +91,7 @@ namespace CrowdAI
             int _arrDiv = (_columns > _rows) ? _rows : _columns;
 
             float _tilt = bounds.y / (_rows * _columns);
-            float _yOffset = GetObjectBounds(prefab).y / 2;
+            
 
             var _crowdMembers = new GameObject[_columns* _rows];
 
@@ -101,7 +101,7 @@ namespace CrowdAI
                 {
                     var _newPos = _parentPos;
                     float _newDensity = crowdDensity + Random.Range(-densityRange, densityRange);
-                    _newPos += new Vector3(j / _newDensity, _yOffset+i*_tilt, i / _newDensity);
+                    _newPos += new Vector3(j / _newDensity,i*_tilt, i / _newDensity);
                         
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
@@ -116,11 +116,9 @@ namespace CrowdAI
 
         }
 
-       public static GameObject[] GenCrowdRing(float crowdDensity, GameObject parent, Vector3 bounds, GameObject prefab, float innerRadius )
+        public static GameObject[] GenCrowdRing(float crowdDensity, GameObject parent, Vector3 bounds, GameObject prefab, float innerRadius )
         {
             float _radius = (bounds.x + bounds.z) / 4;
-
-            float _yOffset = GetObjectBounds(prefab).y / 2;
 
             var _outList = new List<GameObject>();
 
@@ -128,7 +126,7 @@ namespace CrowdAI
             {
                 float _tilt = (i / _radius) * bounds.y;
 
-                GenerateRing(i, crowdDensity,_tilt+_yOffset, parent, prefab, ref _outList);
+                GenerateRing(i, crowdDensity,_tilt, parent, prefab, ref _outList);
             }
             
             return _outList.ToArray();
