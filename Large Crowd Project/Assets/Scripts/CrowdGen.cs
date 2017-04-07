@@ -136,7 +136,7 @@ namespace CrowdAI
             {
                 float _tilt = (i / _radius) * bounds.y;
 
-                GenerateRing(i, crowdDensity,_tilt, parent, prefab, ref _outList);
+                GenRingCentreFacing(_radius, rotDir, crowdDensity, _tilt, parent, prefab, ref _outList);
             }
             
             return _outList.ToArray();
@@ -252,7 +252,7 @@ namespace CrowdAI
 
         }
 
-        private static void GenRingCentreFacing(float radius, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
+        private static void GenRingCentreFacing(float radius, float rotation, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
         {
             float _objCount = 2 * Mathf.PI * radius * density;
 
@@ -261,16 +261,22 @@ namespace CrowdAI
             var _parentTrans = parent.transform;
             var _parentPos = _parentTrans.position;
 
+            var _lookDir = _parentPos ;
+            _lookDir.y = 0;
+
             for (int i = 0; i < _objCount; i++)
             {
                 float _posX = radius * Mathf.Cos(Mathf.Deg2Rad * (i * (360 / _objCount)));
                 float _posZ = radius * Mathf.Sin(Mathf.Deg2Rad * (i * (360 / _objCount)));
 
                 var _newObj = GameObject.Instantiate(prefab, _parentTrans);
-                _newObj.transform.LookAt(parent.transform.position);
 
+                float _yRotz = Mathf.Sin((i * (360 / _objCount)));
 
                 _newObj.transform.position = new Vector3(_parentPos.x + _posX, _yPos, _parentPos.z + _posZ);
+                _newObj.transform.LookAt(_lookDir, Vector3.up);
+                _newObj.transform.Rotate(0, 180+rotation, 0);
+                
                 list.Add(_newObj);
 
 
