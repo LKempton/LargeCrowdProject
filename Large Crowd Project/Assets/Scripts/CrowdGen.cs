@@ -34,11 +34,22 @@ namespace CrowdAI
 
         public static GameObject[] GenCrowdSquare(float crowdDensity, GameObject parent,  Vector3 bounds,   GameObject prefab)
         {
+
+
             var _parentTrans = parent.transform;
             var _parentPos = _parentTrans.position;
 
             int _rows = Mathf.RoundToInt(crowdDensity * bounds.x);
             int _columns = Mathf.RoundToInt(crowdDensity * bounds.z);
+
+            if (_rows <0)
+            {
+                _rows *= -1;
+            }
+            if (_columns < 0)
+            {
+                _columns *= -1;
+            }
 
             int _arrDiv = (_columns > _rows) ? _rows : _columns;
 
@@ -164,7 +175,10 @@ namespace CrowdAI
 
         public static int EstimateRing(float crowdDensity, Vector3 bounds, float innerRadius)
         {
-            float _radius = (bounds.x + bounds.z) / 4;
+           
+            
+
+            float _radius = (Mathf.Abs(bounds.x) + Mathf.Abs(bounds.z)) / 4;
 
             if (innerRadius >= _radius)
             {
@@ -183,14 +197,15 @@ namespace CrowdAI
 
         public static int EstimateSquare(float crowdDensity, Vector3 bounds)
         {
-            return Mathf.RoundToInt(bounds.x * bounds.z * crowdDensity * crowdDensity);
+            return Mathf.RoundToInt(Mathf.Abs(bounds.x)* Mathf.Abs(bounds.z) * crowdDensity * crowdDensity);
         }
 
         public static int EstimateCircle(float crowdDensity, Vector3 bounds)
         {
             float _count = 0;
 
-            float _radius = (bounds.x + bounds.z) / 4;
+           
+            float _radius = (Mathf.Abs(bounds.x) + Mathf.Abs(bounds.z)) / 4;
 
             for (float i = 0; i <= _radius; i += 1 / crowdDensity)
             {

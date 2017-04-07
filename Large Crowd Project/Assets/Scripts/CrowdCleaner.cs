@@ -11,6 +11,12 @@ namespace CrowdAI
 
         void OnDestroy()
         {
+            if (gameObject.transform.childCount < 1)
+            {
+                return;
+            }
+
+
             try
             {
                 _controller.RemoveMembers(gameObject);
