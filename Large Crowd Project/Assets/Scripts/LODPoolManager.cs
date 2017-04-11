@@ -8,7 +8,8 @@ namespace CrowdAI
     public class LODPoolManager
     {
         private int _crowdNumber;
-        private int _lodLayers;
+		[SerializeField]
+        private int _lodLayers = 5;
         
         private string[] _objectNames;
         private GameObject[] _crowdLODObjects;
@@ -25,10 +26,9 @@ namespace CrowdAI
 		/// <param name="layers">the number of levels of detail for the model of each crowd member</param>
 		/// <param name="objects">the array containing the crowd model objects to be pooled (one for each LOD for each crowd member type e.g. medium detail model for woman model on red team)</param>
 		/// <param name="objectNames">the array containing the names of each crowd model object to be pooled (one for each LOD for each crowd member type e.g. mediumDetailWomanRed</param>
-        public LODPoolManager(int size, int layers, GameObject[] objects, string[] objectNames)
+        public LODPoolManager(int size, GameObject[] objects, string[] objectNames)
         {
             _crowdNumber = size;
-            _lodLayers = layers;
             _crowdLODObjects = objects;
 
             _tempList = new List<GameObject>();
