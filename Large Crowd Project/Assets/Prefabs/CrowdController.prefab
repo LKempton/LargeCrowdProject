@@ -123,7 +123,7 @@ MonoBehaviour:
   _crowdStates:
   - Bob
   - Sway
-  _totalCrowdMembers: 21
+  _totalCrowdMembers: 0
   _groupNames:
   - Red
   - Blue
@@ -132,7 +132,7 @@ MonoBehaviour:
   _tiltAmount: 0
   _startHeight: 0.5
   _innerRadius: 0
+  _rotDir: 0
   _placeholderPrefab: {fileID: 1054051684950950, guid: a028fc942c340154690e9ab783aba7ae,
     type: 2}
   _randomGroupDist: 0
-  _percentModelsPooled: 0.5

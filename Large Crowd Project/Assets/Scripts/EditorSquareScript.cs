@@ -78,7 +78,7 @@ public class EditorSquareScript : MonoBehaviour
                 if (bounds != null && source != null)
                 {
                     UnityEditor.Handles.color = selectedColour;
-                    UnityEditor.Handles.DrawWireDisc(midPoint, Vector3.up, bounds.position.magnitude / 3);
+                    UnityEditor.Handles.DrawWireDisc(midPoint, Vector3.up, bounds.localPosition.magnitude / 2.25f);
                 }
             }
             else
@@ -91,7 +91,7 @@ public class EditorSquareScript : MonoBehaviour
                 if (bounds != null && source != null)
                 {
                     UnityEditor.Handles.color = selectedColour;
-                    UnityEditor.Handles.DrawWireDisc(midPoint, Vector3.up, bounds.position.magnitude / 3);
+                    UnityEditor.Handles.DrawWireDisc(midPoint, Vector3.up, bounds.localPosition.magnitude / 2.25f);
                 }
             }
         }
