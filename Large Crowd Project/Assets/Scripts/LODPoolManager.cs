@@ -12,7 +12,7 @@ namespace CrowdAI
         private int _lodLayers = 5;
         
         private string[] _objectNames;
-        private GameObject[] _crowdLODObjects;
+        private GameObject[][][] _crowdLODObjects;
         private int[] _objectAmounts;
 
         private Hashtable _mainPool = new Hashtable();
@@ -25,7 +25,7 @@ namespace CrowdAI
 		/// <param name="size">the number of </param>
 		/// <param name="objects">the array containing the crowd model objects to be pooled (one for each LOD for each crowd member type e.g. medium detail model for woman model on red team)</param>
 		/// <param name="objectNames">the array containing the names of each crowd model object to be pooled (one for each LOD for each crowd member type e.g. mediumDetailWomanRed</param>
-        public LODPoolManager(int size, GameObject[] objects, string[] objectNames)
+        public LODPoolManager(int size, GameObject[][][] objects, string[] objectNames)
         {
 			_crowdNumber = size;
 
@@ -48,9 +48,9 @@ namespace CrowdAI
 				List<GameObject> tempObjList = new List<GameObject>();
 
 				//instantiate the number of objects to pool for this LOD
-                for (int j = 0; j < _objectAmounts[i]; j++)
+                for (int l = 0; l < _objectAmounts[i]; l++)
                 {
-                    GameObject obj = GameObject.Instantiate(_crowdLODObjects[i]);
+                    GameObject obj = GameObject.Instantiate(_crowdLODObjects[i][j][k][l]);
                     tempObjList.Add(obj);
                 }
 

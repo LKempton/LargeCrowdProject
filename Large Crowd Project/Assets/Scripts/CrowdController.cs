@@ -19,7 +19,7 @@ namespace CrowdAI
         [SerializeField]
         private GameObject[][][] _groupModels;
 
-       
+        int _LODCount = 5;
 
         private CrowdGroup[] _crowdGroups;
         [SerializeField]
@@ -84,7 +84,8 @@ namespace CrowdAI
 
                 for (int j = 0; j < _modelsInGroup; j++)
                 {
-                    int _LODCount = _groupModels[i][j].Length;
+                    //made LODCount global variable with set size
+                    //int _LODCount = _groupModels[i][j].Length;
 
                     for (int k = 0; k <_LODCount ; k++)
                     {
@@ -93,8 +94,8 @@ namespace CrowdAI
                 }
             }
 
-            
 
+            _poolManager = new LODPoolManager(_totalCrowdMembers, _groupModels, _names);
         }
 
         /// <summary>
