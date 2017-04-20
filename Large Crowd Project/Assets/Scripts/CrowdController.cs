@@ -97,8 +97,8 @@ namespace CrowdAI
                 }
             }
 
-
             _poolManager = new LODPoolManager(_totalCrowdMembers, _groupModels, _names);
+            Debug.Log("Should have called");
         }
 
         /// <summary>

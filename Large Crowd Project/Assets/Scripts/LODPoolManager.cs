@@ -27,6 +27,7 @@ namespace CrowdAI
 		/// <param name="objectNames">the array containing the names of each crowd model object to be pooled (one for each LOD for each crowd member type e.g. mediumDetailWomanRed</param>
         public LODPoolManager(int size, GameObject[][][] objects, string[] objectNames)
         {
+            Debug.Log("Called");
 			_crowdNumber = size;
 
             _tempList = new List<GameObject>();
@@ -41,21 +42,31 @@ namespace CrowdAI
                 _objectAmounts[i] = _crowdNumber;
             }
 
-			//instantiate the pooled objects
-            for (int i = 0; i < objectNames.Length; i++)
+            //instantiate objects for every model
+            //go through all model groups
+            for (int i = 0; i < _crowdLODObjects.Length; i++)
             {
-				//create temp list to store objects for this LOD
-				List<GameObject> tempObjList = new List<GameObject>();
-
-				//instantiate the number of objects to pool for this LOD
-                for (int l = 0; l < _objectAmounts[i]; l++)
+                //go through all model types
+                for (int j = 0; j < _crowdLODObjects[i].Length; j++)
                 {
-                    GameObject obj = GameObject.Instantiate(_crowdLODObjects[i][j][k][l]);
-                    tempObjList.Add(obj);
-                }
+                    //go through all LODs
+                    for (int k = 0; k < _crowdLODObjects[i][j].Length; k++)
+                    {
+                        //create temp list to store objects for this LOD
+                        List<GameObject> tempObjList = new List<GameObject>();
 
-				//add objects for this LOD to pool
-                _mainPool.Add(objectNames[i], tempObjList);
+                        //instantiate the number of objects to pool for this LOD
+                        for (int l = 0; l < _objectAmounts[k]; l++)
+                        {
+                            Debug.Log("instantiated");
+                            GameObject obj = GameObject.Instantiate(_crowdLODObjects[i][j][k]);
+                            tempObjList.Add(obj);
+                        }
+
+                        //add objects for this LOD to pool
+                        _mainPool.Add(objectNames[k], tempObjList);
+                    }
+                }
             }
         }
 
