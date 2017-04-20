@@ -67,6 +67,7 @@ namespace CrowdAI
 
         void Awake()
         {
+            RemoveEmptySources();
             if (!delegated)
             {
                 ManagePlaceholders();
@@ -191,13 +192,10 @@ namespace CrowdAI
 
         public void GenerateCrowd()
         {
+            RemoveEmptySources();
+
             var _parent = new GameObject();
-          
-
-            
-
-            var _cleaner = _parent.AddComponent<CrowdCleaner>();
-            _cleaner.Controller = this;
+           
 
             var _bounds = transform.GetChild(0).transform.localPosition;
             _parent.transform.position = transform.position;
@@ -264,11 +262,10 @@ namespace CrowdAI
 
             if (_newCrowd.Length > 0)
             {
-                print("added");
                 _allCrowdMembers.Add(_newCrowd);
             }
 
-         
+            
             _totalCrowdMembers = CrowdSizeTotal();
 
             
@@ -312,7 +309,7 @@ namespace CrowdAI
         {
             int size = 0;
 
-            for (int i = 0; i < _allCrowdMembers.Count; i++)
+            for (int i = _allCrowdMembers.Count-1; i >-1; i--)
             {
                 size += _allCrowdMembers[i].Length;
             }
@@ -320,18 +317,30 @@ namespace CrowdAI
             return size;
         }
 
-        public void RemoveMembers(GameObject parent)
+        public void RemoveEmptySources()
         {
-            print(_allCrowdMembers);
-
-            for (int i = 0; i < _allCrowdMembers.Count; i++)
+            if (_allCrowdMembers == null)
             {
-                if(_allCrowdMembers[i][0].transform.parent.gameObject == parent)
+                return;
+            }
+            if (_allCrowdMembers.Count < 1)
+            {
+                return;
+            }
+
+            for (int i = _allCrowdMembers.Count-1; i >-1; i--)
+            {
+                var source = _allCrowdMembers[i];
+
+                if (source[0] == null)
                 {
+                    print(i + " is null, deleting");
                     _allCrowdMembers.RemoveAt(i);
+                        
                 }
             }
-            _totalCrowdMembers = CrowdSizeTotal();
+            print("Size: " + _allCrowdMembers.Count);
+
         }
 
         private void ManagePlaceholders()
