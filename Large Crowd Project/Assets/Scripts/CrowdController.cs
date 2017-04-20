@@ -43,7 +43,10 @@ namespace CrowdAI
 
         private LODPoolManager _poolManager;
 
-        
+        public GameObject GetPooled(string name)
+        {
+            return _poolManager.GetPooledObject(name);
+        }
        
 
         public string[] GetGroupNames()
