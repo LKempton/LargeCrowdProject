@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace CrowdAI
@@ -37,14 +38,18 @@ namespace CrowdAI
         [SerializeField]
         private GameObject _placeholderPrefab;
         [SerializeField]
-        bool _randomGroupDist = true;
+        private GameObject _placeholderMesh;
 
+        [SerializeField]
+        bool _randomGroupDist = true;
+        private bool _placeholdersActive = true;
        
 
         private LODPoolManager _poolManager;
 
         
-       
+      
+
 
         public string[] GetGroupNames()
         {
@@ -54,13 +59,15 @@ namespace CrowdAI
             {
                 _namesCopy[i] = _groupNames[i];
             }
-
+           
             return _namesCopy;
         }
 
 
         void Awake()
         {
+            ClearPlaceholders();
+
             int _groupLength = _groupNames.Length;
 
             int _totalElements = 0;
@@ -315,6 +322,71 @@ namespace CrowdAI
             }
             _totalCrowdMembers = CrowdSizeTotal();
         }
+
+       public void ClearPlaceholders()
+        {
+            if (!_placeholdersActive)
+            {
+                return;
+            }
+
+            for (int i = 0; i < _allCrowdMembers.Count; i++)
+            {
+                var _cGroup = _allCrowdMembers[i];
+
+                for (int j = 0; j < _cGroup.Length; j++)
+                {
+                    var _rendObj = _cGroup[i].GetComponentInChildren<MeshRenderer>();
+
+                    if (_rendObj != null)
+                    {
+                        Destroy(_rendObj.gameObject);
+                    }
+                }
+            }
+
+            _placeholdersActive = false;
+        }
+
+        public void ReAddPlaceholders()
+        {
+            if (_placeholdersActive)
+            {
+                return;
+            }
+
+            
+            if (_placeholderMesh == null)
+            {
+                // assumptive line, the placeholder mesh must be the first child in the prefab
+                _placeholderMesh = _placeholderPrefab.transform.GetChild(0).gameObject;
+            }
+
+
+            for (int i = 0; i < _allCrowdMembers.Count; i++)
+            {
+                var _cGroup = _allCrowdMembers[i];
+
+                for (int j = 0; j < _cGroup.Length; j++)
+                {
+                    var _placeholderPos = _cGroup[j];
+
+                    if (_placeholderPos.GetComponent<MeshRenderer>() == null)
+                    {
+                        var _placeholderTrans = _placeholderPos.transform;
+
+                        var _newPlaceholder = Instantiate(_placeholderMesh,_placeholderTrans);
+                        _newPlaceholder.transform.position = _placeholderTrans.position;
+                        _newPlaceholder.transform.rotation = _placeholderTrans.rotation;
+
+                    }
+                }
+            }
+
+            _placeholdersActive = true;
+        }
+
+       
 
     }
 }
