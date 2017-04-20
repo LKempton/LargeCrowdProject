@@ -15,8 +15,8 @@ namespace CrowdAI
             prefab.transform.Rotate(0, rotDir, 0);
 
             float _radius = (bounds.x + bounds.z) / 4;
-          
 
+          
 
 
 
@@ -39,10 +39,13 @@ namespace CrowdAI
 
 
             var _parentTrans = parent.transform;
-            var _parentPos = _parentTrans.position;
+           
 
             int _rows = Mathf.RoundToInt(crowdDensity * bounds.x);
             int _columns = Mathf.RoundToInt(crowdDensity * bounds.z);
+
+            _parentTrans.position += new Vector3(0.5f * bounds.x, 0, 0.5f * bounds.z);
+            var _startPos = new Vector3(parent.transform.position.x - 0.5f * bounds.x, 0, parent.transform.position.z - 0.5f * bounds.z);
 
             prefab.transform.Rotate(0, rotDir, 0);
 
@@ -66,7 +69,7 @@ namespace CrowdAI
             {
                 for (int j = 0; j < _rows; j++)
                 {
-                    var _newPos = _parentPos;
+                    var _newPos = _startPos;
                     _newPos += new Vector3(j / crowdDensity,i*_tilt, i / crowdDensity);
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
@@ -88,9 +91,11 @@ namespace CrowdAI
         { // e = m/v, e = crowdDensity, m = n of people , v = bounds. Therefore n of people  =  CrowdDensity * bounds
 
             var _parentTrans = parent.transform;
-            var _parentPos = _parentTrans.position;
+           
 
             prefab.transform.Rotate(0,rotDir,0);
+
+            var _startPos = new Vector3(parent.transform.position.x - 0.5f * bounds.x, 0, parent.transform.position.z - 0.5f * bounds.z);
 
             int _rows = Mathf.RoundToInt(crowdDensity * bounds.x);
             int _columns = Mathf.RoundToInt(crowdDensity * bounds.z);
@@ -106,7 +111,7 @@ namespace CrowdAI
             {
                 for (int j = 0; j < _rows; j++)
                 {
-                    var _newPos = _parentPos;
+                    var _newPos = _startPos;
                     float _newDensity = crowdDensity + Random.Range(-densityRange, densityRange);
                     _newPos += new Vector3(j / _newDensity,i*_tilt, i / _newDensity);
                         
