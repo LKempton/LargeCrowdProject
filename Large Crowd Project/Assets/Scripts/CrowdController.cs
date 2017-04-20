@@ -68,12 +68,6 @@ namespace CrowdAI
         void Awake()
         {
             RemoveEmptySources();
-            if (!delegated)
-            {
-                ManagePlaceholders();
-                EditorApplication.playmodeStateChanged += ManagePlaceholders;
-                delegated = true;
-            }
 
             int _groupLength = _groupNames.Length;
 
@@ -219,7 +213,7 @@ namespace CrowdAI
             if (_allCrowdMembers == null)
             {
                 _allCrowdMembers = new List<GameObject[]>();
-                print("created instance");
+               
                 _parent.name = "Crowd Source";
             }
             else
@@ -321,10 +315,12 @@ namespace CrowdAI
         {
             if (_allCrowdMembers == null)
             {
+                Debug.Log("All crowd members null somehow cause fuck u");
                 return;
             }
             if (_allCrowdMembers.Count < 1)
             {
+                Debug.Log("All crowd members empty somehow cause fuck u");
                 return;
             }
 
@@ -339,7 +335,7 @@ namespace CrowdAI
                         
                 }
             }
-            print("Size: " + _allCrowdMembers.Count);
+
 
         }
 
@@ -357,7 +353,6 @@ namespace CrowdAI
 
             if (placeholdersSpawned)
             {
-
 
                 for (int i = 0; i < _allCrowdMembers.Count; i++)
                 {
