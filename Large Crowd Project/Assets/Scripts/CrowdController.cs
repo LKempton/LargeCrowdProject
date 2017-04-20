@@ -14,8 +14,6 @@ namespace CrowdAI
         [SerializeField]
         private string[] _crowdStates;
         [SerializeField]
-        private int _totalCrowdMembers;
-        [SerializeField]
         private string[] _groupNames;
         [SerializeField]
         private GameObject[][][] _groupModels;
@@ -28,7 +26,7 @@ namespace CrowdAI
 
         float animationStagger = 0.25f;
        
-        List<GameObject[]> _allCrowdMembers;
+        List<GameObject> _allCrowdMembers;
 
         // crowd gen parameters
 
@@ -212,7 +210,7 @@ namespace CrowdAI
 
             if (_allCrowdMembers == null)
             {
-                _allCrowdMembers = new List<GameObject[]>();
+                _allCrowdMembers = new List<GameObject>();
                
                 _parent.name = "Crowd Source";
             }
@@ -256,11 +254,14 @@ namespace CrowdAI
 
             if (_newCrowd.Length > 0)
             {
-                _allCrowdMembers.Add(_newCrowd);
+                for (int i = 0; i < _newCrowd.Length; i++)
+                {
+                    _allCrowdMembers.Add(_newCrowd[i]);
+                }
             }
 
             
-            _totalCrowdMembers = CrowdSizeTotal();
+         
 
             
         }
@@ -295,21 +296,11 @@ namespace CrowdAI
         {
             get
             {
-                return _totalCrowdMembers;
+                return _allCrowdMembers.Count;
             }
         }
 
-        private int CrowdSizeTotal()
-        {
-            int size = 0;
-
-            for (int i = _allCrowdMembers.Count-1; i >-1; i--)
-            {
-                size += _allCrowdMembers[i].Length;
-            }
-
-            return size;
-        }
+       
 
         public void RemoveEmptySources()
         {
@@ -328,7 +319,7 @@ namespace CrowdAI
             {
                 var source = _allCrowdMembers[i];
 
-                if (source[0] == null)
+                if (source == null)
                 {
                     print(i + " is null, deleting");
                     _allCrowdMembers.RemoveAt(i);
@@ -356,17 +347,14 @@ namespace CrowdAI
 
                 for (int i = 0; i < _allCrowdMembers.Count; i++)
                 {
-                    var _cGroup = _allCrowdMembers[i];
-
-                    for (int j = 0; j < _cGroup.Length; j++)
-                    {
-                        var _rendObj = _cGroup[i].GetComponentInChildren<MeshRenderer>();
+                  
+                        var _rendObj = _allCrowdMembers[i].GetComponentInChildren<MeshRenderer>();
 
                         if (_rendObj != null)
                         {
                             Destroy(_rendObj.gameObject);
                         }
-                    }
+                    
                 }
 
             }
@@ -380,11 +368,7 @@ namespace CrowdAI
 
                 for (int i = 0; i < _allCrowdMembers.Count; i++)
                 {
-                    var _cGroup = _allCrowdMembers[i];
-
-                    for (int j = 0; j < _cGroup.Length; j++)
-                    {
-                        var _placeholderPos = _cGroup[j];
+                        var _placeholderPos = _allCrowdMembers[i];
 
                         if (_placeholderPos.GetComponent<MeshRenderer>() == null)
                         {
@@ -393,8 +377,6 @@ namespace CrowdAI
                             var _newPlaceholder = Instantiate(_placeholderMesh, _placeholderTrans);
                             _newPlaceholder.transform.position = _placeholderTrans.position;
                             _newPlaceholder.transform.rotation = _placeholderTrans.rotation;
-
-                        }
                     }
                 }
             }
