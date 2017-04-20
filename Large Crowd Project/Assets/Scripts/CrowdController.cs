@@ -42,14 +42,15 @@ namespace CrowdAI
 
         [SerializeField]
         bool _randomGroupDist = true;
-        private bool _placeholdersActive = true;
-       
+
+        private bool  placeholdersSpawned = true;
+        private bool delegated = false;
 
         private LODPoolManager _poolManager;
 
         
       
-
+       
 
         public string[] GetGroupNames()
         {
@@ -66,13 +67,19 @@ namespace CrowdAI
 
         void Awake()
         {
-            ClearPlaceholders();
+            if (!delegated)
+            {
+                ManagePlaceholders();
+                EditorApplication.playmodeStateChanged += ManagePlaceholders;
+                delegated = true;
+            }
 
             int _groupLength = _groupNames.Length;
 
             int _totalElements = 0;
             int _currentIndex = 0;
 
+            return;
             for (int i = 0; i < _groupLength; i++)
             {
                 int _modelsInGroup = _groupModels[i].Length;
@@ -214,6 +221,7 @@ namespace CrowdAI
             if (_allCrowdMembers == null)
             {
                 _allCrowdMembers = new List<GameObject[]>();
+                print("created instance");
                 _parent.name = "Crowd Source";
             }
             else
@@ -256,6 +264,7 @@ namespace CrowdAI
 
             if (_newCrowd.Length > 0)
             {
+                print("added");
                 _allCrowdMembers.Add(_newCrowd);
             }
 
@@ -291,7 +300,7 @@ namespace CrowdAI
             return _prediction;
         }
         
-      public int Size
+        public int Size
         {
             get
             {
@@ -299,7 +308,7 @@ namespace CrowdAI
             }
         }
 
-       private int CrowdSizeTotal()
+        private int CrowdSizeTotal()
         {
             int size = 0;
 
@@ -313,6 +322,8 @@ namespace CrowdAI
 
         public void RemoveMembers(GameObject parent)
         {
+            print(_allCrowdMembers);
+
             for (int i = 0; i < _allCrowdMembers.Count; i++)
             {
                 if(_allCrowdMembers[i][0].transform.parent.gameObject == parent)
@@ -323,69 +334,72 @@ namespace CrowdAI
             _totalCrowdMembers = CrowdSizeTotal();
         }
 
-       public void ClearPlaceholders()
-        {
-            if (!_placeholdersActive)
+        private void ManagePlaceholders()
+        {         
+            if (_allCrowdMembers == null)
             {
                 return;
             }
 
-            for (int i = 0; i < _allCrowdMembers.Count; i++)
-            {
-                var _cGroup = _allCrowdMembers[i];
-
-                for (int j = 0; j < _cGroup.Length; j++)
-                {
-                    var _rendObj = _cGroup[i].GetComponentInChildren<MeshRenderer>();
-
-                    if (_rendObj != null)
-                    {
-                        Destroy(_rendObj.gameObject);
-                    }
-                }
-            }
-
-            _placeholdersActive = false;
-        }
-
-        public void ReAddPlaceholders()
-        {
-            if (_placeholdersActive)
+            if (_allCrowdMembers.Count <1)
             {
                 return;
             }
 
-            
-            if (_placeholderMesh == null)
+            if (placeholdersSpawned)
             {
-                // assumptive line, the placeholder mesh must be the first child in the prefab
-                _placeholderMesh = _placeholderPrefab.transform.GetChild(0).gameObject;
-            }
 
 
-            for (int i = 0; i < _allCrowdMembers.Count; i++)
-            {
-                var _cGroup = _allCrowdMembers[i];
-
-                for (int j = 0; j < _cGroup.Length; j++)
+                for (int i = 0; i < _allCrowdMembers.Count; i++)
                 {
-                    var _placeholderPos = _cGroup[j];
+                    var _cGroup = _allCrowdMembers[i];
 
-                    if (_placeholderPos.GetComponent<MeshRenderer>() == null)
+                    for (int j = 0; j < _cGroup.Length; j++)
                     {
-                        var _placeholderTrans = _placeholderPos.transform;
+                        var _rendObj = _cGroup[i].GetComponentInChildren<MeshRenderer>();
 
-                        var _newPlaceholder = Instantiate(_placeholderMesh,_placeholderTrans);
-                        _newPlaceholder.transform.position = _placeholderTrans.position;
-                        _newPlaceholder.transform.rotation = _placeholderTrans.rotation;
+                        if (_rendObj != null)
+                        {
+                            Destroy(_rendObj.gameObject);
+                        }
+                    }
+                }
 
+            }
+            else
+            {
+                if (_placeholderMesh == null)
+                {
+                    // assumptive line, the placeholder mesh must be the first child in the prefab
+                    _placeholderMesh = _placeholderPrefab.transform.GetChild(0).gameObject;
+                }
+
+                for (int i = 0; i < _allCrowdMembers.Count; i++)
+                {
+                    var _cGroup = _allCrowdMembers[i];
+
+                    for (int j = 0; j < _cGroup.Length; j++)
+                    {
+                        var _placeholderPos = _cGroup[j];
+
+                        if (_placeholderPos.GetComponent<MeshRenderer>() == null)
+                        {
+                            var _placeholderTrans = _placeholderPos.transform;
+
+                            var _newPlaceholder = Instantiate(_placeholderMesh, _placeholderTrans);
+                            _newPlaceholder.transform.position = _placeholderTrans.position;
+                            _newPlaceholder.transform.rotation = _placeholderTrans.rotation;
+
+                        }
                     }
                 }
             }
 
-            _placeholdersActive = true;
+            placeholdersSpawned = !placeholdersSpawned;
+
         }
 
+       
        
 
     }
