@@ -18,10 +18,9 @@ namespace CrowdAI
         [SerializeField]
         private GameObject[][][] _groupModels;
 
-<<<<<<< HEAD
-=======
+
         int _LODCount = 5;
->>>>>>> Implementing_LOD_script
+
 
 
         private List<CrowdGroup> _crowdGroups;
@@ -51,17 +50,12 @@ namespace CrowdAI
 
         private LODPoolManager _poolManager;
 
-<<<<<<< HEAD
-
-
-
-=======
         public GameObject GetPooled(string name)
         {
             return _poolManager.GetPooledObject(name);
         }
        
->>>>>>> Implementing_LOD_script
+
 
         public string[] GetGroupNames()
         {
@@ -89,7 +83,7 @@ namespace CrowdAI
             int _totalElements = 0;
             int _currentIndex = 0;
 
-            return;
+            
             for (int i = 0; i < _groupLength; i++)
             {
                 int _modelsInGroup = _groupModels[i].Length;
@@ -101,6 +95,8 @@ namespace CrowdAI
             }
 
             var _names = new string[_totalElements];
+            var _outObjects = new GameObject[_totalElements];
+           
 
             for (int i = 0; i < _groupLength; i++)
             {
@@ -114,17 +110,16 @@ namespace CrowdAI
                     for (int k = 0; k < _LODCount; k++)
                     {
                         _names[_currentIndex] = _crowdGroups[i].GroupName + "_" + j.ToString() + "_" + k.ToString();
+                        _outObjects[_currentIndex] = _groupModels[i][j][k];
+                        _currentIndex++;
                     }
                 }
             }
 
-<<<<<<< HEAD
 
-
-=======
-            _poolManager = new LODPoolManager(_totalCrowdMembers, _groupModels, _names);
+            _poolManager = new LODPoolManager(Size , _outObjects, _names);
             Debug.Log("Should have called");
->>>>>>> Implementing_LOD_script
+
         }
 
         /// <summary>

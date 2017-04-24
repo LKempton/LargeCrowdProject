@@ -12,7 +12,7 @@ namespace CrowdAI
         private int _lodLayers = 5;
         
         private string[] _objectNames;
-        private GameObject[][][] _crowdLODObjects;
+        private GameObject[] _crowdLODObjects;
         private int[] _objectAmounts;
 
         private Hashtable _mainPool = new Hashtable();
@@ -25,7 +25,7 @@ namespace CrowdAI
 		/// <param name="size">the number of </param>
 		/// <param name="objects">the array containing the crowd model objects to be pooled (one for each LOD for each crowd member type e.g. medium detail model for woman model on red team)</param>
 		/// <param name="objectNames">the array containing the names of each crowd model object to be pooled (one for each LOD for each crowd member type e.g. mediumDetailWomanRed</param>
-        public LODPoolManager(int size, GameObject[][][] objects, string[] objectNames)
+        public LODPoolManager(int size, GameObject[] objects, string[] objectNames)
         {
             Debug.Log("Called");
 			_crowdNumber = size;
@@ -42,32 +42,48 @@ namespace CrowdAI
                 _objectAmounts[i] = _crowdNumber;
             }
 
-            //instantiate objects for every model
-            //go through all model groups
             for (int i = 0; i < _crowdLODObjects.Length; i++)
             {
-                //go through all model types
-                for (int j = 0; j < _crowdLODObjects[i].Length; j++)
+                List<GameObject> tempObjList = new List<GameObject>();
+
+                //instantiate the number of objects to pool for this LOD
+                for (int j = 0; j < size; j++)
                 {
-                    //go through all LODs
-                    for (int k = 0; k < _crowdLODObjects[i][j].Length; k++)
-                    {
-                        //create temp list to store objects for this LOD
-                        List<GameObject> tempObjList = new List<GameObject>();
-
-                        //instantiate the number of objects to pool for this LOD
-                        for (int l = 0; l < _objectAmounts[k]; l++)
-                        {
-                            Debug.Log("instantiated");
-                            GameObject obj = GameObject.Instantiate(_crowdLODObjects[i][j][k]);
-                            tempObjList.Add(obj);
-                        }
-
-                        //add objects for this LOD to pool
-                        _mainPool.Add(objectNames[k], tempObjList);
-                    }
+                    Debug.Log("instantiated");
+                    GameObject obj = GameObject.Instantiate(_crowdLODObjects[i]);
+                    tempObjList.Add(obj);
                 }
+
+                //add objects for this LOD to pool
+                _mainPool.Add(objectNames[i], tempObjList);
             }
+
+            //instantiate objects for every model
+            //go through all model groups
+            //for (int i = 0; i < _crowdLODObjects.Length; i++)
+            //{
+            //    //go through all model types
+            //    for (int j = 0; j < _crowdLODObjects[i].Length; j++)
+            //    {
+            //        //go through all LODs
+            //        for (int k = 0; k < _crowdLODObjects[i][j].Length; k++)
+            //        {
+            //            //create temp list to store objects for this LOD
+            //            List<GameObject> tempObjList = new List<GameObject>();
+
+            //            //instantiate the number of objects to pool for this LOD
+            //            for (int l = 0; l < _objectAmounts[k]; l++)
+            //            {
+            //                Debug.Log("instantiated");
+            //                GameObject obj = GameObject.Instantiate(_crowdLODObjects[i][j][k]);
+            //                tempObjList.Add(obj);
+            //            }
+
+            //            //add objects for this LOD to pool
+            //            _mainPool.Add(objectNames[k], tempObjList);
+            //        }
+            //    }
+            //}
         }
 
 		/// <summary>
