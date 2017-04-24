@@ -306,12 +306,10 @@ namespace CrowdAI
         {
             if (_allCrowdMembers == null)
             {
-                Debug.Log("All crowd members null somehow cause fuck u");
                 return;
             }
             if (_allCrowdMembers.Count < 1)
             {
-                Debug.Log("All crowd members empty somehow cause fuck u");
                 return;
             }
 
