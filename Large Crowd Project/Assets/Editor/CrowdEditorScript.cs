@@ -18,7 +18,6 @@ public class CrowdEditorScript : Editor {
         tiltAmount_Prop,
         startHeight_Prop,
         crowdObject_Prop,
-        groupNames_Prop,
         randomGroupDistribution_Prop,
         crowdDensity_Prop,
         rotation_Prop,
@@ -35,7 +34,6 @@ public class CrowdEditorScript : Editor {
         tiltAmount_Prop = serializedObject.FindProperty("_tiltAmount");
         startHeight_Prop = serializedObject.FindProperty("_startHeight");
         crowdObject_Prop = serializedObject.FindProperty("_placeholderPrefab");
-        groupNames_Prop = serializedObject.FindProperty("_groupNames");
         crowdStates_Prop = serializedObject.FindProperty("_crowdStates");
         randomGroupDistribution_Prop = serializedObject.FindProperty("_randomGroupDist");
 
@@ -83,7 +81,7 @@ public class CrowdEditorScript : Editor {
                 {
                     script.GenerateCrowd();
                 }
-                GUIArray(groupNames_Prop);
+               
                 GUIArray(crowdStates_Prop);
             
                 EditorGUILayout.LabelField(descriptionText);
@@ -102,7 +100,7 @@ public class CrowdEditorScript : Editor {
                 {
                     script.GenerateCrowd();
                 }
-                GUIArray(groupNames_Prop);
+              
                 GUIArray(crowdStates_Prop);
 
                 EditorGUILayout.LabelField(descriptionText);
@@ -123,7 +121,7 @@ public class CrowdEditorScript : Editor {
                 {
                     script.GenerateCrowd();
                 }
-                GUIArray(groupNames_Prop);
+               
                 GUIArray(crowdStates_Prop);
 
                 EditorGUILayout.LabelField(descriptionText);

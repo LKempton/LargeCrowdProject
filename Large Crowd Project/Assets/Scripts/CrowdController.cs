@@ -13,12 +13,12 @@ namespace CrowdAI
 
         [SerializeField]
         private string[] _crowdStates;
-        
-       
+
+
         [SerializeField]
         private GameObject[][][] _groupModels;
 
-       
+
 
         private List<CrowdGroup> _crowdGroups;
         private CrowdGroup _groupUnassigned;
@@ -32,7 +32,7 @@ namespace CrowdAI
         // crowd gen parameters
 
         [SerializeField]
-        private float _density, _tiltAmount, _startHeight, _innerRadius,_rotDir = 0;
+        private float _density, _tiltAmount, _startHeight, _innerRadius, _rotDir = 0;
 
         [SerializeField]
         private GameObject _placeholderPrefab;
@@ -42,17 +42,22 @@ namespace CrowdAI
         [SerializeField]
         bool _randomGroupDist = true;
 
-        private bool  placeholdersSpawned = true;
-    
+        private bool placeholdersSpawned = true;
+
 
         private LODPoolManager _poolManager;
 
-        
-      
-       
+
+
+
 
         public string[] GetGroupNames()
         {
+            if (_crowdGroups == null)
+            {
+                return null;
+            }
+
             var _names = new string[_crowdGroups.Count];
 
             for (int i = 0; i < _crowdGroups.Count; i++)
@@ -67,7 +72,7 @@ namespace CrowdAI
         void Awake()
         {
 
-            int _groupLength = _crowdGroups.Count;
+            int _groupLength = (_crowdGroups == null) ? 0 : _crowdGroups.Count;
 
             int _totalElements = 0;
             int _currentIndex = 0;
@@ -93,14 +98,14 @@ namespace CrowdAI
                 {
                     int _LODCount = _groupModels[i][j].Length;
 
-                    for (int k = 0; k <_LODCount ; k++)
+                    for (int k = 0; k < _LODCount; k++)
                     {
-                        _names[_currentIndex] = _crowdGroups[i].GroupName + "_" +j.ToString()+"_" +k.ToString();
+                        _names[_currentIndex] = _crowdGroups[i].GroupName + "_" + j.ToString() + "_" + k.ToString();
                     }
                 }
             }
 
-            
+
 
         }
 
@@ -191,13 +196,13 @@ namespace CrowdAI
 
         public bool RemoveGroup(string groupName)
         {
-           
 
-            for (int i = 0; i <_crowdGroups.Count ; i++)
+
+            for (int i = 0; i < _crowdGroups.Count; i++)
             {
                 if (_crowdGroups[i].GroupName == groupName)
                 {
-                    
+
 
                     return true;
                 }
@@ -212,7 +217,7 @@ namespace CrowdAI
 
             var _parent = new GameObject();
             _parent.name = "Crowd Source";
-           
+
 
             var _bounds = transform.GetChild(0).transform.localPosition;
             _parent.transform.position = transform.position;
@@ -239,27 +244,27 @@ namespace CrowdAI
             }
 
             GameObject[] _newCrowd;
-            
-           
+
+
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
-                  
+
                     _parent.transform.position += .5f * _bounds;
                     _newCrowd = CrowdGen.GenCrowdCircle(_density, _rotDir, _parent, _bounds, _placeholderPrefab);
                     break;
 
 
                 case CrowdFormation.SQUARE:
-                    
+
                     _parent.transform.position += .5f * CrowdGen.GetObjectBounds(_placeholderPrefab);
                     _newCrowd = CrowdGen.GenCrowdSquare(_density, _rotDir, _parent, _bounds, _placeholderPrefab);
                     break;
 
-                 default:
+                default:
                     _parent.transform.position += .5f * _bounds;
-                  
-                    _newCrowd = CrowdGen.GenCrowdRing(_density, _rotDir, _parent, _bounds,  _placeholderPrefab, _innerRadius);
+
+                    _newCrowd = CrowdGen.GenCrowdRing(_density, _rotDir, _parent, _bounds, _placeholderPrefab, _innerRadius);
                     break;
             }
 
@@ -272,10 +277,10 @@ namespace CrowdAI
                 Destroy(_parent);
             }
 
-            
-         
 
-            
+
+
+
         }
         //All members of the crowd that are generated
         public int GetPrediction()
@@ -303,7 +308,7 @@ namespace CrowdAI
 
             return _prediction;
         }
-        
+
         public int Size
         {
             get
@@ -315,26 +320,28 @@ namespace CrowdAI
 
                 int size = _groupUnassigned.Size;
 
-                for (int i = 0; i < _crowdGroups.Count; i++)
+                if (_crowdGroups != null)
                 {
-                    size += _crowdGroups[i].Size;
+                    for (int i = 0; i < _crowdGroups.Count; i++)
+                    {
+                        size += _crowdGroups[i].Size;
 
+                    }
                 }
-
                 return size;
             }
         }
-     
+
         private void ManagePlaceholders()
-        {         
-           
+        {
+
 
             placeholdersSpawned = !placeholdersSpawned;
 
         }
 
-       
-       
+
+
 
     }
 }
