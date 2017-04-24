@@ -10,10 +10,10 @@ namespace CrowdAI
     public class CrowdGroup
     {
         private string _groupName;
-        private List<ICrowd> _crowdMembers;
+        private List<GameObject> _crowdMembers;
 
-       
-        private GameObject[] _groupCrowdModels;
+
+        private string[] _groupModelNames;
 
         /// <summary>
         /// Constructs a new instance of CrowdGroup
@@ -22,7 +22,7 @@ namespace CrowdAI
 
          public CrowdGroup(string groupName)
         {
-            _crowdMembers = new List<ICrowd>();
+            _crowdMembers = new List<GameObject>();
 
             _groupName = groupName;
         }
@@ -32,12 +32,12 @@ namespace CrowdAI
         /// </summary>
         /// <param name="groupName">The name associated with this crowd group</param>
         /// <param name="models"> group of Models specially for this crowdGroup</param>
-        public CrowdGroup(string groupName, GameObject[] models)
+        public CrowdGroup(string groupName, string[] modelNames)
         {
             _groupName = groupName;
 
-            _crowdMembers = new List<ICrowd>();
-            _groupCrowdModels = models;
+            _crowdMembers = new List<GameObject>();
+           
 
         }
 
@@ -47,18 +47,18 @@ namespace CrowdAI
         /// <param name="crowdMember"> the crowd member game object</param>
         public void AddCrowdMember(GameObject crowdMember)
         {
-            _crowdMembers.Add(crowdMember.GetComponent<ICrowd>());
+            _crowdMembers.Add(crowdMember);
         }
 
-        /// <summary>
-        /// Adds a crowd member to the group
-        /// </summary>
-        /// <param name="crowdMeber"> The CrowdMember class associated with a game object</param>
-        public void AddCrowdMember(ICrowd crowdMeber)
+        public void AddCrowdMemebers(GameObject[] crowdMemebers)
         {
-            _crowdMembers.Add(crowdMeber);
+            for (int i = 0; i < crowdMemebers.Length; i++)
+            {
+                _crowdMembers.Add(crowdMemebers[i]);
+            }
         }
 
+       
         /// <summary>
         /// Sets the state of all crowd members in the gruop
         /// </summary>
@@ -67,10 +67,12 @@ namespace CrowdAI
         
         public void SetState(string state, bool useRandDelay)
         {
-            for (int i = 0; i < _crowdMembers.Count; i++)
-            {
-                _crowdMembers[i].SetState(state, useRandDelay);
-            }
+            
+        }
+
+        public void ToggleAnimations()
+        {
+
         }
 
        /// <summary>
@@ -78,19 +80,17 @@ namespace CrowdAI
        /// Does not dispose of them !
        /// </summary>
 
-        public void ClearAll()
+        public GameObject[] ClearAllForDeletion()
         {
+            var _groupMembers = _crowdMembers.ToArray();
+
             _crowdMembers.Clear();
+
+            return _groupMembers;
         }
         
 
-        public void ToggleAnimations()
-        {
-            for (int i = 0; i < _crowdMembers.Count; i++)
-            {
-                _crowdMembers[i].ToggleAnimation();
-            }
-        }
+        
 
         /// <summary>
         /// The name of the group
@@ -106,19 +106,15 @@ namespace CrowdAI
                 _groupName = value;
             }
         }
-        /// <summary>
-        /// Returns all the models that are in the group
-        /// </summary>
-        public GameObject[] GetCrowdModels
+
+        public int Size
         {
             get
             {
-                    return _groupCrowdModels;
-                
-                
-                
+                return _crowdMembers.Count;
             }
         }
+        
     }
 
     

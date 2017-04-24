@@ -13,20 +13,21 @@ namespace CrowdAI
 
         [SerializeField]
         private string[] _crowdStates;
-        [SerializeField]
-        private string[] _groupNames;
+        
+       
         [SerializeField]
         private GameObject[][][] _groupModels;
 
        
 
-        private CrowdGroup[] _crowdGroups;
+        private List<CrowdGroup> _crowdGroups;
+        private CrowdGroup _groupUnassigned;
+
+
         [SerializeField]
         private CrowdFormation _crowdFormation;
 
         float animationStagger = 0.25f;
-       
-        List<GameObject> _allCrowdMembers;
 
         // crowd gen parameters
 
@@ -42,7 +43,7 @@ namespace CrowdAI
         bool _randomGroupDist = true;
 
         private bool  placeholdersSpawned = true;
-        private bool delegated = false;
+    
 
         private LODPoolManager _poolManager;
 
@@ -52,22 +53,21 @@ namespace CrowdAI
 
         public string[] GetGroupNames()
         {
-            var _namesCopy = new string[_groupNames.Length];
+            var _names = new string[_crowdGroups.Count];
 
-            for (int i = 0; i < _groupNames.Length; i++)
+            for (int i = 0; i < _crowdGroups.Count; i++)
             {
-                _namesCopy[i] = _groupNames[i];
+                _names[i] = _crowdGroups[i].GroupName;
             }
-           
-            return _namesCopy;
+
+            return _names;
         }
 
 
         void Awake()
         {
-            RemoveEmptySources();
 
-            int _groupLength = _groupNames.Length;
+            int _groupLength = _crowdGroups.Count;
 
             int _totalElements = 0;
             int _currentIndex = 0;
@@ -95,7 +95,7 @@ namespace CrowdAI
 
                     for (int k = 0; k <_LODCount ; k++)
                     {
-                        _names[_currentIndex] = _groupNames[i] + "_" +j.ToString()+"_" +k.ToString();
+                        _names[_currentIndex] = _crowdGroups[i].GroupName + "_" +j.ToString()+"_" +k.ToString();
                     }
                 }
             }
@@ -143,7 +143,7 @@ namespace CrowdAI
         public void SetState(string state, bool useRandDelay)
         {
 
-            for (int i = 0; i < _crowdGroups.Length; i++)
+            for (int i = 0; i < _crowdGroups.Count; i++)
             {
                 _crowdGroups[i].SetState(state, useRandDelay);
             }
@@ -159,9 +159,9 @@ namespace CrowdAI
         /// <returns> True if the state has been set sucessfully</returns>
         public bool SetState(string state, string groupName, bool useRandDelay)
         {
-            for (int i = 0; i < _groupNames.Length; i++)
+            for (int i = 0; i < _crowdGroups.Count; i++)
             {
-                if (groupName == _groupNames[i])
+                if (groupName == _crowdGroups[i].GroupName)
                 {
                     _crowdGroups[i].SetState(state, useRandDelay);
 
@@ -175,18 +175,43 @@ namespace CrowdAI
 
         public void ToggleAnimations()
         {
-            for (int i = 0; i < _crowdGroups.Length; i++)
+            for (int i = 0; i < _crowdGroups.Count; i++)
             {
                 _crowdGroups[i].ToggleAnimations();
             }
         }
 
 
+        public void AddGroup(string groupName)
+        {
+            var _newGroup = new CrowdGroup(groupName);
+
+            _crowdGroups.Add(_newGroup);
+        }
+
+        public bool RemoveGroup(string groupName)
+        {
+           
+
+            for (int i = 0; i <_crowdGroups.Count ; i++)
+            {
+                if (_crowdGroups[i].GroupName == groupName)
+                {
+                    
+
+                    return true;
+                }
+            }
+
+
+            return false;
+        }
+
         public void GenerateCrowd()
         {
-            RemoveEmptySources();
 
             var _parent = new GameObject();
+            _parent.name = "Crowd Source";
            
 
             var _bounds = transform.GetChild(0).transform.localPosition;
@@ -208,24 +233,10 @@ namespace CrowdAI
 
             _parent.transform.position += _posModifier;
 
-            if (_allCrowdMembers == null)
+            if (_groupUnassigned == null)
             {
-                _allCrowdMembers = new List<GameObject>();
-               
-                _parent.name = "Crowd Source";
+                _groupUnassigned = new CrowdGroup("Unassigned");
             }
-            else
-            {
-                if (_allCrowdMembers.Count>0)
-                {
-                    _parent.name = "Crowd Source (" + _allCrowdMembers.Count + ")";
-                }
-                else
-                {
-                    _parent.name = "Crowd Source";
-                }
-            }
-
 
             GameObject[] _newCrowd;
             
@@ -254,10 +265,11 @@ namespace CrowdAI
 
             if (_newCrowd.Length > 0)
             {
-                for (int i = 0; i < _newCrowd.Length; i++)
-                {
-                    _allCrowdMembers.Add(_newCrowd[i]);
-                }
+                _groupUnassigned.AddCrowdMemebers(_newCrowd);
+            }
+            else
+            {
+                Destroy(_parent);
             }
 
             
@@ -296,88 +308,26 @@ namespace CrowdAI
         {
             get
             {
-                return _allCrowdMembers.Count;
-            }
-        }
-
-       
-
-        public void RemoveEmptySources()
-        {
-            if (_allCrowdMembers == null)
-            {
-                return;
-            }
-            if (_allCrowdMembers.Count < 1)
-            {
-                return;
-            }
-
-            for (int i = _allCrowdMembers.Count-1; i >-1; i--)
-            {
-                var source = _allCrowdMembers[i];
-
-                if (source == null)
+                if (_groupUnassigned == null)
                 {
-                    print(i + " is null, deleting");
-                    _allCrowdMembers.RemoveAt(i);
-                        
+                    return 0;
                 }
+
+                int size = _groupUnassigned.Size;
+
+                for (int i = 0; i < _crowdGroups.Count; i++)
+                {
+                    size += _crowdGroups[i].Size;
+
+                }
+
+                return size;
             }
-
-
         }
-
+     
         private void ManagePlaceholders()
         {         
-            if (_allCrowdMembers == null)
-            {
-                return;
-            }
-
-            if (_allCrowdMembers.Count <1)
-            {
-                return;
-            }
-
-            if (placeholdersSpawned)
-            {
-
-                for (int i = 0; i < _allCrowdMembers.Count; i++)
-                {
-                  
-                        var _rendObj = _allCrowdMembers[i].GetComponentInChildren<MeshRenderer>();
-
-                        if (_rendObj != null)
-                        {
-                            Destroy(_rendObj.gameObject);
-                        }
-                    
-                }
-
-            }
-            else
-            {
-                if (_placeholderMesh == null)
-                {
-                    // assumptive line, the placeholder mesh must be the first child in the prefab
-                    _placeholderMesh = _placeholderPrefab.transform.GetChild(0).gameObject;
-                }
-
-                for (int i = 0; i < _allCrowdMembers.Count; i++)
-                {
-                        var _placeholderPos = _allCrowdMembers[i];
-
-                        if (_placeholderPos.GetComponent<MeshRenderer>() == null)
-                        {
-                            var _placeholderTrans = _placeholderPos.transform;
-
-                            var _newPlaceholder = Instantiate(_placeholderMesh, _placeholderTrans);
-                            _newPlaceholder.transform.position = _placeholderTrans.position;
-                            _newPlaceholder.transform.rotation = _placeholderTrans.rotation;
-                    }
-                }
-            }
+           
 
             placeholdersSpawned = !placeholdersSpawned;
 
