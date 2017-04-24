@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: ca0956678d4c8f746a20c9466e4c1ec5
 timeCreated: 1491918226
+=======
+guid: 751fed959d95369489fa10ea390f4027
+timeCreated: 1492612370
+>>>>>>> Implementing_LOD_script
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
