@@ -100,6 +100,20 @@ namespace CrowdAI
         }
 
 
+        public bool Remove(GameObject[] crowdMembers)
+        {
+            if (_crowdMembers.Contains(crowdMembers[0]))
+            {
+                for (int i = 0; i < crowdMembers.Length; i++)
+                {
+                    _crowdMembers.Remove(crowdMembers[i]);
+                }
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// The name of the group
         /// </summary>
