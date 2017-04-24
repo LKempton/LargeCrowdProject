@@ -21,7 +21,7 @@ namespace CrowdAI
 		/// <param name="size">the number of </param>
 		/// <param name="objects">the array containing the crowd model objects to be pooled (one for each LOD for each crowd member type e.g. medium detail model for woman model on red team)</param>
 		/// <param name="objectNames">the array containing the names of each crowd model object to be pooled (one for each LOD for each crowd member type e.g. mediumDetailWomanRed</param>
-        public LODPoolManager(int size, GameObject[] objects, string[] objectNames)
+        public LODPoolManager(int[] size, GameObject[] objects, string[] objectNames)
         {
             Debug.Log("Called");
 
@@ -41,7 +41,7 @@ namespace CrowdAI
                 List<GameObject> tempObjList = new List<GameObject>();
 
                 //instantiate the number of pooled objects for this character
-                for (int j = 0; j < size; j++)
+                for (int j = 0; j < size[i]; j++)
                 {
                     Debug.Log("instantiated");
                     GameObject obj = GameObject.Instantiate(objects[i]);
