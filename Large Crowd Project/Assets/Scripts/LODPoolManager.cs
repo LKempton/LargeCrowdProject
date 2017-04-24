@@ -7,13 +7,9 @@ namespace CrowdAI
 
     public class LODPoolManager
     {
-        private int _crowdNumber;
-		[SerializeField]
+        [SerializeField]
         private int _lodLayers = 5;
-        
-        private string[] _objectNames;
-        private GameObject[] _crowdLODObjects;
-        private int[] _objectAmounts;
+        //private int[] _objectAmounts;
 
         private Hashtable _mainPool = new Hashtable();
 
@@ -28,62 +24,35 @@ namespace CrowdAI
         public LODPoolManager(int size, GameObject[] objects, string[] objectNames)
         {
             Debug.Log("Called");
-			_crowdNumber = size;
 
             _tempList = new List<GameObject>();
 
-            _objectNames = objectNames;
-			_crowdLODObjects = objects;
+			////initialise the amounts array
+   //         _objectAmounts = new int[_lodLayers];
+   //         for (int i = 0; i < _objectAmounts.Length; i++)
+   //         {
+   //             _objectAmounts[i] = _crowdNumber;
+   //         }
 
-			//initialise the amounts array
-            _objectAmounts = new int[_lodLayers];
-            for (int i = 0; i < _objectAmounts.Length; i++)
-            {
-                _objectAmounts[i] = _crowdNumber;
-            }
-
-            for (int i = 0; i < _crowdLODObjects.Length; i++)
+            //instantiate all pooled objects
+            //go through each individual model/character
+            for (int i = 0; i < objectNames.Length; i++)
             {
                 List<GameObject> tempObjList = new List<GameObject>();
 
-                //instantiate the number of objects to pool for this LOD
+                //instantiate the number of pooled objects for this character
                 for (int j = 0; j < size; j++)
                 {
                     Debug.Log("instantiated");
-                    GameObject obj = GameObject.Instantiate(_crowdLODObjects[i]);
+                    GameObject obj = GameObject.Instantiate(objects[i]);
                     tempObjList.Add(obj);
                 }
 
-                //add objects for this LOD to pool
+                //add objects for this character to pool
                 _mainPool.Add(objectNames[i], tempObjList);
             }
 
-            //instantiate objects for every model
-            //go through all model groups
-            //for (int i = 0; i < _crowdLODObjects.Length; i++)
-            //{
-            //    //go through all model types
-            //    for (int j = 0; j < _crowdLODObjects[i].Length; j++)
-            //    {
-            //        //go through all LODs
-            //        for (int k = 0; k < _crowdLODObjects[i][j].Length; k++)
-            //        {
-            //            //create temp list to store objects for this LOD
-            //            List<GameObject> tempObjList = new List<GameObject>();
-
-            //            //instantiate the number of objects to pool for this LOD
-            //            for (int l = 0; l < _objectAmounts[k]; l++)
-            //            {
-            //                Debug.Log("instantiated");
-            //                GameObject obj = GameObject.Instantiate(_crowdLODObjects[i][j][k]);
-            //                tempObjList.Add(obj);
-            //            }
-
-            //            //add objects for this LOD to pool
-            //            _mainPool.Add(objectNames[k], tempObjList);
-            //        }
-            //    }
-            //}
+            
         }
 
 		/// <summary>
