@@ -16,9 +16,6 @@ namespace CrowdAI
 
             float _radius = (bounds.x + bounds.z) / 4;
 
-          
-
-
 
             // average size of the bounds = circumference
 
@@ -141,7 +138,7 @@ namespace CrowdAI
             {
                 float _tilt = (i / _radius) * bounds.y;
 
-                GenRingCentreFacing(_radius, rotDir, crowdDensity, _tilt, parent, prefab, ref _outList);
+                GenRingCentreFacing(i, rotDir, crowdDensity, _tilt, parent, prefab, ref _outList);
             }
             
             return _outList.ToArray();

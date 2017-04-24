@@ -17,6 +17,7 @@ namespace CrowdAI
 
         [SerializeField]
         private GameObject[][][] _groupModels;
+        private int[][][] _pooledSizes;
 
 
         int _LODCount = 5;
@@ -35,7 +36,7 @@ namespace CrowdAI
         // crowd gen parameters
 
         [SerializeField]
-        private float _density, _tiltAmount, _startHeight, _innerRadius, _rotDir = 0;
+        private float _density, _startHeight, _innerRadius, _rotDir = 0;
 
         [SerializeField]
         private GameObject _placeholderPrefab;
@@ -95,6 +96,8 @@ namespace CrowdAI
             }
 
             var _names = new string[_totalElements];
+            var _sizes = new int[_totalElements];
+
             var _outObjects = new GameObject[_totalElements];
            
 
@@ -111,13 +114,14 @@ namespace CrowdAI
                     {
                         _names[_currentIndex] = _crowdGroups[i].GroupName + "_" + j.ToString() + "_" + k.ToString();
                         _outObjects[_currentIndex] = _groupModels[i][j][k];
+                        _sizes[_currentIndex] = _pooledSizes[i][j][k];
                         _currentIndex++;
                     }
                 }
             }
 
 
-            _poolManager = new LODPoolManager(Size , _outObjects, _names);
+            _poolManager = new LODPoolManager(_sizes , _outObjects, _names);
             Debug.Log("Should have called");
 
         }
@@ -289,12 +293,8 @@ namespace CrowdAI
             {
                 Destroy(_parent);
             }
-
-
-
-
-
         }
+
         //All members of the crowd that are generated
         public int GetPrediction()
         {
@@ -353,6 +353,13 @@ namespace CrowdAI
 
         }
 
+        public bool AddCrowdMembers(string groupName, GameObject[] group)
+        {
+
+
+
+            return false;
+        }
 
 
 

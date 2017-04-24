@@ -89,8 +89,16 @@ namespace CrowdAI
             return _groupMembers;
         }
         
-
+        public bool Remove(GameObject crowdMember)
+        {
+            return _crowdMembers.Remove(crowdMember);
+        }
         
+        public bool Contains(GameObject crowdMember)
+        {
+            return _crowdMembers.Contains(crowdMember);
+        }
+
 
         /// <summary>
         /// The name of the group
