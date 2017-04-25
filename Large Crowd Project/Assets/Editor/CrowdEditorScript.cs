@@ -132,7 +132,12 @@ public class CrowdEditorScript : Editor {
                 break;
         }
 
-        GUIArray(models_Prop);
+       
+        if (GUILayout.Button("Manage Models & Groups"))
+        {
+            var window = (CrowdAI.GroupUI)CrowdAI.GroupUI.ShowWindow();
+            window.Controller = script;
+        }
 
         serializedObject.ApplyModifiedProperties();
     }

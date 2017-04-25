@@ -56,8 +56,6 @@ namespace CrowdAI
         {
             return _poolManager.GetPooledObject(name);
         }
-       
-
 
         public string[] GetGroupNames()
         {
@@ -75,7 +73,6 @@ namespace CrowdAI
 
             return _names;
         }
-
 
         void Awake()
         {
@@ -129,7 +126,25 @@ namespace CrowdAI
 
         public CrowdGroup[] GetGroups()
         {
+            if (_crowdGroups == null)
+            {
+                return null;
+            }
+
             return _crowdGroups.ToArray();
+        }
+
+        public CrowdGroup GetUnassignedGroup
+        {
+            get
+            {
+                if (_groupUnassigned == null)
+                {
+                    return null;
+                }
+
+                return _groupUnassigned;
+            }
         }
 
         /// <summary>
@@ -200,7 +215,6 @@ namespace CrowdAI
             return false;
         }
 
-
         public void ToggleAnimations()
         {
             for (int i = 0; i < _crowdGroups.Count; i++)
@@ -208,7 +222,6 @@ namespace CrowdAI
                 _crowdGroups[i].ToggleAnimations();
             }
         }
-
 
         public void AddGroup(string groupName)
         {

@@ -7,10 +7,11 @@ using UnityEditor;
 namespace CrowdAI
 {
     
-    public class GroupUI : Editor
+    public class GroupUI : EditorWindow
     {
         private CrowdController _crowdController;
         private CrowdGroup[] currentGroups;
+        private CrowdGroup _unassignedGroup;
 
 
         void OnGUI()
@@ -18,16 +19,26 @@ namespace CrowdAI
             if (_crowdController != null)
             {
                 currentGroups = _crowdController.GetGroups();
+                _unassignedGroup = _crowdController.GetUnassignedGroup;
+
+                ShowGroup(_unassignedGroup);
+
+
+                
             }
         }
 
         [MenuItem("Window/GroupUI")]
-        public static void ShowWindow()
+        public static EditorWindow ShowWindow()
         {
-            EditorWindow.GetWindow(typeof(GroupUI));
+          EditorWindow window =  EditorWindow.GetWindow(typeof(GroupUI));
+
+            window.Show();
+
+            return window;
         }
 
-        public CrowdController CrowdController
+            public CrowdController Controller
         {
             set
             {
@@ -36,6 +47,16 @@ namespace CrowdAI
                     _crowdController = value;
                 }
             }
+        }
+        
+
+        public void ShowGroup(CrowdGroup group)
+        {
+            
+            GUILayout.Label("Group Name: ");
+            group.GroupName = GUILayout.TextField(group.GroupName);
+
+            
         }
     }
 
