@@ -17,13 +17,14 @@ namespace CrowdAI
 
         [SerializeField]
         private GameObject[][][] _groupModels;
+        [SerializeField]
         private int[][][] _pooledSizes;
 
 
         int _LODCount = 5;
 
 
-
+        
         private List<CrowdGroup> _crowdGroups;
         private CrowdGroup _groupUnassigned;
 
@@ -126,6 +127,11 @@ namespace CrowdAI
 
         }
 
+        public CrowdGroup[] GetGroups()
+        {
+            return _crowdGroups.ToArray();
+        }
+
         /// <summary>
         /// Gets all the States that any crowd member may have
         /// </summary>
@@ -219,7 +225,13 @@ namespace CrowdAI
             {
                 if (_crowdGroups[i].GroupName == groupName)
                 {
+                    var _group = _crowdGroups[i];
 
+                    var _previousMembers = _group.ClearAllForDeletion();
+
+                    _groupUnassigned.AddCrowdMembers(_previousMembers);
+
+                    _crowdGroups.RemoveAt(i);
 
                     return true;
                 }
@@ -287,7 +299,7 @@ namespace CrowdAI
 
             if (_newCrowd.Length > 0)
             {
-                _groupUnassigned.AddCrowdMemebers(_newCrowd);
+                _groupUnassigned.AddCrowdMembers(_newCrowd);
             }
             else
             {

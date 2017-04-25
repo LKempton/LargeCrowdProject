@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System;
+
 
 namespace CrowdAI
 {
@@ -11,6 +11,8 @@ namespace CrowdAI
     {
         private string _groupName;
         private List<GameObject> _crowdMembers;
+
+        public ModelWrapper[] _crowdModels {get; set; }
 
 
         private string[] _groupModelNames;
@@ -50,7 +52,7 @@ namespace CrowdAI
             _crowdMembers.Add(crowdMember);
         }
 
-        public void AddCrowdMemebers(GameObject[] crowdMemebers)
+        public void AddCrowdMembers(GameObject[] crowdMemebers)
         {
             for (int i = 0; i < crowdMemebers.Length; i++)
             {
@@ -99,7 +101,6 @@ namespace CrowdAI
             return _crowdMembers.Contains(crowdMember);
         }
 
-
         public bool Remove(GameObject[] crowdMembers)
         {
             if (_crowdMembers.Contains(crowdMembers[0]))
@@ -136,7 +137,8 @@ namespace CrowdAI
                 return _crowdMembers.Count;
             }
         }
-        
+
+      
     }
 
     

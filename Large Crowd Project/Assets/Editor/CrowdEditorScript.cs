@@ -22,6 +22,8 @@ public class CrowdEditorScript : Editor {
         crowdDensity_Prop,
         rotation_Prop,
         innerRadius_Prop,
+        models_Prop,
+        modelAmounts_prop,
         crowdStates_Prop;
     
 
@@ -36,9 +38,10 @@ public class CrowdEditorScript : Editor {
         crowdObject_Prop = serializedObject.FindProperty("_placeholderPrefab");
         crowdStates_Prop = serializedObject.FindProperty("_crowdStates");
         randomGroupDistribution_Prop = serializedObject.FindProperty("_randomGroupDist");
+        models_Prop = serializedObject.FindProperty("_groupModels");
 
-        
-            script = (CrowdAI.CrowdController)target;
+
+        script = (CrowdAI.CrowdController)target;
         
     }
 
@@ -128,6 +131,8 @@ public class CrowdEditorScript : Editor {
 
                 break;
         }
+
+        GUIArray(models_Prop);
 
         serializedObject.ApplyModifiedProperties();
     }
