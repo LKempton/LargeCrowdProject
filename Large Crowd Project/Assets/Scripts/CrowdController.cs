@@ -320,6 +320,11 @@ namespace CrowdAI
             }
         }
 
+        public void CheckForNullCrowdMembers()
+        {
+
+        }
+
         //All members of the crowd that are generated
         public int GetPrediction()
         {
