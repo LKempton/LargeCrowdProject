@@ -10,7 +10,7 @@ namespace CrowdAI
 
         void OnDestroy()
         {
-            controller.
+            controller.CheckForNullCrowdMembers();
         }
 
         public CrowdController Controller

@@ -322,7 +322,10 @@ namespace CrowdAI
 
         public void CheckForNullCrowdMembers()
         {
-
+            if (_groupUnassigned != null)
+            {
+                
+            }
         }
 
         //All members of the crowd that are generated
