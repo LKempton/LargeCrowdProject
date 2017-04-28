@@ -24,7 +24,7 @@ namespace CrowdAI
         int _LODCount = 5;
 
 
-        
+
         private List<CrowdGroup> _crowdGroups;
         private CrowdGroup _groupUnassigned;
 
@@ -82,7 +82,7 @@ namespace CrowdAI
             int _totalElements = 0;
             int _currentIndex = 0;
 
-            
+
             for (int i = 0; i < _groupLength; i++)
             {
                 int _modelsInGroup = _groupModels[i].Length;
@@ -97,7 +97,7 @@ namespace CrowdAI
             var _sizes = new int[_totalElements];
 
             var _outObjects = new GameObject[_totalElements];
-           
+
 
             for (int i = 0; i < _groupLength; i++)
             {
@@ -119,7 +119,7 @@ namespace CrowdAI
             }
 
 
-            _poolManager = new LODPoolManager(_sizes , _outObjects, _names);
+            _poolManager = new LODPoolManager(_sizes, _outObjects, _names);
             Debug.Log("Should have called");
 
         }
@@ -225,10 +225,15 @@ namespace CrowdAI
 
         public void AddGroup(string groupName)
         {
-            var _newGroup = new CrowdGroup(groupName);
+            if (_crowdGroups == null)
+            {
+                _crowdGroups = new List<CrowdGroup>();
+            }
+            _crowdGroups.Add(new CrowdGroup(groupName));
 
-            _crowdGroups.Add(_newGroup);
+            print("Added");
         }
+
 
         public bool RemoveGroup(string groupName)
         {
@@ -324,7 +329,7 @@ namespace CrowdAI
         {
             if (_groupUnassigned != null)
             {
-                
+
             }
         }
 
@@ -395,6 +400,27 @@ namespace CrowdAI
         }
 
 
+        public void ShowDebugInfo()
+        {
+            string _outInfo = "N. Of Crowd States:";
+
+            if (_crowdStates != null)
+            {
+                _outInfo += _crowdStates.Length +"\n The States Are:";
+
+                for (int i = 0; i <_crowdStates.Length ; i++)
+                {
+                    _outInfo = "\n -" + _crowdStates[i];
+                }
+            }
+            
+
+            
+
+        }
+
+
 
     }
 }
+

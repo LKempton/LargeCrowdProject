@@ -18,7 +18,6 @@ public class CrowdEditorScript : Editor {
         tiltAmount_Prop,
         startHeight_Prop,
         crowdObject_Prop,
-        randomGroupDistribution_Prop,
         crowdDensity_Prop,
         rotation_Prop,
         innerRadius_Prop,
@@ -37,7 +36,6 @@ public class CrowdEditorScript : Editor {
         startHeight_Prop = serializedObject.FindProperty("_startHeight");
         crowdObject_Prop = serializedObject.FindProperty("_placeholderPrefab");
         crowdStates_Prop = serializedObject.FindProperty("_crowdStates");
-        randomGroupDistribution_Prop = serializedObject.FindProperty("_randomGroupDist");
         models_Prop = serializedObject.FindProperty("_groupModels");
 
 
@@ -77,7 +75,7 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.Slider(rotation_Prop, 0, 360, new GUIContent("Rotation"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
-                EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
+             
                 //EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
 
                 if (GUILayout.Button("Generate Crowd" ,GUILayout.Width(200), GUILayout.Height(25)))
@@ -98,7 +96,7 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.Slider(rotation_Prop, 0, 360, new GUIContent("Rotation"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
-                EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
+               
                 if (GUILayout.Button("Generate Crowd", GUILayout.Width(200), GUILayout.Height(25)))
                 {
                     script.GenerateCrowd();
@@ -117,7 +115,7 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.Slider(rotation_Prop, 0, 360, new GUIContent("Rotation"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
-                EditorGUILayout.PropertyField(randomGroupDistribution_Prop, new GUIContent("Grouped Randomly?"));
+               
                 //EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
                 EditorGUILayout.PropertyField(innerRadius_Prop, new GUIContent("Hole Radius"));
                 if (GUILayout.Button("Generate Crowd", GUILayout.Width(200), GUILayout.Height(25)))

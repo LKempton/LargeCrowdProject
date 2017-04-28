@@ -15,6 +15,7 @@ namespace CrowdAI
 
         private GUIStyle _genericTextStyle;
         private GUIStyle _headingTextStyle;
+        string _newGroupName = "Group Name";
 
 
 
@@ -24,11 +25,13 @@ namespace CrowdAI
             _headingTextStyle = new GUIStyle();
 
             _headingTextStyle.fontSize = 20;
-            _headingTextStyle.padding = new RectOffset(10, 10, 10, 10);
+            _headingTextStyle.padding = new RectOffset(8, 8, 8, 8);
+
             _headingTextStyle.fontStyle = FontStyle.Bold;
 
-            _genericTextStyle.fontSize = 12;
-            _genericTextStyle.padding = new RectOffset(10, 10, 10, 10);
+            _genericTextStyle.fontSize = 10;
+            _genericTextStyle.padding = new RectOffset(6, 3, 6, 6);
+   
             
 
         }
@@ -41,14 +44,30 @@ namespace CrowdAI
                 _currentGroups = _crowdController.GetGroups();
                 _unassignedGroup = _crowdController.GetUnassignedGroup;
 
-                string _newGroupName = "";
-
-                GUILayout.Label("Add New Group",_headingTextStyle, GUILayout.Width(150));
+                
+                GUILayout.Label("Add New Group",_headingTextStyle);
+                
                 GUILayout.BeginHorizontal();
-                GUILayout.Label("Group Name:", _genericTextStyle, GUILayout.Width(150));
-                GUILayout.EndHorizontal();
-                _newGroupName = GUILayout.TextField("Name");
+                GUILayout.Label("Group Name:", _genericTextStyle, GUILayout.Width(120));
 
+                _newGroupName = GUILayout.TextField(_newGroupName, 25, GUILayout.Width(200));
+                GUILayout.EndHorizontal();
+
+                if (GUILayout.Button("Add New Group", GUILayout.Width(200)))
+                {
+                    Debug.Log("Got to button activation");
+                    if (_newGroupName != "Group Name")
+                    {
+                        Debug.Log("Tried to talk to controller");
+                        _crowdController.AddGroup(_newGroupName);
+                    }
+                 
+                }
+                
+
+
+                EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+                
                 //start scrollable area here
                 if (_unassignedGroup != null)
                 {
