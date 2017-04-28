@@ -69,6 +69,8 @@ namespace CrowdAI
 
                     _crowdMembers.RemoveAt(i);
                 }
+
+               
             }
         }
 

@@ -137,6 +137,10 @@ public class CrowdEditorScript : Editor {
             window.Controller = script;
         }
 
+        if (GUILayout.Button("Log Debug Information"))
+        {
+            script.ShowDebugInfo();
+        }
         serializedObject.ApplyModifiedProperties();
     }
 

@@ -23,7 +23,7 @@ namespace CrowdAI
 		/// <param name="objectNames">the array containing the names of each crowd model object to be pooled (one for each LOD for each crowd member type e.g. mediumDetailWomanRed</param>
         public LODPoolManager(int[] size, GameObject[] objects, string[] objectNames)
         {
-            Debug.Log("Called");
+      
 
             _tempList = new List<GameObject>();
 

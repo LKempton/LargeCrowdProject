@@ -24,4 +24,6 @@ namespace CrowdAI
     {
         CIRCLE,SQUARE, RING
     }
+
+    
 }

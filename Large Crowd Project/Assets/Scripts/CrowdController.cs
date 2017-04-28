@@ -22,7 +22,7 @@ namespace CrowdAI
 
 
         int _LODCount = 5;
-
+        int _crowdCount = 0;
 
 
         private List<CrowdGroup> _crowdGroups;
@@ -120,7 +120,7 @@ namespace CrowdAI
 
 
             _poolManager = new LODPoolManager(_sizes, _outObjects, _names);
-            Debug.Log("Should have called");
+            
 
         }
 
@@ -320,6 +320,7 @@ namespace CrowdAI
             if (_newCrowd.Length > 0)
             {
                 _groupUnassigned.AddCrowdMembers(_newCrowd);
+                _crowdCount = RecalculateCount();
             }
             else
             {
@@ -341,6 +342,7 @@ namespace CrowdAI
                     _crowdGroups[i].RemoveNullCrowdMembers();
                 }
             }
+            _crowdCount = RecalculateCount();
         }
 
         //All members of the crowd that are generated
@@ -370,26 +372,31 @@ namespace CrowdAI
             return _prediction;
         }
 
+        private int RecalculateCount()
+        {
+            if (_groupUnassigned == null)
+            {
+                return 0;
+            }
+
+            int size = _groupUnassigned.Size;
+
+            if (_crowdGroups != null)
+            {
+                for (int i = 0; i < _crowdGroups.Count; i++)
+                {
+                    size += _crowdGroups[i].Size;
+
+                }
+            }
+            return size;
+        }
+
         public int Size
         {
             get
             {
-                if (_groupUnassigned == null)
-                {
-                    return 0;
-                }
-
-                int size = _groupUnassigned.Size;
-
-                if (_crowdGroups != null)
-                {
-                    for (int i = 0; i < _crowdGroups.Count; i++)
-                    {
-                        size += _crowdGroups[i].Size;
-
-                    }
-                }
-                return size;
+                return _crowdCount;
             }
         }
 
@@ -412,21 +419,42 @@ namespace CrowdAI
 
         public void ShowDebugInfo()
         {
-            string _outInfo = "N. Of Crowd States:";
+            string _outInfo = "Current Crowd Count: " + _crowdCount;
+            _outInfo += "\n Current Groups and the number of their members :";
 
+            if (_crowdGroups != null)
+            {
+                for (int i = 0; i < _crowdGroups.Count; i++)
+                {
+                    _outInfo += _crowdGroups[i].GroupName + " , Size:" + _crowdGroups[i].Size + "\n";
+                }
+            }
+            else
+            {
+                _outInfo += "Their are no groups \n";
+            }
+
+
+            _outInfo += "N. Of Crowd States:";
             if (_crowdStates != null)
             {
                 _outInfo += _crowdStates.Length +"\n The States Are:";
 
                 for (int i = 0; i <_crowdStates.Length ; i++)
                 {
-                    _outInfo = "\n -" + _crowdStates[i];
+                    _outInfo += "\n -" + _crowdStates[i];
                 }
+                _outInfo += "\n";
             }
-            
+            else
+            {
+                _outInfo += "0 \n";
+            }
 
-            
+           
 
+
+            Debug.Log(_outInfo);
         }
 
 
