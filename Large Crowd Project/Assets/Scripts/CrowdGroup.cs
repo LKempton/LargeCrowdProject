@@ -60,14 +60,23 @@ namespace CrowdAI
             }
         }
 
-       
+       public void RemoveNullCrowdMembers()
+        {
+            for (int i = 0; i < _crowdMembers.Count; i++)
+            {
+                if (_crowdMembers[i] != null)
+                {
+
+                    _crowdMembers.RemoveAt(i);
+                }
+            }
+        }
 
         /// <summary>
         /// Sets the state of all crowd members in the gruop
         /// </summary>
         /// <param name="state">Name of the new state</param>
         /// <param name="useRandDelay"> whether there should be a delay before the animation starts </param>
-        
         public void SetState(string state, bool useRandDelay)
         {
             

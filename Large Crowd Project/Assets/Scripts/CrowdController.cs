@@ -265,6 +265,8 @@ namespace CrowdAI
             var _parent = new GameObject();
             _parent.name = "Crowd Source";
 
+            var _cleaner =_parent.AddComponent<CrowdSourceCleaner>();
+            _cleaner.Controller = this;
 
             var _bounds = transform.GetChild(0).transform.localPosition;
             _parent.transform.position = transform.position;
@@ -329,7 +331,15 @@ namespace CrowdAI
         {
             if (_groupUnassigned != null)
             {
+                _groupUnassigned.RemoveNullCrowdMembers();
 
+            }
+            if (_crowdGroups != null)
+            {
+                for (int i = 0; i < _crowdGroups.Count; i++)
+                {
+                    _crowdGroups[i].RemoveNullCrowdMembers();
+                }
             }
         }
 

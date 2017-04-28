@@ -4,12 +4,14 @@ using UnityEngine;
 
 namespace CrowdAI
 {
+    [ExecuteInEditMode]
     public class CrowdSourceCleaner : MonoBehaviour
     {
         CrowdController controller;
 
         void OnDestroy()
         {
+            
             controller.CheckForNullCrowdMembers();
         }
 
