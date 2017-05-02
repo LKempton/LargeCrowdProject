@@ -2,62 +2,68 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrowdMemberOptimizer : MonoBehaviour {
+namespace CrowdAI
+{
 
-    private float distanceToCam;
-
-    [SerializeField]
-    private bool dynamicCrowdModel;
-
-    [SerializeField]
-    private float highLODDistance;
-    [SerializeField]
-    private float midLODDistance;
-    [SerializeField]
-    private float lowLODDistance;
-
-    private void UpdateLOD()
+    public class CrowdMemberOptimizer : MonoBehaviour
     {
-        distanceToCam = CalculateDistance();
-        Debug.Log(distanceToCam);
 
-        //!distance boundaries to change!
-        if (distanceToCam <= highLODDistance)
-        {
-            //set high detail model
-        }
-        else if (distanceToCam > highLODDistance && distanceToCam <= lowLODDistance)
-        {
-            //set medium detail model
-        }
-        else if (distanceToCam > lowLODDistance)
-        {
-            //set far away model
-        }
-    }
+        private float distanceToCam;
 
-	void OnBecameVisible()
-    {
-        if (dynamicCrowdModel)
+        [SerializeField]
+        private bool _dynamicCrowdModel;
+
+        [SerializeField]
+        private float _highLODDistance;
+        [SerializeField]
+        private float _midLODDistance;
+        [SerializeField]
+        private float _lowLODDistance, _updateFrequency = 0.3f;
+
+        private void UpdateLOD()
         {
-            InvokeRepeating("UpdateLOD", 0, 0.1f);
-        }
-    }
+            distanceToCam = CalculateDistance();
+            Debug.Log(distanceToCam);
 
-    void OnBecameInvisible()
-    {
-        if (dynamicCrowdModel)
+            //!distance boundaries to change!
+            if (distanceToCam <= _highLODDistance)
+            {
+                //set high detail model
+            }
+            else if (distanceToCam > _highLODDistance && distanceToCam <= _lowLODDistance)
+            {
+                //set medium detail model
+            }
+            else if (distanceToCam > _lowLODDistance)
+            {
+                //set far away model
+            }
+        }
+
+        void OnBecameVisible()
         {
-            CancelInvoke("UpdateLOD");
+            if (_dynamicCrowdModel)
+            {
+                
+                InvokeRepeating("UpdateLOD", 0, _updateFrequency);
+            }
         }
-    }
 
-    private float CalculateDistance()
-    {
-        var camera = Camera.main;
-        var heading = transform.position - camera.transform.position;
-        float distance = Vector3.Dot(heading, camera.transform.forward);
+        void OnBecameInvisible()
+        {
+            if (_dynamicCrowdModel)
+            {
+                CancelInvoke("UpdateLOD");
+            }
+        }
 
-        return distance;
+        private float CalculateDistance()
+        {
+            var camera = Camera.main;
+            var heading = transform.position - camera.transform.position;
+            float distance = Vector3.Dot(heading, camera.transform.forward);
+
+            return distance;
+        }
     }
 }

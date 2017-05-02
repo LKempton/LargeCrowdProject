@@ -25,5 +25,16 @@ namespace CrowdAI
         CIRCLE,SQUARE, RING
     }
 
-    
+    public enum AnimationStatus
+    {
+        Playing,Stopped,Transistioning,Paused
+    }
+
+    public interface ICrowdPosition
+    {
+         GameObject PlaceholderObject();
+         bool IsStatic();
+
+
+    }
 }
