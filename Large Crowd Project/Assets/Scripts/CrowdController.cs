@@ -76,7 +76,7 @@ namespace CrowdAI
 
         void Awake()
         {
-            CheckForNullCrowdMembers();
+
 
             int _groupLength = (_crowdGroups == null) ? 0 : _crowdGroups.Count;
 
@@ -300,7 +300,7 @@ namespace CrowdAI
 
         public void GenerateCrowd()
         {
-            CheckForNullCrowdMembers();
+
             var _parent = new GameObject();
             _parent.name = "Crowd Source";
 
@@ -366,23 +366,6 @@ namespace CrowdAI
             {
                 Destroy(_parent);
             }
-        }
-
-        public void CheckForNullCrowdMembers()
-        {
-            if (_groupUnassigned != null)
-            {
-                _groupUnassigned.RemoveNullCrowdMembers();
-
-            }
-            if (_crowdGroups != null)
-            {
-                for (int i = 0; i < _crowdGroups.Count; i++)
-                {
-                    _crowdGroups[i].RemoveNullCrowdMembers();
-                }
-            }
-            _crowdCount = RecalculateCount();
         }
 
         //All members of the crowd that are generated

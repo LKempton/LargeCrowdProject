@@ -78,20 +78,7 @@ namespace CrowdAI
             }
         }
 
-       public void RemoveNullCrowdMembers()
-        {
-            for (int i = 0; i < _crowdMembers.Count; i++)
-            {
-                if (_crowdMembers[i] != null)
-                {
-
-                    _crowdMembers.RemoveAt(i);
-                }
-
-               
-            }
-        }
-
+      
         /// <summary>
         /// Sets the state of all crowd members in the gruop
         /// </summary>
