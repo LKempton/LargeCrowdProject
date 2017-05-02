@@ -247,7 +247,7 @@ namespace CrowdAI
 
                     var _previousMembers = _group.ClearAllForDeletion();
 
-                    _groupUnassigned.AddCrowdMembers(_previousMembers);
+                    _groupUnassigned.AddCrowdMember(_previousMembers);
 
                     _crowdGroups.RemoveAt(i);
 
@@ -319,8 +319,9 @@ namespace CrowdAI
 
             if (_newCrowd.Length > 0)
             {
-                _groupUnassigned.AddCrowdMembers(_newCrowd);
+                _groupUnassigned.AddCrowdMember(_newCrowd);
                 _crowdCount = RecalculateCount();
+                
             }
             else
             {

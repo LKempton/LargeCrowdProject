@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CrowdAI
 {
 
-    public class CrowdMemberOptimizer : MonoBehaviour
+    public class CrowdMemberOptimizer : MonoBehaviour,ICrowdPosition
     {
 
         private float distanceToCam;
@@ -64,6 +65,16 @@ namespace CrowdAI
             float distance = Vector3.Dot(heading, camera.transform.forward);
 
             return distance;
+        }
+
+        public GameObject PlaceholderObject()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsStatic()
+        {
+            throw new NotImplementedException();
         }
     }
 }

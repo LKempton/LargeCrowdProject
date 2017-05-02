@@ -10,7 +10,7 @@ namespace CrowdAI
     public class CrowdGroup
     {
         private string _groupName;
-        private List<GameObject> _crowdMembers;
+        private List<ICrowdPosition> _crowdMembers;
 
         public ModelWrapper[] _crowdModels {get; set; }
 
@@ -24,7 +24,7 @@ namespace CrowdAI
 
          public CrowdGroup(string groupName)
         {
-            _crowdMembers = new List<GameObject>();
+            _crowdMembers = new List<ICrowdPosition>();
 
             _groupName = groupName;
         }
@@ -38,25 +38,43 @@ namespace CrowdAI
         {
             _groupName = groupName;
 
-            _crowdMembers = new List<GameObject>();
-           
-
+            _crowdMembers = new List<ICrowdPosition>();
         }
 
         /// <summary>
         /// Adds a crowd member to the group
         /// </summary>
         /// <param name="crowdMember"> the crowd member game object</param>
-        public void AddCrowdMember(GameObject crowdMember)
+        public void AddCrowdMember(ICrowdPosition crowdMember)
         {
             _crowdMembers.Add(crowdMember);
         }
 
-        public void AddCrowdMembers(GameObject[] crowdMemebers)
+        public void AddCrowdMember(GameObject crowdMember)
         {
-            for (int i = 0; i < crowdMemebers.Length; i++)
+            var _memberComponent = crowdMember.GetComponent<ICrowdPosition>();
+
+            if (_memberComponent == null)
             {
-                _crowdMembers.Add(crowdMemebers[i]);
+                Debug.LogWarning("Prefabs don't implent ICrowdPosition interface");
+                _memberComponent = crowdMember.AddComponent<CrowdMemberOptimizer>();
+            }
+
+            _crowdMembers.Add(_memberComponent);
+        }
+        public void AddCrowdMember(GameObject[] crowdMembers)
+        {
+            for (int i = 0; i < crowdMembers.Length; i++)
+            {
+                var _memberComponent = crowdMembers[i].GetComponent<ICrowdPosition>();
+
+                if (_memberComponent == null)
+                {
+                    Debug.LogWarning("Prefabs don't implent ICrowdPosition interface");
+                    _memberComponent = crowdMembers[i].AddComponent<CrowdMemberOptimizer>();
+                }
+
+                _crowdMembers.Add(_memberComponent);
             }
         }
 
@@ -100,28 +118,48 @@ namespace CrowdAI
 
             _crowdMembers.Clear();
 
-            return _groupMembers;
+            var _outGOs = new GameObject[_groupMembers.Length];
+            for (int i = 0; i < _groupMembers.Length; i++)
+            {
+                _outGOs[i] = _groupMembers[i].PlaceholderObject();
+            }
+
+            return _outGOs;
         }
         
-        public bool Remove(GameObject crowdMember)
+        public bool Remove(ICrowdPosition crowdMember)
         {
             return _crowdMembers.Remove(crowdMember);
         }
-        
-        public bool Contains(GameObject crowdMember)
+
+        public bool Remove(GameObject crowdMember)
+        {
+            for (int i = 0; i < _crowdMembers.Count; i++)
+            {
+                if (_crowdMembers[i].PlaceholderObject() == crowdMember)
+                {
+                    _crowdMembers.RemoveAt(i);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        public bool Contains(ICrowdPosition crowdMember)
         {
             return _crowdMembers.Contains(crowdMember);
         }
 
-        public bool Remove(GameObject[] crowdMembers)
+        public bool Contains(GameObject crowdMember)
         {
-            if (_crowdMembers.Contains(crowdMembers[0]))
+            for (int i = 0; i < _crowdMembers.Count; i++)
             {
-                for (int i = 0; i < crowdMembers.Length; i++)
+                if(_crowdMembers[i].PlaceholderObject() == crowdMember)
                 {
-                    _crowdMembers.Remove(crowdMembers[i]);
+                    return true;
                 }
-                return true;
             }
 
             return false;
