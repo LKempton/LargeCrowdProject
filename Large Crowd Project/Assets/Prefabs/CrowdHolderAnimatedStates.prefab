@@ -158,7 +158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c44d13eb0f77384bb72d6c3eb2c1ca4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicCrowdModel: 0
-  highLODDistance: 0
-  midLODDistance: 0
-  lowLODDistance: 0
+  _dynamicCrowdModel: 0
+  _highLODDistance: 0
+  _midLODDistance: 0
+  _lowLODDistance: 0
+  _updateFrequency: 0.3
