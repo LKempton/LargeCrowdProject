@@ -76,6 +76,7 @@ namespace CrowdAI
 
         void Awake()
         {
+            CheckForNullCrowdMembers();
 
             int _groupLength = (_crowdGroups == null) ? 0 : _crowdGroups.Count;
 
@@ -234,6 +235,44 @@ namespace CrowdAI
             print("Added");
         }
 
+        public void RemoveSourceChildren(GameObject[] children)
+        {
+           
+
+            for (int i = 0; i < children.Length; i++)
+            {
+
+                var _currentChild = children[i];
+
+                bool _childRemoved = _groupUnassigned.Remove(_currentChild);
+
+                if (_childRemoved)
+                {
+                    continue;
+                }
+                else
+                {
+                    if (_crowdGroups == null)
+                    {
+
+                    
+                    for (int j = 0; j < _crowdGroups.Count; j++)
+                    {
+                        _childRemoved = _crowdGroups[j].Remove(_currentChild);
+
+                        if (_childRemoved)
+                        {
+                            break;
+                        }
+                    }
+                }
+                }
+
+                
+            }
+
+           
+        }
 
         public bool RemoveGroup(string groupName)
         {
@@ -261,7 +300,7 @@ namespace CrowdAI
 
         public void GenerateCrowd()
         {
-
+            CheckForNullCrowdMembers();
             var _parent = new GameObject();
             _parent.name = "Crowd Source";
 

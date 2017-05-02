@@ -13,11 +13,20 @@ namespace CrowdAI
         {
             if (controller!= null)
             {
-                controller.CheckForNullCrowdMembers();
+                var _children = new GameObject[transform.GetChildCount()];
+
+                for (int i = 0; i < _children.Length; i++)
+                {
+                    _children[i] = transform.GetChild(i).gameObject;
+                }
+
+                controller.RemoveSourceChildren(_children);
             }
             
         }
 
+
+        
         public CrowdController Controller
         {
             set

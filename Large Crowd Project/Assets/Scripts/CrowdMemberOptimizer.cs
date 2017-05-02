@@ -69,12 +69,12 @@ namespace CrowdAI
 
         public GameObject PlaceholderObject()
         {
-            throw new NotImplementedException();
+            return gameObject;
         }
 
         public bool IsStatic()
         {
-            throw new NotImplementedException();
+            return _dynamicCrowdModel;
         }
     }
 }
