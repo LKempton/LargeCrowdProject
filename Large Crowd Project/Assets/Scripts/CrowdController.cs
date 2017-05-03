@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace CrowdAI
@@ -24,10 +25,12 @@ namespace CrowdAI
         int _LODCount = 5;
         int _crowdCount = 0;
 
-
+        
         private List<CrowdGroup> _crowdGroups;
         private CrowdGroup _groupUnassigned;
 
+        [SerializeField]
+        bool _randomStagger;
 
         [SerializeField]
         private CrowdFormation _crowdFormation;
@@ -237,11 +240,8 @@ namespace CrowdAI
 
         public void RemoveSourceChildren(GameObject[] children)
         {
-           
-
             for (int i = 0; i < children.Length; i++)
             {
-
                 var _currentChild = children[i];
 
                 bool _childRemoved = _groupUnassigned.Remove(_currentChild);
@@ -267,11 +267,7 @@ namespace CrowdAI
                     }
                 }
                 }
-
-                
             }
-
-           
         }
 
         public bool RemoveGroup(string groupName)
@@ -328,7 +324,7 @@ namespace CrowdAI
 
             if (_groupUnassigned == null)
             {
-                _groupUnassigned = new CrowdGroup("Unassigned");
+                SetUp();
             }
 
             GameObject[] _newCrowd;
@@ -360,7 +356,8 @@ namespace CrowdAI
             {
                 _groupUnassigned.AddCrowdMember(_newCrowd);
                 _crowdCount = RecalculateCount();
-                
+         
+
             }
             else
             {
@@ -439,7 +436,6 @@ namespace CrowdAI
             return false;
         }
 
-
         public void ShowDebugInfo()
         {
             string _outInfo = "Current Crowd Count: " + _crowdCount;
@@ -480,7 +476,12 @@ namespace CrowdAI
             Debug.Log(_outInfo);
         }
 
-
+        void SetUp()
+        {
+            _crowdGroups = new List<CrowdGroup>();
+            _groupUnassigned = new CrowdGroup("Unassigned");
+            
+        }
 
     }
 }

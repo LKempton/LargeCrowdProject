@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEditor;
 
 namespace CrowdAI
 {
@@ -11,7 +13,8 @@ namespace CrowdAI
 
         void OnDestroy()
         {
-            if (controller!= null)
+            
+            if (controller!= null && !EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 var _children = new GameObject[transform.GetChildCount()];
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CrowdAI
 {
-
+    [System.Serializable]
     public class LODPoolManager
     {
         [SerializeField]

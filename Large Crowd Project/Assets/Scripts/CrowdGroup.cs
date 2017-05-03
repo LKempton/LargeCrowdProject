@@ -7,14 +7,20 @@ namespace CrowdAI
     /// <summary>
     /// Group of crowd members abritrarily seperated 
     /// </summary>
+    /// 
+    [System.Serializable]
     public class CrowdGroup
     {
+        [SerializeField]
         private string _groupName;
+        [SerializeField]
         private List<ICrowdPosition> _crowdMembers;
+
+       
 
         public ModelWrapper[] _crowdModels {get; set; }
 
-
+        [SerializeField]
         private string[] _groupModelNames;
 
         /// <summary>
@@ -121,6 +127,11 @@ namespace CrowdAI
 
         public bool Remove(GameObject crowdMember)
         {
+            if (crowdMember == null)
+            {
+                return false;
+            }
+
             for (int i = 0; i < _crowdMembers.Count; i++)
             {
                 if (_crowdMembers[i].PlaceholderObject() == crowdMember)
