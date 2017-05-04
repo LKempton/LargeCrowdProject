@@ -13,10 +13,6 @@ namespace CrowdAI
         [SerializeField]
         private string[] _crowdStates;
         private string _savePath;
-
-   
-        private int[][][] _pooledSizes;
-        private GameObject[][][] _groupModels;
       
 
         int _LODCount = 5;
@@ -32,7 +28,7 @@ namespace CrowdAI
         [SerializeField]
         private CrowdFormation _crowdFormation;
 
-        float animationStagger = 0.25f;
+        float _animationStagger = 0.25f;
 
         // crowd gen parameters
 
@@ -123,6 +119,44 @@ namespace CrowdAI
             _poolManager = new LODPoolManager(_sizes, _outObjects, _names);
             
 
+        }
+
+        private ControllerData GetData()
+        {
+            ControllerData _outData = new ControllerData();
+            _outData.path = _savePath;
+            _outData._animationStagger = _animationStagger;
+
+            _outData._position._posX = transform.position.x;
+            _outData._position._posY = transform.position.y;
+            _outData._position._posZ = transform.position.z;
+
+            _outData._position._rotW = transform.rotation.w;
+            _outData._position._rotX = transform.rotation.x;
+            _outData._position._rotY = transform.rotation.y;
+            _outData._position._rotZ = transform.rotation.z;
+
+            if (_crowdStates != null)
+            {
+                _outData._stateNameSize = _crowdStates.Length;
+                _outData._stateNames = _crowdStates;
+            }
+            if (_crowdGroups != null)
+            {
+                _outData._groupCount = _crowdGroups.Count;
+                _outData._groups = new GroupData[_crowdGroups.Count];
+
+                for (int i = 0; i < _crowdGroups.Count; i++)
+                {
+                    _outData._groups[i] = _crowdGroups[i].GetData();
+                }
+            }
+
+            if (_groupUnassigned != null)
+            {
+                _outData._unassignedGroup = _groupUnassigned.GetData();
+            }
+            return _outData;
         }
 
         public CrowdGroup[] GetGroups()
@@ -486,6 +520,9 @@ namespace CrowdAI
             {
                 return false;
             }
+            var _data = GetData();
+
+
             if (_savePath == null)
             {
                 string _newPath = Application.dataPath + "CrowdData.data";

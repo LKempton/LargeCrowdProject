@@ -79,20 +79,46 @@ namespace CrowdAI
         }
         
       
-        public void GetModels(ref string[][] modelNames, ref int[][] sizes)
+        public GroupData GetData()
         {
-            if (_models.Count < 1)
+            GroupData _outData = new GroupData();
+
+            _outData._crowdMembers = new TransFormData[_crowdMembers.Count];
+            _outData._models = new ModelData[_models.Count];
+
+            _outData._name = _groupName;
+
+            for (int i = 0; i < _crowdMembers.Count; i++)
             {
-                return;
+                var _currentTransform = _crowdMembers[i].PlaceholderObject().transform;
+
+                _outData._crowdMembers[i]._posX = _currentTransform.position.x;
+                _outData._crowdMembers[i]._posY = _currentTransform.position.y;
+                _outData._crowdMembers[i]._posZ = _currentTransform.position.z;
+
+                _outData._crowdMembers[i]._rotW = _currentTransform.rotation.w;
+                _outData._crowdMembers[i]._rotX = _currentTransform.rotation.x;
+                _outData._crowdMembers[i]._rotY = _currentTransform.rotation.y;
+                _outData._crowdMembers[i]._rotZ = _currentTransform.rotation.z;
+
             }
-            modelNames = new string[_models.Count][];
-            sizes = new int[_models.Count][];
 
             for (int i = 0; i < _models.Count; i++)
             {
-                var _currentModels = _models[i]._LODLevel;
-                var _currentSizes = _models[i].sizes;
+                var _currentModel = _models[i];
+                int _LODCount = _currentModel.sizes.Length;
+
+                _outData._models[i]._modelNames = new string[_LODCount];
+                _outData._models[i]._sizes = _models[i].sizes;
+
+                for (int j = 0; j <_LODCount ; j++)
+                {
+                    _outData._models[i]._modelNames[j] = _models[i]._LODLevel[j].name;
+                    
+                }
             }
+
+            return _outData;
         }
 
         public bool AddModelGroup(ModelWrapper model)
