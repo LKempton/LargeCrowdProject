@@ -13,10 +13,6 @@ namespace CrowdAI
         void ToggleAnimation();
 
         GameObject Member { get; }
-       
-
-        
-      
         // possibly use a way of using a mix of global and local animations
     }
 
@@ -34,6 +30,43 @@ namespace CrowdAI
     {
          GameObject PlaceholderObject();
          bool IsStatic();
+
+
+    }
+
+    public struct TransFormData
+    {
+        public float _posX;
+        public float _posY;
+        public float _posZ;
+
+        public float _rotW;
+        public float _rotX;
+        public float _rotY;
+        public float _rotZ;
+
+    }
+
+   public struct GroupData
+    {
+        public TransFormData[] _crowdMembers;
+        public string _name;
+    }
+
+    public struct ControllerData
+    {
+        public TransFormData _position;
+        public string path;
+
+        public int _stateNameSize;
+        public string[] _stateNames;
+        public int[][][] _poolerSizes;
+
+        public int _groupCount;
+        public GroupData[] _groups;
+        public GroupData _unassignedGroup;
+        public float _animationStagger;
+
 
 
     }

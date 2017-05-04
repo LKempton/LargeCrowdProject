@@ -1,7 +1,5 @@
-﻿using System.Collections;
+﻿using System.IO;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace CrowdAI
@@ -14,13 +12,12 @@ namespace CrowdAI
 
         [SerializeField]
         private string[] _crowdStates;
+        private string _savePath;
 
-
-        [SerializeField]
-        private GameObject[][][] _groupModels;
+   
         [SerializeField]
         private int[][][] _pooledSizes;
-
+        private GameObject[][][] _groupModels;
 
         int _LODCount = 5;
         int _crowdCount = 0;
@@ -79,7 +76,7 @@ namespace CrowdAI
 
         void Awake()
         {
-
+            ReadAll();
 
             int _groupLength = (_crowdGroups == null) ? 0 : _crowdGroups.Count;
 
@@ -483,6 +480,42 @@ namespace CrowdAI
             
         }
 
+        public bool SaveAll()
+        {
+            if (!Application.isEditor)
+            {
+                return false;
+            }
+            if (_savePath == null)
+            {
+                string _newPath = Application.dataPath + "CrowdData.data";
+                if (File.Exists(_newPath))
+                {
+                    int _instance = 1;
+                    do
+                    {
+
+                        _newPath = Application.dataPath + "CrowdData(" + _instance + ").data";
+                        _instance++;
+                    }
+                    while (File.Exists(_newPath));
+                }
+
+
+
+                _savePath = _newPath;
+            }
+
+            
+            return true;
+        }
+
+         void ReadAll()
+        {
+
+        }
     }
+
 }
+
 

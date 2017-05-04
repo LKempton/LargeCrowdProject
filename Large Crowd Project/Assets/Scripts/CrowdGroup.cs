@@ -18,10 +18,9 @@ namespace CrowdAI
 
        
 
-        public ModelWrapper[] _crowdModels {get; set; }
+      
 
-        [SerializeField]
-        private string[] _groupModelNames;
+      
 
         /// <summary>
         /// Constructs a new instance of CrowdGroup

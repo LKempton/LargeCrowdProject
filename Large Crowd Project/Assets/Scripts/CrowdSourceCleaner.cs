@@ -26,6 +26,7 @@ namespace CrowdAI
                 controller.RemoveSourceChildren(_children);
             }
             
+            
         }
 
 
