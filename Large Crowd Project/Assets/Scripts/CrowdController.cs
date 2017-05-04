@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 namespace CrowdAI
 {
     /// <summary>
@@ -79,45 +80,45 @@ namespace CrowdAI
 
             int _totalElements = 0;
             int _currentIndex = 0;
+          
+
+            //for (int i = 0; i < _groupLength; i++)
+            //{
+            //    int _modelsInGroup = _groupModels[i].Length;
+
+            //    for (int j = 0; j < _modelsInGroup; j++)
+            //    {
+            //        _totalElements += _groupModels[i][j].Length;
+            //    }
+            //}
+
+            //var _names = new string[_totalElements];
+            //var _sizes = new int[_totalElements];
+
+            //var _outObjects = new GameObject[_totalElements];
 
 
-            for (int i = 0; i < _groupLength; i++)
-            {
-                int _modelsInGroup = _groupModels[i].Length;
+            //for (int i = 0; i < _groupLength; i++)
+            //{
+            //    int _modelsInGroup = _groupModels[i].Length;
 
-                for (int j = 0; j < _modelsInGroup; j++)
-                {
-                    _totalElements += _groupModels[i][j].Length;
-                }
-            }
+            //    for (int j = 0; j < _modelsInGroup; j++)
+            //    {
+            //        //made LODCount global variable with set size
+            //        //int _LODCount = _groupModels[i][j].Length;
 
-            var _names = new string[_totalElements];
-            var _sizes = new int[_totalElements];
-
-            var _outObjects = new GameObject[_totalElements];
-
-
-            for (int i = 0; i < _groupLength; i++)
-            {
-                int _modelsInGroup = _groupModels[i].Length;
-
-                for (int j = 0; j < _modelsInGroup; j++)
-                {
-                    //made LODCount global variable with set size
-                    //int _LODCount = _groupModels[i][j].Length;
-
-                    for (int k = 0; k < _LODCount; k++)
-                    {
-                        _names[_currentIndex] = _crowdGroups[i].GroupName + "_" + j.ToString() + "_" + k.ToString();
-                        _outObjects[_currentIndex] = _groupModels[i][j][k];
-                        _sizes[_currentIndex] = _pooledSizes[i][j][k];
-                        _currentIndex++;
-                    }
-                }
-            }
+            //        for (int k = 0; k < _LODCount; k++)
+            //        {
+            //            _names[_currentIndex] = _crowdGroups[i].GroupName + "_" + j.ToString() + "_" + k.ToString();
+            //            _outObjects[_currentIndex] = _groupModels[i][j][k];
+            //            _sizes[_currentIndex] = _pooledSizes[i][j][k];
+            //            _currentIndex++;
+            //        }
+            //    }
+            //}
 
 
-            _poolManager = new LODPoolManager(_sizes, _outObjects, _names);
+            //_poolManager = new LODPoolManager(_sizes, _outObjects, _names);
             
 
         }
@@ -542,6 +543,9 @@ namespace CrowdAI
 
 
                 _savePath = _newPath;
+
+               
+
             }
 
             
