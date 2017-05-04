@@ -7,7 +7,15 @@ public class DynamicLODCamera : MonoBehaviour {
     [SerializeField]
     private Collider veryLowLODCollider, lowLODCollider, midLODCollider, highLODCollider, veryHighLODCollider;
 
-    void Update()
+    [SerializeField]
+    private float updateInterval = 0.5f;
+
+    void Start()
+    {
+        InvokeRepeating("GetCrowdMembers", 0, updateInterval);
+    }
+
+    private void GetCrowdMembers()
     {
 
     }

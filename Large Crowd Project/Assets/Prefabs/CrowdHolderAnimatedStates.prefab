@@ -20,7 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4472861272711716}
   - component: {fileID: 114822844978273278}
-  - component: {fileID: 114994526084368796}
+  - component: {fileID: 114611056412304536}
+  - component: {fileID: 65676558000222824}
   m_Layer: 0
   m_Name: CrowdHolderAnimatedStates
   m_TagString: Untagged
@@ -111,6 +112,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1205891536930750}
   m_Mesh: {fileID: 4300000, guid: 404cf9e0098da964582dc9ef0e005210, type: 3}
+--- !u!65 &65676558000222824
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1054051684950950}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!111 &111048192051693304
 Animation:
   m_ObjectHideFlags: 1
@@ -127,6 +140,20 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 1
+--- !u!114 &114611056412304536
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1054051684950950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c44d13eb0f77384bb72d6c3eb2c1ca4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dynamicCrowdModel: 0
+  _updateFrequency: 1
+  _collider: {fileID: 65676558000222824}
 --- !u!114 &114822844978273278
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -147,19 +174,3 @@ MonoBehaviour:
   _animStateNames:
   - Bob
   - Sway
---- !u!114 &114994526084368796
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1054051684950950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c44d13eb0f77384bb72d6c3eb2c1ca4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dynamicCrowdModel: 0
-  _highLODDistance: 0
-  _midLODDistance: 0
-  _lowLODDistance: 0
-  _updateFrequency: 0.3
