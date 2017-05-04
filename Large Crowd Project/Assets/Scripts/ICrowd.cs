@@ -50,24 +50,26 @@ namespace CrowdAI
    public struct GroupData
     {
         public TransFormData[] _crowdMembers;
+        public Model[] _models;
         public string _name;
+    }
+
+    public struct Model
+    {
+        public string[] _modelNames;
+        public int[] _sizes;
     }
 
     public struct ControllerData
     {
         public TransFormData _position;
-        public string path;
+        public string pat;
 
         public int _stateNameSize;
         public string[] _stateNames;
-        public int[][][] _poolerSizes;
-
         public int _groupCount;
         public GroupData[] _groups;
         public GroupData _unassignedGroup;
         public float _animationStagger;
-
-
-
     }
 }

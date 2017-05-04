@@ -15,7 +15,7 @@ namespace CrowdAI
         private string _groupName;
         [SerializeField]
         private List<ICrowdPosition> _crowdMembers;
-
+        private List<ModelWrapper> _models;
        
 
       
@@ -30,7 +30,7 @@ namespace CrowdAI
          public CrowdGroup(string groupName)
         {
             _crowdMembers = new List<ICrowdPosition>();
-
+            _models = new List<ModelWrapper>();
             _groupName = groupName;
         }
 
@@ -39,12 +39,7 @@ namespace CrowdAI
         /// </summary>
         /// <param name="groupName">The name associated with this crowd group</param>
         /// <param name="models"> group of Models specially for this crowdGroup</param>
-        public CrowdGroup(string groupName, string[] modelNames)
-        {
-            _groupName = groupName;
-
-            _crowdMembers = new List<ICrowdPosition>();
-        }
+   
 
         /// <summary>
         /// Adds a crowd member to the group
@@ -82,8 +77,36 @@ namespace CrowdAI
                 _crowdMembers.Add(_memberComponent);
             }
         }
-
+        
       
+        public void GetModels(ref string[][] modelNames, ref int[][] sizes)
+        {
+            if (_models.Count < 1)
+            {
+                return;
+            }
+            modelNames = new string[_models.Count][];
+            sizes = new int[_models.Count][];
+
+            for (int i = 0; i < _models.Count; i++)
+            {
+                var _currentModels = _models[i]._LODLevel;
+                var _currentSizes = _models[i].sizes;
+            }
+        }
+
+        public bool AddModelGroup(ModelWrapper model)
+        {
+            if (!Application.isEditor)
+            {
+                return false;
+            }
+
+            _models.Add(model);
+            return true;
+
+        }
+
         /// <summary>
         /// Sets the state of all crowd members in the gruop
         /// </summary>

@@ -15,9 +15,9 @@ namespace CrowdAI
         private string _savePath;
 
    
-        [SerializeField]
         private int[][][] _pooledSizes;
         private GameObject[][][] _groupModels;
+      
 
         int _LODCount = 5;
         int _crowdCount = 0;

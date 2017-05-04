@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace CrowdAI
 {
-    [System.Serializable]
+ 
     public class ModelWrapper
     {
         public GameObject[] _LODLevel;
-
+        public int[] sizes;
         
     }
 
