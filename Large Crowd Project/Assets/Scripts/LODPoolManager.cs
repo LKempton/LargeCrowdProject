@@ -24,7 +24,6 @@ namespace CrowdAI
         public LODPoolManager(int[] size, GameObject[] objects, string[] objectNames)
         {
       
-
             _tempList = new List<GameObject>();
 
 			////initialise the amounts array
@@ -51,8 +50,6 @@ namespace CrowdAI
                 //add objects for this character to pool
                 _mainPool.Add(objectNames[i], tempObjList);
             }
-
-            
         }
 
 		/// <summary>
@@ -65,7 +62,7 @@ namespace CrowdAI
         {
             if (_mainPool.ContainsKey(name))
             {
-                _tempList =  (List<GameObject> )_mainPool[name];
+                _tempList = (List<GameObject>)_mainPool[name];
 
                 for (int i = 0; i < _tempList.Count; i++)
                 {
@@ -79,7 +76,6 @@ namespace CrowdAI
                 }
                 throw new System.Exception("There are no more inactive instances of the object you searched for in the pooler");
             }
-
             throw new System.Exception("There are no objects in the pooler with the name you searched for.");
         }
 
