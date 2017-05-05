@@ -9,6 +9,9 @@ namespace CrowdAI
     /// </summary>
     public class CrowdController : MonoBehaviour
     {
+        private static CrowdController instance;
+
+        private LODPoolManager _poolManager;
 
         [SerializeField]
         private string[] _crowdStates;
@@ -49,12 +52,22 @@ namespace CrowdAI
 
         private bool placeholdersSpawned = true;
 
-
-        private LODPoolManager _poolManager;
-
         public GameObject GetPooled(string name)
         {
             return _poolManager.GetPooledObject(name);
+        }
+
+        private void Reset()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Debug.LogError("Can only have one Crowd Controller instance");
+                Destroy(this);
+            }
         }
 
         public string[] GetGroupNames()
@@ -513,6 +526,11 @@ namespace CrowdAI
          void ReadAll()
         {
 
+        }
+
+        public static CrowdController GetCrowdController()
+        {
+            return instance;
         }
     }
 

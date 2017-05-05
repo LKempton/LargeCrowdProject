@@ -66,7 +66,12 @@ namespace CrowdAI
 
         private void SetLOD(int LOD)
         {
+            //Disable previous model
 
+            //Get new model
+            GameObject model = CrowdController.GetCrowdController().GetPooled("string");
+
+            //place model at position
         }
     }
 }
