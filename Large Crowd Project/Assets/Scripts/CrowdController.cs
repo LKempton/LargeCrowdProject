@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 
 
@@ -19,8 +20,7 @@ namespace CrowdAI
 
         int _LODCount = 5;
         int _crowdCount = 0;
-
-        
+       
         private List<CrowdGroup> _crowdGroups;
         private CrowdGroup _groupUnassigned;
 
@@ -539,16 +539,12 @@ namespace CrowdAI
                     }
                     while (File.Exists(_newPath));
                 }
-
-
-
                 _savePath = _newPath;
-
-               
-
             }
 
-            
+            string _serializedData = JsonConvert.SerializeObject(_data);
+            File.WriteAllText(_savePath, _serializedData);
+
             return true;
         }
 
