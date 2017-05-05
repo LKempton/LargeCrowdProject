@@ -71,6 +71,20 @@ namespace CrowdAI
             }
         }
 
+        public void OverwriteModelData(ModelData[] data)
+        {
+            if (data.Length < 1 | !Application.isEditor)
+            {
+                return;
+            }
+            _models.Clear();
+
+            for (int i = 0; i <data.Length ; i++)
+            {
+                _models.Add(GetModelFromData(data[i]));
+            }
+
+        }
         private GameObject MakeCrowdPlaceholder(TransFormData data)
         {
             var _outGO = GameObject.Instantiate(new GameObject());
