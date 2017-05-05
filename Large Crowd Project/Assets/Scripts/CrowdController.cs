@@ -10,15 +10,17 @@ namespace CrowdAI
     /// <summary>
     /// Master controlling class 
     /// </summary>
+    [RequireComponent(typeof(ControllerDelegator))]
     public class CrowdController : MonoBehaviour
     {
         
         [SerializeField]
         private string[] _crowdStates;
-
+        
         string _savePath;
 
-        bool _loaded = false;
+        // Whether the save/load function has been delegated to play mode event
+        bool _functionDelegated = false;
 
         int _LODCount = 5;
         int _crowdCount = 0;
@@ -124,6 +126,8 @@ namespace CrowdAI
 
 
         }
+
+        
 
         private CrowdData GetData()
         {
@@ -270,7 +274,7 @@ namespace CrowdAI
             }
             _crowdGroups.Add(new CrowdGroup(groupName));
 
-            print("Added");
+            SaveAll();
         }
 
         public void RemoveSourceChildren(GameObject[] children)
@@ -303,6 +307,8 @@ namespace CrowdAI
                     }
                 }
             }
+
+            SaveAll();
         }
 
         public bool RemoveGroup(string groupName)
@@ -321,6 +327,7 @@ namespace CrowdAI
 
                     _crowdGroups.RemoveAt(i);
 
+                    SaveAll();
                     return true;
                 }
             }
@@ -455,19 +462,13 @@ namespace CrowdAI
             }
         }
 
-        private void ManagePlaceholders()
-        {
-
-
-            placeholdersSpawned = !placeholdersSpawned;
-
-        }
+       
 
         public bool AddCrowdMembers(string groupName, GameObject[] group)
         {
 
 
-
+            SaveAll();
             return false;
         }
 
@@ -520,7 +521,7 @@ namespace CrowdAI
 
         public void SaveAll()
         {
-           
+            
             if (!Application.isEditor)
             {
                 return ;
@@ -575,7 +576,19 @@ namespace CrowdAI
             {
                if (data._unassignedGroup._crowdMembers.Length > 0)
                 {
-                    _groupUnassigned = new CrowdGroup("Unassigned");
+                    _groupUnassigned = GenerateGroupAndPlaceholders(data._unassignedGroup);
+                }
+                if (data._groupCount > 0)
+                {
+                    _crowdGroups.Clear();
+                    int _currentGroupIndex = 0;
+
+                    while (_currentGroupIndex < data._groupCount)
+                    {
+
+                        _crowdGroups.Add(GenerateGroupAndPlaceholders(data._groups[_currentGroupIndex]));
+                        _currentGroupIndex++;
+                    }
                 }
             }
             else
@@ -618,7 +631,7 @@ namespace CrowdAI
             return _newGroup;
         }
 
-        private void ReadAll(bool isPlayMode)
+        private void ReadAll()
         {
             if (_savePath == null)
             {
@@ -628,11 +641,14 @@ namespace CrowdAI
 
             if (File.Exists(_savePath))
             {
-                var _jsonReader = new JsonTextReader(new StreamReader(_savePath));
+                var _reader = new StreamReader(_savePath);
 
-                string _jsonFile = _jsonReader.ReadAsString();
 
-               var data =(CrowdData)JsonConvert.DeserializeObject(_jsonFile);
+                var _jsonFile = _reader.ReadToEnd();
+
+                var data = JsonConvert.DeserializeObject<CrowdData>(_jsonFile);
+
+                _reader.Dispose();
 
                 OverWriteData(data);
                 
@@ -668,6 +684,17 @@ namespace CrowdAI
                 ClearAllForPlayMode();
             }
             
+        }
+
+        public void Delegate()
+        {
+            if (!Application.isEditor | _functionDelegated)
+            {
+                return;
+            }
+
+            EditorApplication.playmodeStateChanged += SaveAndLoadForPlayMode;
+            _functionDelegated = true;
         }
     }
 
