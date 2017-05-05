@@ -37,9 +37,40 @@ namespace CrowdAI
 
         public CrowdGroup(GroupData data)
         {
+            _crowdMembers = new List<GameObject>();
+            _models = new List<ModelWrapper>();
+            _groupName = data._name;
+            if (data._models != null)
+            {
+                for (int i = 0; i < data._models.Length; i++)
+                {
+                    var _nextModel = GetModelFromData(data._models[i]);
+                    _models.Add(_nextModel);
+                }
+            }
             
+            if (data._crowdMembers != null)
+            {
+                for (int i = 0; i < data._crowdMembers.Length; i++)
+                {
+                    var _newCrowdMember = MakeCrowdPlaceholder(data._crowdMembers[i]);
+                    _crowdMembers.Add(_newCrowdMember);
+                }
+            }
+
         }
-      
+        public void DestroyCrowdMembers()
+        {
+            for (int i = _crowdMembers.Count; i > -1; i--)
+            {
+                if (_crowdMembers[i] != null)
+                {
+                    GameObject.Destroy(_crowdMembers[i]);
+                }
+                _crowdMembers.RemoveAt(i);
+            }
+        }
+
         private GameObject MakeCrowdPlaceholder(TransFormData data)
         {
             var _outGO = GameObject.Instantiate(new GameObject());
@@ -50,6 +81,23 @@ namespace CrowdAI
             return _outGO;
             
         }
+        private ModelWrapper GetModelFromData(ModelData data)
+        {
+            int _length = data._modelNames.Length;
+
+            var _outModel = new ModelWrapper();
+
+            _outModel._LODLevel = new GameObject[_length];
+            _outModel.sizes = new int[_length];
+
+            for (int i = 0; i < _length; i++)
+            {
+                _outModel._LODLevel[i] = (GameObject)Resources.Load(data._modelNames[i], typeof (GameObject));
+                _outModel.sizes[i] = data._sizes[i];
+            }
+
+            return _outModel;
+        }
 
         /// <summary>
         /// Adds a crowd member to the group
@@ -59,7 +107,6 @@ namespace CrowdAI
         {
             _crowdMembers.Add(crowdMember);
         }
-
        
         public void AddCrowdMember(GameObject[] crowdMembers)
         {
@@ -75,39 +122,56 @@ namespace CrowdAI
             GroupData _outData = new GroupData();
 
             _outData._crowdMembers = new TransFormData[_crowdMembers.Count];
-            _outData._models = new ModelData[_models.Count];
+             
+           
 
             _outData._name = _groupName;
-
-            for (int i = 0; i < _crowdMembers.Count; i++)
+            if (_crowdMembers != null)
             {
-                var _currentTransform = _crowdMembers[i].transform;
-
-                _outData._crowdMembers[i]._posX = _currentTransform.position.x;
-                _outData._crowdMembers[i]._posY = _currentTransform.position.y;
-                _outData._crowdMembers[i]._posZ = _currentTransform.position.z;
-
-                _outData._crowdMembers[i]._rotW = _currentTransform.rotation.w;
-                _outData._crowdMembers[i]._rotX = _currentTransform.rotation.x;
-                _outData._crowdMembers[i]._rotY = _currentTransform.rotation.y;
-                _outData._crowdMembers[i]._rotZ = _currentTransform.rotation.z;
-
-            }
-
-            for (int i = 0; i < _models.Count; i++)
-            {
-                var _currentModel = _models[i];
-                int _LODCount = _currentModel.sizes.Length;
-
-                _outData._models[i]._modelNames = new string[_LODCount];
-                _outData._models[i]._sizes = _models[i].sizes;
-
-                for (int j = 0; j <_LODCount ; j++)
+                if (_crowdMembers.Count > 0)
                 {
-                    _outData._models[i]._modelNames[j] = _models[i]._LODLevel[j].name;
-                    
+                    for (int i = 0; i < _crowdMembers.Count; i++)
+                    {
+                        var _currentTransform = _crowdMembers[i].transform;
+
+                        _outData._crowdMembers[i]._posX = _currentTransform.position.x;
+                        _outData._crowdMembers[i]._posY = _currentTransform.position.y;
+                        _outData._crowdMembers[i]._posZ = _currentTransform.position.z;
+
+                        _outData._crowdMembers[i]._rotW = _currentTransform.rotation.w;
+                        _outData._crowdMembers[i]._rotX = _currentTransform.rotation.x;
+                        _outData._crowdMembers[i]._rotY = _currentTransform.rotation.y;
+                        _outData._crowdMembers[i]._rotZ = _currentTransform.rotation.z;
+
+                    }
                 }
             }
+           
+
+            if (_models !=null)
+            {
+                if (_models.Count > 0)
+                {
+                    _outData._models = new ModelData[_models.Count];
+
+                    for (int i = 0; i < _models.Count; i++)
+                    {
+                        var _currentModel = _models[i];
+                        int _LODCount = _currentModel.sizes.Length;
+
+                        _outData._models[i]._modelNames = new string[_LODCount];
+                        _outData._models[i]._sizes = _models[i].sizes;
+
+                        for (int j = 0; j < _LODCount; j++)
+                        {
+                            _outData._models[i]._modelNames[j] = _models[i]._LODLevel[j].name;
+
+                        }
+                    }
+                }
+                
+            }
+           
 
             return _outData;
         }

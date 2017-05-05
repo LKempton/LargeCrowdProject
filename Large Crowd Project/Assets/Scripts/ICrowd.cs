@@ -60,10 +60,10 @@ namespace CrowdAI
         public int[] _sizes;
     }
 
-    public struct ControllerData
+    public struct CrowdData
     {
         public TransFormData _position;
-        public string path;
+        public string _path;
         public int _stateNameSize;
         public int _groupCount;
         public float _animationStagger;
