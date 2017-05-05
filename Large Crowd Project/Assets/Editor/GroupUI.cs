@@ -17,7 +17,7 @@ namespace CrowdAI
         private GUIStyle _headingTextStyle;
         string _newGroupName = "Group Name";
 
-
+        Vector2 scrollPosition = new Vector2();
 
         void Awake()
         {
@@ -67,8 +67,10 @@ namespace CrowdAI
 
 
                 EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
                 
-                //start scrollable area here
+                scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+
                 if (_unassignedGroup != null)
                 {
                     ShowGroup(_unassignedGroup);
@@ -76,9 +78,13 @@ namespace CrowdAI
                 
                 if (_currentGroups != null)
                 {
-
+                    for (int i = 0; i < _currentGroups.Length; i++)
+                    {
+                        ShowGroup(_currentGroups[i]);
+                    }
                 }
-                //end scrollable area here
+
+                GUILayout.EndScrollView();
                 
             }
         }
@@ -107,11 +113,17 @@ namespace CrowdAI
 
         public void ShowGroup(CrowdGroup group)
         {
-            
             GUILayout.Label("Group Name: ");
+
             group.GroupName = GUILayout.TextField(group.GroupName);
 
-            
+
+
+            if (GUILayout.Button("Delete This Group", GUILayout.Width(200)))
+            {
+                _crowdController.RemoveGroup(group.GroupName);
+            }
+
         }
     }
 

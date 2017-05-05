@@ -106,6 +106,11 @@ namespace CrowdAI
 
         public GameObject[] ClearAllForDeletion()
         {
+            if (_crowdMembers == null)
+            {
+                return null;
+            }
+
             var _groupMembers = _crowdMembers.ToArray();
 
             _crowdMembers.Clear();
@@ -173,7 +178,10 @@ namespace CrowdAI
             }
             set
             {
-                _groupName = value;
+                if (_groupName != "Unassigned")
+                {
+                    _groupName = value;
+                }
             }
         }
 
@@ -181,7 +189,14 @@ namespace CrowdAI
         {
             get
             {
-                return _crowdMembers.Count;
+                if (_crowdMembers == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return _crowdMembers.Count;
+                }
             }
         }
 

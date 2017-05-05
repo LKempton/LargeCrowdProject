@@ -292,7 +292,10 @@ namespace CrowdAI
 
                     var _previousMembers = _group.ClearAllForDeletion();
 
-                    _groupUnassigned.AddCrowdMember(_previousMembers);
+                    if (_previousMembers != null)
+                    {
+                        _groupUnassigned.AddCrowdMember(_previousMembers);
+                    }
 
                     _crowdGroups.RemoveAt(i);
 
@@ -449,13 +452,18 @@ namespace CrowdAI
         public void ShowDebugInfo()
         {
             string _outInfo = "Current Crowd Count: " + _crowdCount;
-            _outInfo += "\n Current Groups and the number of their members :";
+            _outInfo += "\n Current Groups and the number of their members:\n";
+
+            if (_groupUnassigned != null)
+            {
+                _outInfo += _groupUnassigned.GroupName + ", Size: " + _groupUnassigned.Size + "\n";
+            }
 
             if (_crowdGroups != null)
             {
                 for (int i = 0; i < _crowdGroups.Count; i++)
                 {
-                    _outInfo += _crowdGroups[i].GroupName + " , Size:" + _crowdGroups[i].Size + "\n";
+                    _outInfo += _crowdGroups[i].GroupName + ", Size: " + _crowdGroups[i].Size + "\n";
                 }
             }
             else
@@ -479,9 +487,6 @@ namespace CrowdAI
             {
                 _outInfo += "0 \n";
             }
-
-           
-
 
             Debug.Log(_outInfo);
         }
