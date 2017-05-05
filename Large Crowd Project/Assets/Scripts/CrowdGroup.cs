@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 
+
 namespace CrowdAI
 {
     /// <summary>
@@ -14,7 +15,7 @@ namespace CrowdAI
         [SerializeField]
         private string _groupName;
         [SerializeField]
-        private List<ICrowdPosition> _crowdMembers;
+        private List<GameObject> _crowdMembers;
         private List<ModelWrapper> _models;
        
 
@@ -29,52 +30,42 @@ namespace CrowdAI
 
          public CrowdGroup(string groupName)
         {
-            _crowdMembers = new List<ICrowdPosition>();
+            _crowdMembers = new List<GameObject>();
             _models = new List<ModelWrapper>();
             _groupName = groupName;
         }
 
-        /// <summary>
-        /// Constructs a new instance of CrowdGroup
-        /// </summary>
-        /// <param name="groupName">The name associated with this crowd group</param>
-        /// <param name="models"> group of Models specially for this crowdGroup</param>
-   
+        public CrowdGroup(GroupData data)
+        {
+            
+        }
+      
+        private GameObject MakeCrowdPlaceholder(TransFormData data)
+        {
+            var _outGO = GameObject.Instantiate(new GameObject());
+            // add components go here for any scripts that need to be on the objects
+            _outGO.transform.position = new Vector3(data._posX, data._posY, data._posZ);
+            _outGO.transform.rotation = new Quaternion(data._rotX, data._rotY, data._rotZ, data._rotW);
+
+            return _outGO;
+            
+        }
 
         /// <summary>
         /// Adds a crowd member to the group
         /// </summary>
         /// <param name="crowdMember"> the crowd member game object</param>
-        public void AddCrowdMember(ICrowdPosition crowdMember)
+        public void AddCrowdMember(GameObject crowdMember)
         {
             _crowdMembers.Add(crowdMember);
         }
 
-        public void AddCrowdMember(GameObject crowdMember)
-        {
-            var _memberComponent = crowdMember.GetComponent<ICrowdPosition>();
-
-            if (_memberComponent == null)
-            {
-                Debug.LogWarning("Prefabs don't implent ICrowdPosition interface");
-                _memberComponent = crowdMember.AddComponent<CrowdMemberOptimizer>();
-            }
-
-            _crowdMembers.Add(_memberComponent);
-        }
+       
         public void AddCrowdMember(GameObject[] crowdMembers)
         {
             for (int i = 0; i < crowdMembers.Length; i++)
             {
-                var _memberComponent = crowdMembers[i].GetComponent<ICrowdPosition>();
-
-                if (_memberComponent == null)
-                {
-                    Debug.LogWarning("Prefabs don't implent ICrowdPosition interface");
-                    _memberComponent = crowdMembers[i].AddComponent<CrowdMemberOptimizer>();
-                }
-
-                _crowdMembers.Add(_memberComponent);
+                _crowdMembers.Add(crowdMembers[i]);
             }
         }
         
@@ -90,7 +81,7 @@ namespace CrowdAI
 
             for (int i = 0; i < _crowdMembers.Count; i++)
             {
-                var _currentTransform = _crowdMembers[i].PlaceholderObject().transform;
+                var _currentTransform = _crowdMembers[i].transform;
 
                 _outData._crowdMembers[i]._posX = _currentTransform.position.x;
                 _outData._crowdMembers[i]._posY = _currentTransform.position.y;
@@ -162,16 +153,13 @@ namespace CrowdAI
             var _outGOs = new GameObject[_groupMembers.Length];
             for (int i = 0; i < _groupMembers.Length; i++)
             {
-                _outGOs[i] = _groupMembers[i].PlaceholderObject();
+                _outGOs[i] = _groupMembers[i];
             }
 
             return _outGOs;
         }
         
-        public bool Remove(ICrowdPosition crowdMember)
-        {
-            return _crowdMembers.Remove(crowdMember);
-        }
+       
 
         public bool Remove(GameObject crowdMember)
         {
@@ -182,7 +170,7 @@ namespace CrowdAI
 
             for (int i = 0; i < _crowdMembers.Count; i++)
             {
-                if (_crowdMembers[i].PlaceholderObject() == crowdMember)
+                if (_crowdMembers[i] == crowdMember)
                 {
                     _crowdMembers.RemoveAt(i);
                     return true;
@@ -193,23 +181,12 @@ namespace CrowdAI
         }
 
 
-        public bool Contains(ICrowdPosition crowdMember)
+        public bool Contains(GameObject crowdMember)
         {
             return _crowdMembers.Contains(crowdMember);
         }
 
-        public bool Contains(GameObject crowdMember)
-        {
-            for (int i = 0; i < _crowdMembers.Count; i++)
-            {
-                if(_crowdMembers[i].PlaceholderObject() == crowdMember)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+       
 
         /// <summary>
         /// The name of the group
