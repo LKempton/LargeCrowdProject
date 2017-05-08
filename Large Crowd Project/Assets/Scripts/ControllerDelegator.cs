@@ -15,7 +15,7 @@ namespace CrowdAI
 
             if (_controller)
             {
-                _controller.Delegate();
+                //_controller.Delegate();
             }
         }
 
