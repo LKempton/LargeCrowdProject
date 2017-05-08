@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 
 
@@ -57,7 +58,7 @@ namespace CrowdAI
                 for (int i = 0; i < data._groupMembers.Length; i++)
                 {
 
-                    var _newCrowdMember = MakeCrowdPosition(data._groupMembers[i]);
+                    var _newCrowdMember = MakeCrowdPosition(data._groupMembers[i]._position);
                     _newCrowdMember.transform.parent = _parentGameObject.transform;
                     _crowdMembers.Add(_newCrowdMember);
                 }
@@ -103,7 +104,7 @@ namespace CrowdAI
                 return;
             }
 
-            if (data.Length < 1 | !Application.isEditor)
+            if (data.Length < 1)
             {
                 return;
             }
@@ -172,13 +173,34 @@ namespace CrowdAI
             }
         }
         
-      
-        public GroupData GetData()
+       
+      private int GetParentIndex(GameObject value, List<GameObject> parents)
+        {
+            if (value == null || parents == null)
+            {
+                return -1;
+            }
+
+            for (int i = 0; i < parents.Count; i++)
+            {
+                if (value == parents[i])
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+        public GroupData GetData(List<GameObject> parents)
         {
             GroupData _outData = new GroupData();
 
-            _outData._groupMembers = new TransFormData[_crowdMembers.Count];
+            _outData._groupMembers = new MemberData[_crowdMembers.Count];
              
+            
+         
+           
+
            
 
             _outData._name = _groupName;
@@ -190,15 +212,17 @@ namespace CrowdAI
                     {
                         var _currentTransform = _crowdMembers[i].transform;
 
-                        _outData._groupMembers[i]._posX = _currentTransform.position.x;
-                        _outData._groupMembers[i]._posY = _currentTransform.position.y;
-                        _outData._groupMembers[i]._posZ = _currentTransform.position.z;
+                        _outData._groupMembers[i]._position._posX = _currentTransform.position.x;
+                        _outData._groupMembers[i]._position._posY = _currentTransform.position.y;
+                        _outData._groupMembers[i]._position._posZ = _currentTransform.position.z;
 
-                        _outData._groupMembers[i]._rotW = _currentTransform.rotation.w;
-                        _outData._groupMembers[i]._rotX = _currentTransform.rotation.x;
-                        _outData._groupMembers[i]._rotY = _currentTransform.rotation.y;
-                        _outData._groupMembers[i]._rotZ = _currentTransform.rotation.z;
+                        _outData._groupMembers[i]._position._rotW = _currentTransform.rotation.w;
+                        _outData._groupMembers[i]._position._rotX = _currentTransform.rotation.x;
+                        _outData._groupMembers[i]._position._rotY = _currentTransform.rotation.y;
+                        _outData._groupMembers[i]._position._rotZ = _currentTransform.rotation.z;
 
+                        _outData._groupMembers[i].source = GetParentIndex(_currentTransform.parent.gameObject, parents);
+                       
                     }
                 }
             }

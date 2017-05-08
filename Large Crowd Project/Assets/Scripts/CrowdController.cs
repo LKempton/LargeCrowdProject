@@ -15,7 +15,7 @@ namespace CrowdAI
         private static CrowdController instance;
 
         private LODPoolManager _poolManager;
-        
+        bool delegated = false;
         [SerializeField]
         private string[] _crowdStates;
 
@@ -81,14 +81,7 @@ namespace CrowdAI
 
         void Awake()
         {
-            ReadAll(false);
-            
-            if (Application.isEditor && Application.isPlaying)
-            {
-                EditorApplication.playmodeStateChanged -= SaveAll;
-            }
-            
-
+            ReadAll();
 
             int _groupLength = (_crowdGroups == null) ? 0 : _crowdGroups.Count;
 
@@ -164,14 +157,38 @@ namespace CrowdAI
 
                 for (int i = 0; i < _crowdGroups.Count; i++)
                 {
-                    _outData._groups[i] = _crowdGroups[i].GetData();
+                    _outData._groups[i] = _crowdGroups[i].GetData(_crowdSources);
                 }
             }
 
             if (_groupUnassigned != null)
             {
-                _outData._unassignedGroup = _groupUnassigned.GetData();
+                _outData._unassignedGroup = _groupUnassigned.GetData(_crowdSources);
             }
+
+            if (_crowdSources != null)
+            {
+                if (_crowdSources.Count > 0)
+                {
+                    _outData._parents = new TransFormData[_crowdSources.Count];
+
+                    for (int i = 0; i < _crowdSources.Count; i++)
+                    {
+                        var _transformData = new TransFormData();
+                        var _currentParent = _crowdSources[i].transform;
+
+                        _transformData._posX = _currentParent.position.x;
+                        _transformData._posY = _currentParent.position.y;
+                        _transformData._posZ = _currentParent.position.z;
+
+                        _transformData._rotX = _currentParent.rotation.x;
+                        _transformData._rotY = _currentParent.rotation.y;
+                        _transformData._rotZ = _currentParent.rotation.z;
+                        _transformData._rotW = _currentParent.rotation.w;
+                    }
+                }
+            }
+           
             return _outData;
         }
 
@@ -574,17 +591,17 @@ namespace CrowdAI
             _groupUnassigned = new CrowdGroup("Unassigned");
             _crowdSources = new List<GameObject>();
 
-            if (!Application.isPlaying)
+            if (!Application.isPlaying && Application.isEditor)
             {
-                EditorApplication.playmodeStateChanged += SaveAll;
-                EditorApplication.playmodeStateChanged += RemovePlaceholders;
+                EditorApplication.playmodeStateChanged += OnPlay;
+               
             }
         }
 
 
         public void SaveAll()
         {
-            print("called save function");
+           
             if (!Application.isEditor)
             {
                 return ;
@@ -612,7 +629,7 @@ namespace CrowdAI
             
         }
 
-        private void OverWriteData(CrowdData data, bool showPlaceholders)
+        private void OverWriteData(CrowdData data)
         {
             if (_crowdGroups == null)
             {
@@ -630,15 +647,34 @@ namespace CrowdAI
             if (data._stateNameSize > 0)
             {
                 _crowdStates = new string[data._stateNameSize];
-
+                
                 for (int i = 0; i < _crowdStates.Length; i++)
                 {
                     _crowdStates[i] = data._stateNames[i];
 
                 }
             }
-            if (showPlaceholders)
+
+
+
+            if (Application.isEditor &&!EditorApplication.isPlaying)
             {
+                _crowdSources = new List<GameObject>();
+                if (data._parents!= null)
+                {
+                    for (int i = 0; i < data._parents.Length; i++)
+                    {
+                        var _newSource = new GameObject();
+                        var _newParentData = data._parents[i];
+
+                        _newSource.name = "Crowd Source";
+                        _newSource.transform.position = new Vector3(_newParentData._posX, _newParentData._posY, _newParentData._posZ);
+                        _newSource.transform.rotation = new Quaternion(_newParentData._rotX, _newParentData._rotY, _newParentData._rotZ, _newParentData._rotW);
+
+                        _crowdSources.Add(_newSource);
+                    }
+                }
+
                if (data._unassignedGroup._groupMembers.Length > 0)
                 {
                     _groupUnassigned = GenerateGroupAndPlaceholders(data._unassignedGroup);
@@ -672,6 +708,33 @@ namespace CrowdAI
 
             }
 
+        }
+
+        private void OnPlay()
+        {
+            print("called on play");
+
+            SaveAll();
+            RemovePlaceholders();
+            if (Application.isEditor)
+            {
+                print("Application is editor");
+                EditorApplication.playmodeStateChanged -= OnPlay;
+                EditorApplication.playmodeStateChanged += OnPlayEnd;
+            }
+                
+
+        }
+        
+        private void OnPlayEnd()
+        {
+            print("called On Play end");
+            ReadAll();
+            if (Application.isEditor)
+            {
+                EditorApplication.playmodeStateChanged += OnPlay;
+                EditorApplication.playmodeStateChanged -= OnPlayEnd;
+            }
         }
 
         private void RemovePlaceholders()
@@ -721,7 +784,7 @@ namespace CrowdAI
 
         private CrowdGroup GenerateGroupAndPlaceholders(GroupData groupData)
         {
-            Debug.Log("Called");
+           
             var _newGroup = new CrowdGroup(groupData._name);
             _newGroup.OverwriteModelData(groupData._models);
 
@@ -730,19 +793,21 @@ namespace CrowdAI
             while(_memberIndex < groupData._groupMembers.Length)
             {
                 var _newMember = GameObject.Instantiate(_placeholderPrefab);
-                var _transformData = groupData._groupMembers[_memberIndex];
+                var _transformData = groupData._groupMembers[_memberIndex]._position;
+                int _source = groupData._groupMembers[_memberIndex].source;
 
                 _newMember.transform.position = new Vector3(_transformData._posX, _transformData._posY, _transformData._posZ);
                 _newMember.transform.rotation = new Quaternion(_transformData._rotX, _transformData._rotY, _transformData._rotZ, _transformData._rotW);
 
                 _newGroup.AddCrowdMember(_newMember);
+                _newMember.transform.parent = _crowdSources[_source].transform;
                 _memberIndex++;
             }
 
             return _newGroup;
         }
 
-        private void ReadAll(bool showPlaceholders)
+        private void ReadAll()
         {
             if (_savePath == null)
             {
@@ -761,7 +826,7 @@ namespace CrowdAI
 
                 _reader.Dispose();
 
-                OverWriteData(data,showPlaceholders);
+                OverWriteData(data);
 
             }
         }
