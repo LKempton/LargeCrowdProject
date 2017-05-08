@@ -55,7 +55,7 @@ namespace CrowdAI
 
                 if (GUILayout.Button("Add New Group", GUILayout.Width(200)))
                 {
-                    Debug.Log("Got to button activation");
+
                     if (_newGroupName != "Group Name")
                     {
                         Debug.Log("Tried to talk to controller");

@@ -71,6 +71,9 @@ ModelImporter:
     100126: toe_R
     100128: upper_arm_L
     100130: upper_arm_R
+    100132: Bone
+    100134: pt_l
+    100136: pt_r
     400000: //RootNode
     400002: chest
     400004: Cube
@@ -137,6 +140,9 @@ ModelImporter:
     400126: toe_R
     400128: upper_arm_L
     400130: upper_arm_R
+    400132: Bone
+    400134: pt_l
+    400136: pt_r
     2300000: //RootNode
     2300002: Cube
     3300000: //RootNode
@@ -144,6 +150,7 @@ ModelImporter:
     4300000: Cube
     7400000: Default Take
     9500000: //RootNode
+    13700000: Cube
   materials:
     importMaterials: 1
     materialName: 0

@@ -18,6 +18,7 @@ namespace CrowdAI
         private string[] _crowdStates;
         
         string _savePath;
+        string _fileName;
 
         // Whether the save/load function has been delegated to play mode event
         bool _functionDelegated = false;
@@ -526,23 +527,25 @@ namespace CrowdAI
             {
                 return ;
             }
+
             var _data = GetData();
 
-            if (_savePath == null)
-            {
+           
                 _savePath = Application.dataPath + @"/CrowdAssetData";
+               _fileName = @"/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
+            
 
-                if (!Directory.Exists(_savePath))
-                {
-                    Directory.CreateDirectory(_savePath);
+            print("Save Path: "+_savePath);
 
-                }
-                _savePath += @"/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
+            if (!Directory.Exists(_savePath))
+            {
+                print("Attempting to create directory");
+                Directory.CreateDirectory(_savePath);
             }
 
-
             string _serializedData = JsonConvert.SerializeObject(_data);
-            File.WriteAllText(_savePath, _serializedData);
+            print("Saving file to disk...");
+            File.WriteAllText(_savePath+_fileName, _serializedData);
 
             
         }
