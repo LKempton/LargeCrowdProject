@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c44d13eb0f77384bb72d6c3eb2c1ca4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dynamicCrowdModel: 0
+  _dynamicCrowdModel: 1
   _updateFrequency: 1
   _collider: {fileID: 65676558000222824}
 --- !u!114 &114822844978273278

@@ -7,18 +7,7 @@ namespace CrowdAI
     public class DynamicLODCamera : MonoBehaviour {
 
         [SerializeField]
-        private Collider veryLowLODCollider, lowLODCollider, midLODCollider, highLODCollider, veryHighLODCollider;
-
-        [SerializeField]
-        private float veryHighLODDistance;
-        [SerializeField]
-        private float highLODDistance;
-        [SerializeField]
-        private float midLODDistance;
-        [SerializeField]
-        private float lowLODDistance;
-        [SerializeField]
-        private float veryLowLODDistance;
+        private float veryHighLODDistance, highLODDistance, midLODDistance, lowLODDistance, veryLowLODDistance;
 
         [SerializeField]
         private float updateInterval = 0.5f;

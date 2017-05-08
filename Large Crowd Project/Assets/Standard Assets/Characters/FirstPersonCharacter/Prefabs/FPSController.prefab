@@ -13,11 +13,8 @@ GameObject:
   - component: {fileID: 5400000}
   - component: {fileID: 8200000}
   - component: {fileID: 114715161580573148}
-  - component: {fileID: 135267295325593448}
-  - component: {fileID: 135982731054663774}
-  - component: {fileID: 135654508317053292}
-  - component: {fileID: 135396024262715924}
-  - component: {fileID: 135677761266781688}
+  - component: {fileID: 20999594784463588}
+  - component: {fileID: 114456249778540420}
   m_Layer: 0
   m_Name: FPSController
   m_TagString: Untagged
@@ -343,6 +340,62 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
+--- !u!20 &20999594784463588
+Camera:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
+--- !u!114 &114456249778540420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436275a13d4459746955fc6db5953473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialSpeed: 10
+  increaseSpeed: 1.25
+  allowMovement: 1
+  allowRotation: 1
+  forwardButton: 119
+  backwardButton: 115
+  rightButton: 100
+  leftButton: 97
+  cursorSensitivity: 0.025
+  cursorToggleAllowed: 1
+  cursorToggleButton: 27
 --- !u!114 &114715161580573148
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -354,68 +407,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9cb9e83d2c848d43b6c1467184b9fd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  veryLowLODCollider: {fileID: 135267295325593448}
-  lowLODCollider: {fileID: 135982731054663774}
-  midLODCollider: {fileID: 135654508317053292}
-  highLODCollider: {fileID: 135396024262715924}
-  veryHighLODCollider: {fileID: 135677761266781688}
---- !u!135 &135267295325593448
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 50
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135396024262715924
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 20
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135654508317053292
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 30
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135677761266781688
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 10
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135982731054663774
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 40
-  m_Center: {x: 0, y: 0, z: 0}
+  veryHighLODDistance: 0
+  highLODDistance: 0
+  midLODDistance: 0
+  lowLODDistance: 0
+  veryLowLODDistance: 0
+  updateInterval: 0.5
