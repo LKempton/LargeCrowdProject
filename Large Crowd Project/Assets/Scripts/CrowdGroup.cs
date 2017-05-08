@@ -50,20 +50,22 @@ namespace CrowdAI
                 }
             }
             
-            if (data._crowdMembers != null)
+            if (data._groupMembers != null)
             {
                 var _parentGameObject = new GameObject();
                 _parentGameObject.name = GroupName + "_Source";
-                for (int i = 0; i < data._crowdMembers.Length; i++)
+                for (int i = 0; i < data._groupMembers.Length; i++)
                 {
 
-                    var _newCrowdMember = MakeCrowdPlaceholder(data._crowdMembers[i]);
+                    var _newCrowdMember = MakeCrowdPosition(data._groupMembers[i]);
                     _newCrowdMember.transform.parent = _parentGameObject.transform;
                     _crowdMembers.Add(_newCrowdMember);
                 }
             }
 
         }
+
+       
         public void DestroyCrowdMembers()
         {
             if (Application.isEditor)
@@ -79,6 +81,7 @@ namespace CrowdAI
             }
             else
             {
+                
                 for (int i = _crowdMembers.Count - 1; i > -1; i--)
                 {
                     if (_crowdMembers[i] != null)
@@ -111,7 +114,7 @@ namespace CrowdAI
             }
 
         }
-        private GameObject MakeCrowdPlaceholder(TransFormData data)
+        private GameObject MakeCrowdPosition(TransFormData data)
         {
             var _outGO = new GameObject();
             _outGO.name = GroupName+"_Crowd Member_"+_crowdMembers.Count;
@@ -123,6 +126,17 @@ namespace CrowdAI
             return _outGO;
             
         }
+
+        private void MakeCrowdPlaceholder(TransFormData data, GameObject placeholder)
+        {
+            var _crowdMember = GameObject.Instantiate(placeholder);
+
+            _crowdMember.transform.position = new Vector3(data._posX, data._posY, data._posZ);
+            _crowdMember.transform.rotation = new Quaternion(data._rotX, data._rotY, data._rotZ, data._rotW);
+            _crowdMembers.Add(_crowdMember);
+
+        }
+
         private ModelWrapper GetModelFromData(ModelData data)
         {
             int _length = data._modelNames.Length;
@@ -163,7 +177,7 @@ namespace CrowdAI
         {
             GroupData _outData = new GroupData();
 
-            _outData._crowdMembers = new TransFormData[_crowdMembers.Count];
+            _outData._groupMembers = new TransFormData[_crowdMembers.Count];
              
            
 
@@ -176,14 +190,14 @@ namespace CrowdAI
                     {
                         var _currentTransform = _crowdMembers[i].transform;
 
-                        _outData._crowdMembers[i]._posX = _currentTransform.position.x;
-                        _outData._crowdMembers[i]._posY = _currentTransform.position.y;
-                        _outData._crowdMembers[i]._posZ = _currentTransform.position.z;
+                        _outData._groupMembers[i]._posX = _currentTransform.position.x;
+                        _outData._groupMembers[i]._posY = _currentTransform.position.y;
+                        _outData._groupMembers[i]._posZ = _currentTransform.position.z;
 
-                        _outData._crowdMembers[i]._rotW = _currentTransform.rotation.w;
-                        _outData._crowdMembers[i]._rotX = _currentTransform.rotation.x;
-                        _outData._crowdMembers[i]._rotY = _currentTransform.rotation.y;
-                        _outData._crowdMembers[i]._rotZ = _currentTransform.rotation.z;
+                        _outData._groupMembers[i]._rotW = _currentTransform.rotation.w;
+                        _outData._groupMembers[i]._rotX = _currentTransform.rotation.x;
+                        _outData._groupMembers[i]._rotY = _currentTransform.rotation.y;
+                        _outData._groupMembers[i]._rotZ = _currentTransform.rotation.z;
 
                     }
                 }

@@ -30,6 +30,8 @@ namespace CrowdAI
         int _crowdCount = 0;
 
         private List<CrowdGroup> _crowdGroups;
+        private List<GameObject> _crowdSources;
+
         private CrowdGroup _groupUnassigned;
 
         [SerializeField]
@@ -179,8 +181,11 @@ namespace CrowdAI
             {
                 return null;
             }
-
-            return _crowdGroups.ToArray();
+            else
+            {
+                return _crowdGroups.ToArray();
+            }
+            
         }
 
         public CrowdGroup GetUnassignedGroup
@@ -191,8 +196,10 @@ namespace CrowdAI
                 {
                     return null;
                 }
-
-                return _groupUnassigned;
+                else
+                {
+                    return _groupUnassigned;
+                }
             }
         }
 
@@ -331,7 +338,11 @@ namespace CrowdAI
 
                     if (_previousMembers != null)
                     {
-                        _groupUnassigned.AddCrowdMember(_previousMembers);
+                        if (_previousMembers.Length > 0)
+                        {
+                            _groupUnassigned.AddCrowdMember(_previousMembers);
+                        }
+                        
                     }
 
                     _crowdGroups.RemoveAt(i);
@@ -407,6 +418,7 @@ namespace CrowdAI
             {
                 _groupUnassigned.AddCrowdMember(_newCrowd);
                 _crowdCount = RecalculateCount();
+                _crowdSources.Add(_parent);
 
 
             }
@@ -560,6 +572,8 @@ namespace CrowdAI
             
             _crowdGroups = new List<CrowdGroup>();
             _groupUnassigned = new CrowdGroup("Unassigned");
+            _crowdSources = new List<GameObject>();
+
             if (!Application.isPlaying)
             {
                 EditorApplication.playmodeStateChanged += SaveAll;
@@ -625,7 +639,7 @@ namespace CrowdAI
             }
             if (showPlaceholders)
             {
-               if (data._unassignedGroup._crowdMembers.Length > 0)
+               if (data._unassignedGroup._groupMembers.Length > 0)
                 {
                     _groupUnassigned = GenerateGroupAndPlaceholders(data._unassignedGroup);
                 }
@@ -651,7 +665,7 @@ namespace CrowdAI
                         _crowdGroups.Add(new CrowdGroup(data._groups[i]));
                     }
                 }
-                if (data._unassignedGroup._crowdMembers != null)
+                if (data._unassignedGroup._groupMembers != null)
                 {
                     _groupUnassigned = new CrowdGroup(data._unassignedGroup);
                 }
@@ -662,7 +676,7 @@ namespace CrowdAI
 
         private void RemovePlaceholders()
         {
-            print("Attempted to remove placeholders");
+            
             if (_groupUnassigned.Size > 0)
             {
                 _groupUnassigned.DestroyCrowdMembers();
@@ -671,12 +685,38 @@ namespace CrowdAI
 
             if (_crowdGroups.Count > 0)
             {
+                
+
                 for (int i = 0; i < _crowdGroups.Count; i++)
                 {
                     _crowdGroups[i].DestroyCrowdMembers();
                 }
                 _crowdGroups.Clear();
             }
+            if (_crowdSources != null)
+            {
+                if (_crowdSources.Count > 0)
+                {
+                    if (Application.isEditor)
+                    {
+                        for (int i = _crowdSources.Count - 1; i > -1; i--)
+                        {
+                            DestroyImmediate(_crowdSources[i]);
+
+                        }
+                    }
+                    else
+                    {
+                        for (int i = _crowdSources.Count - 1; i > -1; i--)
+                        {
+                            Destroy(_crowdSources[i]);
+                        }
+                    }
+                   
+                    _crowdSources.Clear();
+                }
+            }
+            
         }
 
         private CrowdGroup GenerateGroupAndPlaceholders(GroupData groupData)
@@ -687,10 +727,10 @@ namespace CrowdAI
 
             int _memberIndex = 0;
 
-            while(_memberIndex < groupData._crowdMembers.Length)
+            while(_memberIndex < groupData._groupMembers.Length)
             {
                 var _newMember = GameObject.Instantiate(_placeholderPrefab);
-                var _transformData = groupData._crowdMembers[_memberIndex];
+                var _transformData = groupData._groupMembers[_memberIndex];
 
                 _newMember.transform.position = new Vector3(_transformData._posX, _transformData._posY, _transformData._posZ);
                 _newMember.transform.rotation = new Quaternion(_transformData._rotX, _transformData._rotY, _transformData._rotZ, _transformData._rotW);
@@ -725,6 +765,7 @@ namespace CrowdAI
 
             }
         }
+
         public static CrowdController GetCrowdController()
         {
             return instance;

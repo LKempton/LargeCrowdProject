@@ -47,9 +47,17 @@ namespace CrowdAI
 
     }
 
+    public struct SourceData
+    {
+        public TransFormData _position;
+       
+    }
+
+   
+
    public struct GroupData
     {
-        public TransFormData[] _crowdMembers;
+        public TransFormData[] _groupMembers;
         public ModelData[] _models;
         public string _name;
     }
