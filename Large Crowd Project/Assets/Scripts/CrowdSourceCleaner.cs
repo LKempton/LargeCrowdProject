@@ -11,6 +11,8 @@ namespace CrowdAI
     {
         CrowdController controller;
 
+        
+
         void OnDestroy()
         {
             
@@ -25,12 +27,14 @@ namespace CrowdAI
 
                 controller.RemoveSourceChildren(_children);
             }
+
             
             
         }
 
-
+       
         
+
         public CrowdController Controller
         {
             set

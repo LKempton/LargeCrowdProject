@@ -18,9 +18,10 @@ namespace CrowdAI
         
         [SerializeField]
         private string[] _crowdStates;
-        
-        string _savePath;
-        string _fileName;
+
+        private string _scene;
+        private string _savePath;
+        private string _fileName;
 
         // Whether the save/load function has been delegated to play mode event
         bool _functionDelegated = false;
@@ -59,19 +60,6 @@ namespace CrowdAI
             return _poolManager.GetPooledObject(name);
         }
 
-        private void Reset()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Debug.LogError("Can only have one Crowd Controller instance");
-                Destroy(this);
-            }
-        }
-
         public string[] GetGroupNames()
         {
             if (_crowdGroups == null)
@@ -91,7 +79,14 @@ namespace CrowdAI
 
         void Awake()
         {
-            ReadAll();
+            ReadAll(false);
+            
+            if (Application.isEditor && Application.isPlaying)
+            {
+                EditorApplication.playmodeStateChanged -= SaveAll;
+            }
+            
+
 
             int _groupLength = (_crowdGroups == null) ? 0 : _crowdGroups.Count;
 
@@ -139,8 +134,6 @@ namespace CrowdAI
 
 
         }
-
-        
 
         private CrowdData GetData()
         {
@@ -287,7 +280,7 @@ namespace CrowdAI
             }
             _crowdGroups.Add(new CrowdGroup(groupName));
 
-            SaveAll();
+           
         }
 
         public void RemoveSourceChildren(GameObject[] children)
@@ -321,7 +314,7 @@ namespace CrowdAI
                 }
             }
 
-            SaveAll();
+           
         }
 
         public bool RemoveGroup(string groupName)
@@ -343,7 +336,7 @@ namespace CrowdAI
 
                     _crowdGroups.RemoveAt(i);
 
-                    SaveAll();
+                   
                     return true;
                 }
             }
@@ -414,7 +407,7 @@ namespace CrowdAI
             {
                 _groupUnassigned.AddCrowdMember(_newCrowd);
                 _crowdCount = RecalculateCount();
-                SaveAll();
+
 
             }
             else
@@ -478,13 +471,30 @@ namespace CrowdAI
             }
         }
 
-       
+       void Reset()
+        {
+            SetUp();
+        }
 
         public bool AddCrowdMembers(string groupName, GameObject[] group)
         {
+            if (_crowdGroups == null)
+            {
+                return false;
+            }
 
+            for (int i = 0; i < _crowdGroups.Count; i++)
+            {
+                var _currentGroup = _crowdGroups[i];
 
-            SaveAll();
+                if (_currentGroup.GroupName == groupName)
+                {
+                    _currentGroup.AddCrowdMember(group);
+                    return true;
+                }
+            }
+
+            
             return false;
         }
 
@@ -535,14 +545,32 @@ namespace CrowdAI
 
         void SetUp()
         {
+            _scene = SceneManager.GetActiveScene().name;
+
+            if (instance != null)
+            {
+                if (instance != this && _scene == instance.ControllerScene)
+                {
+                    Debug.LogWarning("Can Only Have one Crowd Controller per scene");
+                    Destroy(gameObject);
+                }
+            }
+
+            instance = this;
+            
             _crowdGroups = new List<CrowdGroup>();
             _groupUnassigned = new CrowdGroup("Unassigned");
-
+            if (!Application.isPlaying)
+            {
+                EditorApplication.playmodeStateChanged += SaveAll;
+                EditorApplication.playmodeStateChanged += RemovePlaceholders;
+            }
         }
+
 
         public void SaveAll()
         {
-            
+            print("called save function");
             if (!Application.isEditor)
             {
                 return ;
@@ -555,22 +583,22 @@ namespace CrowdAI
                _fileName = @"/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
             
 
-            print("Save Path: "+_savePath);
+        
 
             if (!Directory.Exists(_savePath))
             {
-                print("Attempting to create directory");
+                
                 Directory.CreateDirectory(_savePath);
             }
 
             string _serializedData = JsonConvert.SerializeObject(_data);
-            print("Saving file to disk...");
+           
             File.WriteAllText(_savePath+_fileName, _serializedData);
 
             
         }
 
-        private void OverWriteData(CrowdData data)
+        private void OverWriteData(CrowdData data, bool showPlaceholders)
         {
             if (_crowdGroups == null)
             {
@@ -595,7 +623,7 @@ namespace CrowdAI
 
                 }
             }
-            if (Application.isEditor)
+            if (showPlaceholders)
             {
                if (data._unassignedGroup._crowdMembers.Length > 0)
                 {
@@ -632,8 +660,28 @@ namespace CrowdAI
 
         }
 
+        private void RemovePlaceholders()
+        {
+            print("Attempted to remove placeholders");
+            if (_groupUnassigned.Size > 0)
+            {
+                _groupUnassigned.DestroyCrowdMembers();
+                _groupUnassigned = null;
+            }
+
+            if (_crowdGroups.Count > 0)
+            {
+                for (int i = 0; i < _crowdGroups.Count; i++)
+                {
+                    _crowdGroups[i].DestroyCrowdMembers();
+                }
+                _crowdGroups.Clear();
+            }
+        }
+
         private CrowdGroup GenerateGroupAndPlaceholders(GroupData groupData)
         {
+            Debug.Log("Called");
             var _newGroup = new CrowdGroup(groupData._name);
             _newGroup.OverwriteModelData(groupData._models);
 
@@ -654,12 +702,12 @@ namespace CrowdAI
             return _newGroup;
         }
 
-        private void ReadAll()
+        private void ReadAll(bool showPlaceholders)
         {
             if (_savePath == null)
             {
-                  _savePath = Application.dataPath + @"/CrowdAssetData/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
-                
+                _savePath = Application.dataPath + @"/CrowdAssetData/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
+
             }
 
             if (File.Exists(_savePath))
@@ -673,19 +721,21 @@ namespace CrowdAI
 
                 _reader.Dispose();
 
-                OverWriteData(data);
-                
-            }
-            else
-            {
-                Debug.LogError("Failed to Load Crowd Controller Data as the (autogenerated) file does not exist");
-                return;
+                OverWriteData(data,showPlaceholders);
+
             }
         }
-
         public static CrowdController GetCrowdController()
         {
             return instance;
+        }
+
+        public string ControllerScene
+        {
+            get
+            {
+                return _scene;
+            }
         }
     }
 

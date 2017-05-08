@@ -40,6 +40,7 @@ namespace CrowdAI
             _crowdMembers = new List<GameObject>();
             _models = new List<ModelWrapper>();
             _groupName = data._name;
+
             if (data._models != null)
             {
                 for (int i = 0; i < data._models.Length; i++)
@@ -51,9 +52,13 @@ namespace CrowdAI
             
             if (data._crowdMembers != null)
             {
+                var _parentGameObject = new GameObject();
+                _parentGameObject.name = GroupName + "_Source";
                 for (int i = 0; i < data._crowdMembers.Length; i++)
                 {
+
                     var _newCrowdMember = MakeCrowdPlaceholder(data._crowdMembers[i]);
+                    _newCrowdMember.transform.parent = _parentGameObject.transform;
                     _crowdMembers.Add(_newCrowdMember);
                 }
             }
@@ -61,23 +66,44 @@ namespace CrowdAI
         }
         public void DestroyCrowdMembers()
         {
-            for (int i = _crowdMembers.Count; i > -1; i--)
+            if (Application.isEditor)
             {
-                if (_crowdMembers[i] != null)
+                for (int i = _crowdMembers.Count - 1; i > -1; i--)
                 {
-                    GameObject.Destroy(_crowdMembers[i]);
+                    if (_crowdMembers[i] != null)
+                    {
+                        GameObject.DestroyImmediate(_crowdMembers[i]);
+                    }
+                    _crowdMembers.RemoveAt(i);
                 }
-                _crowdMembers.RemoveAt(i);
             }
+            else
+            {
+                for (int i = _crowdMembers.Count - 1; i > -1; i--)
+                {
+                    if (_crowdMembers[i] != null)
+                    {
+                        GameObject.Destroy(_crowdMembers[i]);
+                    }
+                    _crowdMembers.RemoveAt(i);
+                }
+            }
+            _crowdMembers.Clear();
+            
         }
 
         public void OverwriteModelData(ModelData[] data)
         {
+
+            if (data == null)
+            {
+                return;
+            }
+
             if (data.Length < 1 | !Application.isEditor)
             {
                 return;
             }
-            _models.Clear();
 
             for (int i = 0; i <data.Length ; i++)
             {
@@ -87,7 +113,9 @@ namespace CrowdAI
         }
         private GameObject MakeCrowdPlaceholder(TransFormData data)
         {
-            var _outGO = GameObject.Instantiate(new GameObject());
+            var _outGO = new GameObject();
+            _outGO.name = GroupName+"_Crowd Member_"+_crowdMembers.Count;
+
             // add components go here for any scripts that need to be on the objects
             _outGO.transform.position = new Vector3(data._posX, data._posY, data._posZ);
             _outGO.transform.rotation = new Quaternion(data._rotX, data._rotY, data._rotZ, data._rotW);
@@ -278,11 +306,15 @@ namespace CrowdAI
         {
             get
             {
+                if (_groupName == "")
+                {
+                    return "Unassigned";
+                }
                 return _groupName;
             }
             set
             {
-                if (_groupName != "Unassigned")
+                if (_groupName != "Unassigned" )
                 {
                     _groupName = value;
                 }
