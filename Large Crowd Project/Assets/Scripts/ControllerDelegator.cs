@@ -19,17 +19,16 @@ namespace CrowdAI
            if (Application.isEditor & EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 print("Saved");
+                
                 GetComponent<CrowdController>().SaveAll();
-            }
-            else if (Application.isEditor)
-            {
-                GetComponent<CrowdController>().ReadAll();
-            }
 
+            }
+           
 
 
         }
 
+       
         
     }
 

@@ -17,7 +17,8 @@ namespace CrowdAI
         private static CrowdController instance;
 
         private LODPoolManager _poolManager;
-        bool delegated = false;
+
+        bool _setUp = false;
        
         [SerializeField]
         private string[] _crowdStates;
@@ -344,7 +345,7 @@ namespace CrowdAI
 
         public void GenerateCrowd()
         {
-
+            SetUp();
             var _parent = new GameObject();
             _parent.name = "Crowd Source";
 
@@ -398,10 +399,11 @@ namespace CrowdAI
 
             if (_newCrowd.Length > 0)
             {
+              
                 _groupUnassigned.AddCrowdMember(_newCrowd);
                 _crowdCount = RecalculateCount();
                 _crowdSources.Add(_parent);
-
+               
 
             }
             else
@@ -532,8 +534,16 @@ namespace CrowdAI
             Debug.Log(_outInfo);
         }
 
-        void SetUp()
+        public void SetUp()
         {
+
+            if (_setUp)
+            {
+                return;
+            }
+
+            _setUp = true;
+
             _scene = SceneManager.GetActiveScene().name;
 
             if (instance != null)
@@ -581,6 +591,12 @@ namespace CrowdAI
            
             File.WriteAllText(_savePath+_fileName, _serializedData);
 
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                RemovePlaceholderReferences();
+                print("removed placeholders");
+            }
+            
             
         }
 
@@ -626,7 +642,8 @@ namespace CrowdAI
                     }
                 }
 
-               if (data._unassignedGroup._groupMembers.Length > 0)
+              
+               if (data._unassignedGroup._groupMembers!=null)
                 {
                     _groupUnassigned = GenerateGroupAndPlaceholders(data._unassignedGroup);
                 }
@@ -662,13 +679,13 @@ namespace CrowdAI
         }
         
 
-        private void RemovePlaceholders()
+        private void RemovePlaceholderReferences()
         {
-            
+           
             if (_groupUnassigned.Size > 0)
             {
                 _groupUnassigned.DestroyCrowdMembers();
-                _groupUnassigned = null;
+               
             }
 
             if (_crowdGroups.Count > 0)
@@ -681,29 +698,21 @@ namespace CrowdAI
                 }
                 _crowdGroups.Clear();
             }
-            if (_crowdSources != null)
-            {
-                if (_crowdSources.Count > 0)
-                {
-                    if (Application.isEditor)
-                    {
-                        for (int i = _crowdSources.Count - 1; i > -1; i--)
-                        {
-                            DestroyImmediate(_crowdSources[i]);
 
-                        }
-                    }
-                    else
+            if (_crowdSources.Count > 0)
+            {
+                for (int i = 0; i < _crowdSources.Count; i++)
+                {
+                    var _crowdSource = _crowdSources[i];
+
+                    if (_crowdSource != null)
                     {
-                        for (int i = _crowdSources.Count - 1; i > -1; i--)
-                        {
-                            Destroy(_crowdSources[i]);
-                        }
+                        Destroy(_crowdSource);
                     }
-                   
-                    _crowdSources.Clear();
                 }
+                
             }
+            
             
         }
 

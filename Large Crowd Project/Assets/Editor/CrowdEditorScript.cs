@@ -128,6 +128,9 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.LabelField(descriptionText);
 
                 break;
+
+
+                
         }
 
        
@@ -140,6 +143,13 @@ public class CrowdEditorScript : Editor {
         if (GUILayout.Button("Log Debug Information"))
         {
             script.ShowDebugInfo();
+        }
+
+        if (GUILayout.Button("Save Controller Data"))
+        {
+            script.SaveAll();
+            Debug.Log("Saved Controller Data");
+
         }
         serializedObject.ApplyModifiedProperties();
     }

@@ -27,13 +27,13 @@ namespace CrowdAI
 
                 controller.RemoveSourceChildren(_children);
             }
+           
 
             
             
         }
 
-       
-        
+      
 
         public CrowdController Controller
         {
