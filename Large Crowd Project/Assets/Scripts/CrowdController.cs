@@ -19,7 +19,7 @@ namespace CrowdAI
         private LODPoolManager _poolManager;
         bool delegated = false;
        
-        
+        [SerializeField]
         private string[] _crowdStates;
     
 
@@ -754,6 +754,7 @@ namespace CrowdAI
 
                 OverWriteData(data);
 
+                _crowdCount = RecalculateCount();
             }
         }
 

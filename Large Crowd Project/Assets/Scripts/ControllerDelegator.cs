@@ -30,11 +30,7 @@ namespace CrowdAI
 
         }
 
-       
-        void OnApplicationQuit()
-        {
-           
-        }
+        
     }
 
 }

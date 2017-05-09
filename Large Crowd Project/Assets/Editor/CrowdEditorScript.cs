@@ -146,6 +146,7 @@ public class CrowdEditorScript : Editor {
 
     void GUIArray(SerializedProperty val)
     {
+       
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(val, true);
         if (EditorGUI.EndChangeCheck())
