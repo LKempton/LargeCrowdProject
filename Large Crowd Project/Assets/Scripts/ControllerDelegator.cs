@@ -5,21 +5,36 @@ using UnityEditor;
 
 namespace CrowdAI
 {
+    
+    
     [ExecuteInEditMode]
     public class ControllerDelegator :MonoBehaviour
     {
-       
+      
+
         void Awake()
         {
-            print("I am awake");
+           
 
-          if (Application.isEditor & !Application.isPlaying)
+           if (Application.isEditor & EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                print("Tried to read everything");
+                print("Saved");
+                GetComponent<CrowdController>().SaveAll();
+            }
+            else if (Application.isEditor)
+            {
                 GetComponent<CrowdController>().ReadAll();
             }
+
+
+
         }
 
        
+        void OnApplicationQuit()
+        {
+           
+        }
     }
+
 }

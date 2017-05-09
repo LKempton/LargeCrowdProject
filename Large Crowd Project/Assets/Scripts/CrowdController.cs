@@ -1,23 +1,27 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using Newtonsoft.Json;
 
 namespace CrowdAI
 {
     /// <summary>
     /// Master controlling class 
     /// </summary>
+    /// 
+    [RequireComponent(typeof(ControllerDelegator))]
     public class CrowdController : MonoBehaviour
     {
         private static CrowdController instance;
 
         private LODPoolManager _poolManager;
         bool delegated = false;
-        [SerializeField]
+       
+        
         private string[] _crowdStates;
+    
 
         private string _scene;
         private string _savePath;
@@ -90,51 +94,15 @@ namespace CrowdAI
             int _currentIndex = 0;
 
 
-            //for (int i = 0; i < _groupLength; i++)
-            //{
-            //    int _modelsInGroup = _groupModels[i].Length;
-
-            //    for (int j = 0; j < _modelsInGroup; j++)
-            //    {
-            //        _totalElements += _groupModels[i][j].Length;
-            //    }
-            //}
-
-            //var _names = new string[_totalElements];
-            //var _sizes = new int[_totalElements];
-
-            //var _outObjects = new GameObject[_totalElements];
-
-
-            //for (int i = 0; i < _groupLength; i++)
-            //{
-            //    int _modelsInGroup = _groupModels[i].Length;
-
-            //    for (int j = 0; j < _modelsInGroup; j++)
-            //    {
-            //        //made LODCount global variable with set size
-            //        //int _LODCount = _groupModels[i][j].Length;
-
-            //        for (int k = 0; k < _LODCount; k++)
-            //        {
-            //            _names[_currentIndex] = _crowdGroups[i].GroupName + "_" + j.ToString() + "_" + k.ToString();
-            //            _outObjects[_currentIndex] = _groupModels[i][j][k];
-            //            _sizes[_currentIndex] = _pooledSizes[i][j][k];
-            //            _currentIndex++;
-            //        }
-            //    }
-            //}
-
-
-            //_poolManager = new LODPoolManager(_sizes, _outObjects, _names);
-
+            
 
         }
 
-        private CrowdData GetData()
+        public CrowdData GetData()
         {
+            
             CrowdData _outData = new CrowdData();
-            _outData._path = _savePath;
+            
             _outData._animationStagger = _animationStagger;
 
             _outData._position._posX = transform.position.x;
@@ -402,11 +370,7 @@ namespace CrowdAI
 
             _parent.transform.position += _posModifier;
 
-            if (_groupUnassigned == null)
-            {
-                SetUp();
-            }
-
+            
             GameObject[] _newCrowd;
 
 
@@ -499,11 +463,6 @@ namespace CrowdAI
             {
                 return _crowdCount;
             }
-        }
-
-       void Reset()
-        {
-            SetUp();
         }
 
         public bool AddCrowdMembers(string groupName, GameObject[] group)
@@ -608,15 +567,15 @@ namespace CrowdAI
            
                 _savePath = Application.dataPath + @"/CrowdAssetData";
                _fileName = @"/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
-            
 
-        
 
             if (!Directory.Exists(_savePath))
             {
-                
+
                 Directory.CreateDirectory(_savePath);
             }
+
+
 
             string _serializedData = JsonConvert.SerializeObject(_data);
            
@@ -627,11 +586,7 @@ namespace CrowdAI
 
         private void OverWriteData(CrowdData data)
         {
-            if (_crowdGroups == null)
-            {
-                SetUp();
-            }
-
+            
             if (data._path != null)
             {
                 _savePath = data._path;
@@ -705,31 +660,7 @@ namespace CrowdAI
             }
 
         }
-
-        private void OnPlay()
-        {
-            print("called on play");
-
-
-            if (EditorApplication.isPlayingOrWillChangePlaymode && !Application.isPlaying)
-            {
-              
-                SaveAll();
-                RemovePlaceholders();
-            }
-        }
         
-        [ExecuteInEditMode]
-        private void OnEnable()
-        {
-            print("Called on enable");
-
-            if (Application.isEditor && !Application.isPlaying)
-            {
-                print("It is the editor and it is playing");
-                ReadAll();
-            }
-        }
 
         private void RemovePlaceholders()
         {
@@ -803,6 +734,7 @@ namespace CrowdAI
 
         public void ReadAll()
         {
+            SetUp();
             if (_savePath == null)
             {
                 _savePath = Application.dataPath + @"/CrowdAssetData/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
