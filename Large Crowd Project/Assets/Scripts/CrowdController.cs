@@ -78,6 +78,7 @@ namespace CrowdAI
 
             return _names;
         }
+       
 
         void Awake()
         {
@@ -591,13 +592,8 @@ namespace CrowdAI
             _groupUnassigned = new CrowdGroup("Unassigned");
             _crowdSources = new List<GameObject>();
 
-            if (!Application.isPlaying && Application.isEditor)
-            {
-                EditorApplication.playmodeStateChanged += OnPlay;
-               
-            }
+          
         }
-
 
         public void SaveAll()
         {
@@ -714,26 +710,24 @@ namespace CrowdAI
         {
             print("called on play");
 
-            SaveAll();
-            RemovePlaceholders();
-            if (Application.isEditor)
-            {
-                print("Application is editor");
-                EditorApplication.playmodeStateChanged -= OnPlay;
-                EditorApplication.playmodeStateChanged += OnPlayEnd;
-            }
-                
 
+            if (EditorApplication.isPlayingOrWillChangePlaymode && !Application.isPlaying)
+            {
+              
+                SaveAll();
+                RemovePlaceholders();
+            }
         }
         
-        private void OnPlayEnd()
+        [ExecuteInEditMode]
+        private void OnEnable()
         {
-            print("called On Play end");
-            ReadAll();
-            if (Application.isEditor)
+            print("Called on enable");
+
+            if (Application.isEditor && !Application.isPlaying)
             {
-                EditorApplication.playmodeStateChanged += OnPlay;
-                EditorApplication.playmodeStateChanged -= OnPlayEnd;
+                print("It is the editor and it is playing");
+                ReadAll();
             }
         }
 
@@ -807,7 +801,7 @@ namespace CrowdAI
             return _newGroup;
         }
 
-        private void ReadAll()
+        public void ReadAll()
         {
             if (_savePath == null)
             {

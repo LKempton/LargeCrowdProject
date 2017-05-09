@@ -191,6 +191,7 @@ namespace CrowdAI
 
             return -1;
         }
+
         public GroupData GetData(List<GameObject> parents)
         {
             GroupData _outData = new GroupData();
@@ -256,15 +257,15 @@ namespace CrowdAI
             return _outData;
         }
 
-        public bool AddModelGroup(ModelWrapper model)
+        public void AddModelGroup(ModelWrapper model)
         {
             if (!Application.isEditor)
             {
-                return false;
+                return;
             }
 
             _models.Add(model);
-            return true;
+            
 
         }
 
