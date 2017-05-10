@@ -18,7 +18,7 @@ namespace CrowdAI
 
         private LODPoolManager _poolManager;
 
-        bool _setUp = false;
+        private bool _setUp = false;
        
         [SerializeField]
         private string[] _crowdStates;
@@ -31,8 +31,8 @@ namespace CrowdAI
         // Whether the save/load function has been delegated to play mode event
         bool _functionDelegated = false;
 
-        int _LODCount = 5;
-        int _crowdCount = 0;
+        public int _LODCount = 5;
+        private int _crowdCount = 0;
 
         private List<CrowdGroup> _crowdGroups;
         private List<GameObject> _crowdSources;
@@ -40,12 +40,12 @@ namespace CrowdAI
         private CrowdGroup _groupUnassigned;
 
         [SerializeField]
-        bool _randomStagger;
+        private bool _randomStagger;
 
         [SerializeField]
         private CrowdFormation _crowdFormation;
 
-        float _animationStagger = 0.25f;
+        private float _animationStagger = 0.25f;
 
         // crowd gen parameters
 
@@ -58,7 +58,7 @@ namespace CrowdAI
         private GameObject _placeholderMesh;
 
         [SerializeField]
-        bool _randomGroupDist = true;
+        private bool _randomGroupDist = true;
 
         private bool placeholdersSpawned = true;
 

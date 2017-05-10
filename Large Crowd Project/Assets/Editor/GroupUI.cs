@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
+using System;
 
 namespace CrowdAI
 {
@@ -15,7 +15,11 @@ namespace CrowdAI
 
         private GUIStyle _genericTextStyle;
         private GUIStyle _headingTextStyle;
-        string _newGroupName = "Group Name";
+        private string _newGroupName = "Group Name";
+
+        private int _numberOfModels = 0;
+
+        GameObject[] levelsOfDetail = new GameObject[30];
 
         Vector2 scrollPosition = new Vector2();
 
@@ -31,9 +35,6 @@ namespace CrowdAI
 
             _genericTextStyle.fontSize = 10;
             _genericTextStyle.padding = new RectOffset(6, 3, 6, 6);
-   
-            
-
         }
 
 
@@ -117,12 +118,32 @@ namespace CrowdAI
 
             group.GroupName = GUILayout.TextField(group.GroupName);
 
+            GUILayout.BeginHorizontal();
 
+            GUILayout.Label("Number of Models: ");
+            _numberOfModels = EditorGUILayout.IntField(_numberOfModels, GUILayout.Width(100));
+            GUILayout.EndHorizontal();
+
+            for (int i = 0; i < _numberOfModels; i++)
+            {
+                GUILayout.Label("Crowd Character " + i);
+                
+                //characters[characters.Count - 1], typeof(GameObject), true, GUILayout.Width(200))
+                for (int j = 0; j < _crowdController._LODCount; j++)
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("Level of Detail Object " + j);
+                    levelsOfDetail[i] = (GameObject)EditorGUILayout.ObjectField(levelsOfDetail[i], typeof(GameObject), true, GUILayout.Width(200));
+                    GUILayout.EndHorizontal();
+                }
+            }
 
             if (GUILayout.Button("Delete This Group", GUILayout.Width(200)))
             {
                 _crowdController.RemoveGroup(group.GroupName);
             }
+
+            
 
         }
     }
