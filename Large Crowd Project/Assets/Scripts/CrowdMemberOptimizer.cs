@@ -6,7 +6,7 @@ using UnityEngine;
 namespace CrowdAI
 {
 
-    public class CrowdMemberOptimizer : MonoBehaviour, ICrowdPosition
+    public class CrowdMemberOptimizer : MonoBehaviour
     {
 
         [SerializeField]

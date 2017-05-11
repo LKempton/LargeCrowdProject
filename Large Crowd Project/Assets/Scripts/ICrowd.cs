@@ -1,8 +1,14 @@
 ﻿
 using UnityEngine;
 
+/// <summary>
+/// Crowd AI Asset namespace
+/// </summary>
 namespace CrowdAI
 {
+    /// <summary>
+    /// Interface for crowdmembers 
+    /// </summary>
     public interface ICrowd
     {
         bool SetState(string state, bool useRandDelay);
@@ -16,11 +22,19 @@ namespace CrowdAI
         // possibly use a way of using a mix of global and local animations
     }
 
+    /// <summary>
+    /// The different formations available to gerenate a crowd
+    /// </summary>
   public enum CrowdFormation
     {
         CIRCLE,SQUARE, RING
     }
 
+
+    /// <summary>
+    /// (Not Implemented) enumerators for the current state of animation 
+    /// For each crowd member
+    /// </summary>
     public enum AnimationStatus
     {
         Playing,Stopped,Transistioning,Paused
@@ -34,6 +48,9 @@ namespace CrowdAI
 
     }
 
+    /// <summary>
+    /// JSON Serializeable structure to store transforms
+    /// </summary>
     public struct TransFormData
     {
         public float _posX;
@@ -49,8 +66,9 @@ namespace CrowdAI
 
     
 
-   
-
+   /// <summary>
+   /// JSON serializeable structure for storing group object data
+   /// </summary>
    public struct GroupData
     {
         public MemberData[] _groupMembers;
@@ -58,12 +76,18 @@ namespace CrowdAI
         public string _name;
     }
 
+    /// <summary>
+    /// JSON serializeable structure for storing model wrapper object data
+    /// </summary>
     public struct ModelData
     {
         public string[] _modelNames;
         public int[] _sizes;
     }
 
+    /// <summary>
+    /// JSON serializeable structure for storing Crowd member data
+    /// </summary>
     public struct MemberData
     {
         public TransFormData _position;
@@ -71,6 +95,9 @@ namespace CrowdAI
         
     }
 
+    /// <summary>
+    /// JSON serializeable structure for storing  Crowd Controller object data
+    /// </summary>
     public struct CrowdData
     {
         public TransFormData _position;

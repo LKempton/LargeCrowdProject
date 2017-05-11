@@ -174,7 +174,7 @@ namespace CrowdAI
         }
         
        
-      private int GetParentIndex(GameObject value, List<GameObject> parents)
+      private int GetParentIndex(Transform value, List<GameObject> parents)
         {
             if (value == null || parents == null)
             {
@@ -185,6 +185,7 @@ namespace CrowdAI
             {
                 if (value == parents[i])
                 {
+                    
                     return i;
                 }
             }
@@ -222,7 +223,7 @@ namespace CrowdAI
                         _outData._groupMembers[i]._position._rotY = _currentTransform.rotation.y;
                         _outData._groupMembers[i]._position._rotZ = _currentTransform.rotation.z;
 
-                        _outData._groupMembers[i].source = GetParentIndex(_currentTransform.parent.gameObject, parents);
+                        _outData._groupMembers[i].source = GetParentIndex(_currentTransform.parent, parents);
                        
                     }
                 }

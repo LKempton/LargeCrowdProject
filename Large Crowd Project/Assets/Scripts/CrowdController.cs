@@ -887,8 +887,19 @@ namespace CrowdAI
                 _newMember.transform.rotation = new Quaternion(_transformData._rotX, _transformData._rotY, _transformData._rotZ, _transformData._rotW);
 
                 _newGroup.AddCrowdMember(_newMember);
-                _crowdSources.Add(_newMember.transform.parent.gameObject);
 
+                if(_source>0)
+                {
+                    if (_source > _crowdSources.Count)
+                    {
+                        while(_source<= _crowdSources.Count)
+                        {
+                            var _newSource = new GameObject();
+                        }
+                    }
+
+                    _crowdSources.Add(_newMember.transform.parent.gameObject);
+                }
                 _memberIndex++;
             }
 
