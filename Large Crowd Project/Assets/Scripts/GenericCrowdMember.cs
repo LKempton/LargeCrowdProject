@@ -15,6 +15,9 @@ namespace CrowdAI
         private Renderer _rend;
         private Animation _animator;
 
+        [SerializeField]
+        private Team _team;
+
         bool _isTransitioning = false;
 
         [SerializeField]
@@ -267,6 +270,18 @@ namespace CrowdAI
             get
             {
                 return _isTransitioning;
+            }
+        }
+
+        public Team Team
+        {
+            get
+            {
+                return _team;
+            }
+            set
+            {
+                _team = value;
             }
         }
 

@@ -21,6 +21,11 @@ namespace CrowdAI
         CIRCLE,SQUARE, RING
     }
 
+    public enum Team
+    {
+        NONE, RED, BLUE
+    }
+
     public enum AnimationStatus
     {
         Playing,Stopped,Transistioning,Paused

@@ -545,8 +545,6 @@ namespace CrowdAI
 
             bool _isOnlyOnScene = instance != null;
 
-            if (!)
-
             if (instance != null & !(instance != this && _scene == instance.ControllerScene))
             {
                     Debug.LogWarning("Can Only Have one Crowd Controller per scene");
