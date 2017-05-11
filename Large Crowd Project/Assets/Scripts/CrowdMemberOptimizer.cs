@@ -9,8 +9,6 @@ namespace CrowdAI
     public class CrowdMemberOptimizer : MonoBehaviour, ICrowdPosition
     {
 
-        //private float distanceToCam;
-
         [SerializeField]
         private bool _dynamicCrowdModel;
 
