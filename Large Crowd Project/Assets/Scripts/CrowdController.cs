@@ -353,7 +353,7 @@ namespace CrowdAI
             _parent.name = "Crowd Source";
 
             var _cleaner = _parent.AddComponent<CrowdSourceCleaner>();
-            _cleaner.Controller = this;
+            
 
             var _bounds = transform.GetChild(0).transform.localPosition;
             _parent.transform.position = transform.position;
@@ -377,6 +377,7 @@ namespace CrowdAI
             
             GameObject[] _newCrowd;
 
+            _cleaner.Controller = this;
 
             switch (_crowdFormation)
             {
@@ -542,25 +543,26 @@ namespace CrowdAI
 
             _scene = SceneManager.GetActiveScene().name;
 
-            if (instance != null)
+            bool _isOnlyOnScene = instance != null;
+
+            if (!)
+
+            if (instance != null & !(instance != this && _scene == instance.ControllerScene))
             {
-                if (instance != this && _scene == instance.ControllerScene)
-                {
                     Debug.LogWarning("Can Only Have one Crowd Controller per scene");
                     Destroy(gameObject);
-                }
             }
+            else
+            {
+                instance = this;
 
-            instance = this;
-            
-            _crowdGroups = new List<CrowdGroup>();
-            _groupUnassigned = new CrowdGroup("Unassigned");
-            _crowdSources = new List<GameObject>();
-
-          
+                _crowdGroups = new List<CrowdGroup>();
+                _groupUnassigned = new CrowdGroup("Unassigned");
+                _crowdSources = new List<GameObject>();
+            }
         }
 
-        public void SaveAll()
+        public void SaveAll( bool destroyPlacholders)
         {
            
             if (!Application.isEditor)
@@ -587,18 +589,20 @@ namespace CrowdAI
            
             File.WriteAllText(_savePath+_fileName, _serializedData);
 
-            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            if (destroyPlacholders)
             {
-                print("removed placeholders");
                 RemovePlaceholderReferences();
-                
+                _crowdCount = RecalculateCount();
             }
-            
             
         }
 
         private void OverWriteData(CrowdData data)
         {
+            if (Application.isEditor)
+            {
+                RemovePlaceholderReferences();
+            }
             SetUp();
             if (data._path != null)
             {
@@ -679,7 +683,10 @@ namespace CrowdAI
 
         private void RemovePlaceholderReferences()
         {
-           
+           if (_groupUnassigned == null)
+            {
+                return;
+            }
             if (_groupUnassigned.Size > 0)
             {
                 _groupUnassigned.DestroyCrowdMembers();
@@ -703,8 +710,6 @@ namespace CrowdAI
 
                 if (!Application.isPlaying)
                 {
-
-
                     for (int i = 0; i < _crowdSources.Count; i++)
                     {
                         var _crowdSource = _crowdSources[i];
@@ -712,6 +717,18 @@ namespace CrowdAI
                         if (_crowdSource != null)
                         {
                             DestroyImmediate(_crowdSource);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < _crowdSources.Count; i++)
+                    {
+                        var _crowdSource = _crowdSources[i];
+
+                        if (_crowdSource != null)
+                        {
+                            Destroy(_crowdSource);
                         }
                     }
                 }
@@ -739,7 +756,8 @@ namespace CrowdAI
                 _newMember.transform.rotation = new Quaternion(_transformData._rotX, _transformData._rotY, _transformData._rotZ, _transformData._rotW);
 
                 _newGroup.AddCrowdMember(_newMember);
-                _newMember.transform.parent = _crowdSources[_source].transform;
+                _crowdSources.Add(_newMember.transform.parent.gameObject);
+
                 _memberIndex++;
             }
 

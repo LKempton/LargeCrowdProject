@@ -34,6 +34,16 @@ namespace CrowdAI
         }
 
       
+        void Awake()
+        {
+            
+            // Saving and loading is no longer done by the scene management, the controller rebuilds this
+            if (Application.isEditor && CrowdController.GetCrowdController() == null)
+            {
+                DestroyImmediate(gameObject);
+            }
+            
+        }
 
         public CrowdController Controller
         {

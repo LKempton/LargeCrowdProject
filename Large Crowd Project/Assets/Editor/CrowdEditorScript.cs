@@ -115,7 +115,7 @@ public class CrowdEditorScript : Editor {
 
         EditorGUILayout.LabelField(descriptionText);
 
-        if (GUILayout.Button("Manage Models & Groups"))
+        if (GUILayout.Button("Manage Models & Groups", GUILayout.Width(200), GUILayout.Height(25)))
         {
             var window = (CrowdAI.GroupUI)CrowdAI.GroupUI.ShowWindow();
             window.Controller = script;
@@ -125,21 +125,21 @@ public class CrowdEditorScript : Editor {
 
         if (_showDebug)
         {
-            if (GUILayout.Button("Log Debug Information"))
+            if (GUILayout.Button("Log Debug Information", GUILayout.Width(200), GUILayout.Height(25)))
             {
                 script.ShowDebugInfo();
             }
 
-            if (GUILayout.Button("Save Controller Data"))
+            if (GUILayout.Button("Save Controller Data", GUILayout.Width(200), GUILayout.Height(25)))
             {
-                script.SaveAll();
+                script.SaveAll(false);
                 Debug.Log("Saved Controller Data");
 
             }
             /*
             if (GUILayout.Button("LoadController Data"))
             {
-                script.SaveAll();
+                script.ReadAll();
                 Debug.Log("Loaded Controller Data");
 
             }
