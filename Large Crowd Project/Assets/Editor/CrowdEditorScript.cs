@@ -7,7 +7,7 @@ public class CrowdEditorScript : Editor {
     private EditorSquareScript editorScript;
     private EditorSquareScript childScript;
     CrowdAI.CrowdController script;
-   
+    bool _showDebug = false;
 
     public SerializedProperty
         crowdFormation_Prop,
@@ -46,7 +46,9 @@ public class CrowdEditorScript : Editor {
     public override void OnInspectorGUI()
     {
        int _estimatedCount = script.GetPrediction();
-        int _currentTotal = script.Size;    
+        int _currentTotal = script.Size;
+
+        
 
         serializedObject.Update();
 
@@ -77,16 +79,6 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
              
                 //EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
-
-                if (GUILayout.Button("Generate Crowd" ,GUILayout.Width(200), GUILayout.Height(25)))
-                {
-                    script.GenerateCrowd();
-                }
-               
-                GUIArray(crowdStates_Prop);
-            
-                EditorGUILayout.LabelField(descriptionText);
-
                 break;
 
 
@@ -96,16 +88,6 @@ public class CrowdEditorScript : Editor {
                 EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
                 EditorGUILayout.Slider(rotation_Prop, 0, 360, new GUIContent("Rotation"));
                 EditorGUILayout.PropertyField(crowdObject_Prop, new GUIContent("Crowd Placeholder"));
-               
-                if (GUILayout.Button("Generate Crowd", GUILayout.Width(200), GUILayout.Height(25)))
-                {
-                    script.GenerateCrowd();
-                }
-              
-                GUIArray(crowdStates_Prop);
-
-                EditorGUILayout.LabelField(descriptionText);
-
                 break;
 
 
@@ -118,39 +100,53 @@ public class CrowdEditorScript : Editor {
                
                 //EditorGUILayout.PropertyField(tiltAmount_Prop, new GUIContent("Tilt Amount"));
                 EditorGUILayout.PropertyField(innerRadius_Prop, new GUIContent("Hole Radius"));
-                if (GUILayout.Button("Generate Crowd", GUILayout.Width(200), GUILayout.Height(25)))
-                {
-                    script.GenerateCrowd();
-                }
-               
-                GUIArray(crowdStates_Prop);
-
-                EditorGUILayout.LabelField(descriptionText);
 
                 break;
-
-
-                
         }
 
-       
+        if (GUILayout.Button("Generate Crowd", GUILayout.Width(200), GUILayout.Height(25)))
+        {
+            script.GenerateCrowd();
+        }
+
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+        GUIArray(crowdStates_Prop);
+
+        EditorGUILayout.LabelField(descriptionText);
+
         if (GUILayout.Button("Manage Models & Groups"))
         {
             var window = (CrowdAI.GroupUI)CrowdAI.GroupUI.ShowWindow();
             window.Controller = script;
         }
 
-        if (GUILayout.Button("Log Debug Information"))
+        _showDebug = EditorGUILayout.Toggle("Show Debug Options", _showDebug);
+
+        if (_showDebug)
         {
-            script.ShowDebugInfo();
+            if (GUILayout.Button("Log Debug Information"))
+            {
+                script.ShowDebugInfo();
+            }
+
+            if (GUILayout.Button("Save Controller Data"))
+            {
+                script.SaveAll();
+                Debug.Log("Saved Controller Data");
+
+            }
+            /*
+            if (GUILayout.Button("LoadController Data"))
+            {
+                script.SaveAll();
+                Debug.Log("Loaded Controller Data");
+
+            }
+            */
         }
 
-        if (GUILayout.Button("Save Controller Data"))
-        {
-            script.SaveAll();
-            Debug.Log("Saved Controller Data");
-
-        }
+       
         serializedObject.ApplyModifiedProperties();
     }
 

@@ -18,8 +18,7 @@ namespace CrowdAI
 
         private LODPoolManager _poolManager;
 
-        private bool _setUp = false;
-       
+
         [SerializeField]
         private string[] _crowdStates;
     
@@ -345,7 +344,11 @@ namespace CrowdAI
 
         public void GenerateCrowd()
         {
-            SetUp();
+            if (_groupUnassigned == null)
+            {
+                SetUp();
+            }
+            
             var _parent = new GameObject();
             _parent.name = "Crowd Source";
 
@@ -537,13 +540,6 @@ namespace CrowdAI
         public void SetUp()
         {
 
-            if (_setUp)
-            {
-                return;
-            }
-
-            _setUp = true;
-
             _scene = SceneManager.GetActiveScene().name;
 
             if (instance != null)
@@ -593,8 +589,9 @@ namespace CrowdAI
 
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                RemovePlaceholderReferences();
                 print("removed placeholders");
+                RemovePlaceholderReferences();
+                
             }
             
             
@@ -602,7 +599,7 @@ namespace CrowdAI
 
         private void OverWriteData(CrowdData data)
         {
-            
+            SetUp();
             if (data._path != null)
             {
                 _savePath = data._path;
@@ -673,6 +670,7 @@ namespace CrowdAI
                 {
                     _groupUnassigned = new CrowdGroup(data._unassignedGroup);
                 }
+                
 
             }
 
@@ -699,15 +697,22 @@ namespace CrowdAI
                 _crowdGroups.Clear();
             }
 
+            
             if (_crowdSources.Count > 0)
             {
-                for (int i = 0; i < _crowdSources.Count; i++)
-                {
-                    var _crowdSource = _crowdSources[i];
 
-                    if (_crowdSource != null)
+                if (!Application.isPlaying)
+                {
+
+
+                    for (int i = 0; i < _crowdSources.Count; i++)
                     {
-                        Destroy(_crowdSource);
+                        var _crowdSource = _crowdSources[i];
+
+                        if (_crowdSource != null)
+                        {
+                            DestroyImmediate(_crowdSource);
+                        }
                     }
                 }
                 
@@ -743,7 +748,7 @@ namespace CrowdAI
 
         public void ReadAll()
         {
-            SetUp();
+           
             if (_savePath == null)
             {
                 _savePath = Application.dataPath + @"/CrowdAssetData/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
