@@ -129,13 +129,13 @@ namespace CrowdAI
                 GUILayout.Label("Crowd Character " + i);
                 
                 //characters[characters.Count - 1], typeof(GameObject), true, GUILayout.Width(200))
-                for (int j = 0; j < _crowdController._LODCount; j++)
-                {
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label("Level of Detail Object " + j);
-                    levelsOfDetail[i] = (GameObject)EditorGUILayout.ObjectField(levelsOfDetail[i], typeof(GameObject), true, GUILayout.Width(200));
-                    GUILayout.EndHorizontal();
-                }
+                //for (int j = 0; j < _crowdController._LODCount; j++)
+                //{
+                //    GUILayout.BeginHorizontal();
+                //    GUILayout.Label("Level of Detail Object " + j);
+                //    levelsOfDetail[i] = (GameObject)EditorGUILayout.ObjectField(levelsOfDetail[i], typeof(GameObject), true, GUILayout.Width(200));
+                //    GUILayout.EndHorizontal();
+                //}
             }
 
             if (GUILayout.Button("Delete This Group", GUILayout.Width(200)))
