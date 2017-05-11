@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114822844978273278}
   - component: {fileID: 114611056412304536}
   - component: {fileID: 65676558000222824}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: CrowdHolderAnimatedStates
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dynamicCrowdModel: 1
-  _updateFrequency: 1
+  _updateFrequency: 0.5
   _collider: {fileID: 65676558000222824}
 --- !u!114 &114822844978273278
 MonoBehaviour:
@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b15d92382667c264bba6840e1fcc7405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _team: 0
   _minStartDelay: 0.004
   _maxStartDelay: 1
   _transistionDelay: 0.4

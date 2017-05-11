@@ -82,7 +82,7 @@ namespace CrowdAI
                     break;
 
 
-                case CrowdAI.CrowdFormation.CIRCLE:
+                case CrowdFormation.CIRCLE:
                     editorScript.isCircle = true;
                     childScript.isCircle = true;
                     EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
@@ -91,7 +91,7 @@ namespace CrowdAI
                     break;
 
 
-                case CrowdAI.CrowdFormation.RING:
+                case CrowdFormation.RING:
                     editorScript.isCircle = true;
                     childScript.isCircle = true;
                     EditorGUILayout.Slider(crowdDensity_Prop, 0, 1, new GUIContent("Crowd Density"));
@@ -109,7 +109,7 @@ namespace CrowdAI
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            //GUIArray(crowdStates_Prop);
+            GUIArray(crowdStates_Prop);
 
             EditorGUILayout.LabelField(descriptionText);
 
@@ -118,6 +118,10 @@ namespace CrowdAI
 
         void GUIArray(SerializedProperty val)
         {
+            if (val == null)
+            {
+                return;
+            }
 
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(val, true);
