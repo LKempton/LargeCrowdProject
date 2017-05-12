@@ -33,28 +33,16 @@ namespace CrowdAI
         private string[] _crowdStates;
 
         /// <summary>
-        /// The name of the current scene the controller is in
-        /// </summary>
-        private string _scene;
-
-        /// <summary>
-        /// The path where the controller saves data
-        /// </summary>
-        private string _savePath;
-        /// <summary>
-        /// The name of the file that the controller saves
-        /// </summary>
-        private string _fileName;
-
-        /// <summary>
         /// Tracks the number of crowd members on the Scene
         /// </summary>
         private int _crowdCount = 0;
 
         /// <summary>
-        /// falg for whether the controller has been set up or not
+        ///  whether the controller has been set up or not
         /// </summary>
         bool _setUp = false;
+
+        private string _scene;
 
         /// <summary>
         /// All the crowd groups in the scene
@@ -152,90 +140,11 @@ namespace CrowdAI
         /// </summary>
         void Awake()
         {
-    
-
             int _groupLength = (_crowdGroups == null) ? 0 : _crowdGroups.Count;
 
             int _totalElements = 0;
             int _currentIndex = 0;
 
-
-
-
-        }
-
-      
-
-        /// <summary>
-        /// Puts all variables in a structure so that they can be serialized by a JSON writer
-        /// </summary>
-        /// <returns>All values required for saving in order to reconstruct this object</returns>
-        public CrowdData GetData()
-        {
-
-            CrowdData _outData = new CrowdData();
-
-            _outData._animationStagger = _animationStagger;
-
-            _outData._position._posX = transform.position.x;
-            _outData._position._posY = transform.position.y;
-            _outData._position._posZ = transform.position.z;
-
-            _outData._position._rotW = transform.rotation.w;
-            _outData._position._rotX = transform.rotation.x;
-            _outData._position._rotY = transform.rotation.y;
-            _outData._position._rotZ = transform.rotation.z;
-
-            if (_crowdStates != null)
-            {
-                _outData._stateNameSize = _crowdStates.Length;
-                _outData._stateNames = _crowdStates;
-            }
-            if (_crowdGroups != null)
-            {
-                _outData._groupCount = _crowdGroups.Count;
-                _outData._groups = new GroupData[_crowdGroups.Count];
-
-                for (int i = 0; i < _crowdGroups.Count; i++)
-                {
-                    _outData._groups[i] = _crowdGroups[i].GetData(_crowdSources);
-                }
-            }
-
-            if (_groupUnassigned != null)
-            {
-                _outData._unassignedGroup = _groupUnassigned.GetData(_crowdSources);
-            }
-
-            if (_crowdSources != null)
-            {
-                
-                if (_crowdSources.Count > 0)
-                {
-                    _outData._parents = new TransFormData[_crowdSources.Count];
-
-                    
-                    for (int i = 0; i < _crowdSources.Count; i++)
-                    {
-                        var _transformData = new TransFormData();
-                        var _currentParent = _crowdSources[i].transform;
-
-                        
-
-                        _transformData._posX = _currentParent.position.x;
-                        _transformData._posY = _currentParent.position.y;
-                        _transformData._posZ = _currentParent.position.z;
-
-                        _transformData._rotX = _currentParent.rotation.x;
-                        _transformData._rotY = _currentParent.rotation.y;
-                        _transformData._rotZ = _currentParent.rotation.z;
-                        _transformData._rotW = _currentParent.rotation.w;
-                    }
-                }
-            }
-            
-
-            return _outData;
         }
 
         /// <summary>
@@ -668,7 +577,8 @@ namespace CrowdAI
         }
 
         /// <summary>
-        /// Instansiates classes inside of the controller to do with 
+        /// Instansiates classes inside of the controller
+        /// This will cause the controller to lose all references to objects
         /// </summary>
         public void SetUp()
         {
@@ -695,242 +605,7 @@ namespace CrowdAI
 
             _setUp = true;
         }
-
-        /// <summary>
-        /// Saves data for the controller to disk
-        /// </summary>
-        /// <param name="destroyPlacholders">Whether the objects in the controller should be cleared
-        /// useful for editor as references don't persist in playmode
-        /// </param>
-        public void SaveAll(bool destroyPlacholders)
-        {
-
-            if (!Application.isEditor)
-            {
-                return;
-            }
-
-            var _data = GetData();
-
-          
-
-            _savePath = Application.dataPath + @"/CrowdAssetData";
-            _fileName = @"/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
-
-
-            if (!Directory.Exists(_savePath))
-            {
-
-                Directory.CreateDirectory(_savePath);
-            }
-
-
-
-            string _serializedData = JsonConvert.SerializeObject(_data);
-
-            File.WriteAllText(_savePath + _fileName, _serializedData);
-
-            if (destroyPlacholders)
-            {
-                RemovePlaceholderReferences();
-               RecalculateCount();
-            }
-
-        }
-
-        /// <summary>
-        /// Overwrite the current object's values 
-        /// </summary>
-        /// <param name="data"> Value to be overwritten to</param>
-        private void OverWriteData(CrowdData data)
-        {
-            if (Application.isEditor)
-            {
-                RemovePlaceholderReferences();
-            }
-            SetUp();
-            if (data._path != null)
-            {
-                _savePath = data._path;
-            }
-            gameObject.transform.position = new Vector3(data._position._posX, data._position._posY, data._position._posZ);
-            gameObject.transform.rotation = new Quaternion(data._position._rotX, data._position._rotY, data._position._rotZ, data._position._rotW);
-            _animationStagger = data._animationStagger;
-
-            if (data._stateNameSize > 0)
-            {
-                _crowdStates = new string[data._stateNameSize];
-
-                for (int i = 0; i < _crowdStates.Length; i++)
-                {
-                    _crowdStates[i] = data._stateNames[i];
-
-                }
-            }
-
-
-
-            if (Application.isEditor && !EditorApplication.isPlaying)
-            {
-                
-                _crowdSources = new List<GameObject>();
-                if (data._parents != null)
-                {
-                    for (int i = 0; i < data._parents.Length; i++)
-                    {
-                        var _newSource = new GameObject();
-                        var _newParentData = data._parents[i];
-
-                        _newSource.name = "Crowd Source";
-                        var _cleaner = _newSource.AddComponent<CrowdSourceCleaner>();
-                        _cleaner.Controller = this;
-
-                        _newSource.transform.position = new Vector3(_newParentData._posX, _newParentData._posY, _newParentData._posZ);
-                        _newSource.transform.rotation = new Quaternion(_newParentData._rotX, _newParentData._rotY, _newParentData._rotZ, _newParentData._rotW);
-
-                        _crowdSources.Add(_newSource);
-                    }
-                }
-                
-
-
-                if (data._unassignedGroup._groupMembers != null)
-                {
-                    _groupUnassigned = GenerateGroupAndPlaceholders(data._unassignedGroup);
-                }
-                if (data._groupCount > 0)
-                {
-                    _crowdGroups.Clear();
-                    int _currentGroupIndex = 0;
-
-                    while (_currentGroupIndex < data._groupCount)
-                    {
-
-                        _crowdGroups.Add(GenerateGroupAndPlaceholders(data._groups[_currentGroupIndex]));
-                        _currentGroupIndex++;
-                    }
-                }
-            }
-            else
-            {
-                print("LoadMode: Player");
-                if (data._groupCount > 0)
-                {
-                    for (int i = 0; i < data._groupCount; i++)
-                    {
-                        _crowdGroups.Add(new CrowdGroup(data._groups[i]));
-                    }
-                }
-                if (data._unassignedGroup._groupMembers != null)
-                {
-                    _groupUnassigned = new CrowdGroup(data._unassignedGroup);
-                }
-
-
-            }
-
-        }
-
-        /// <summary>
-        /// Removes all crowd members in the controller
-        /// </summary>
-        private void RemovePlaceholderReferences()
-        {
-            if (_groupUnassigned == null)
-            {
-                return;
-            }
-            if (_groupUnassigned.Size > 0)
-            {
-                _groupUnassigned.DestroyCrowdMembers();
-
-            }
-
-            if (_crowdGroups.Count > 0)
-            {
-
-
-                for (int i = 0; i < _crowdGroups.Count; i++)
-                {
-                    _crowdGroups[i].DestroyCrowdMembers();
-                }
-                _crowdGroups.Clear();
-            }
-
-
-            if (_crowdSources.Count > 0)
-            {
-
-                if (!Application.isPlaying)
-                {
-                    for (int i = 0; i < _crowdSources.Count; i++)
-                    {
-                        var _crowdSource = _crowdSources[i];
-
-                        if (_crowdSource != null)
-                        {
-                            DestroyImmediate(_crowdSource);
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < _crowdSources.Count; i++)
-                    {
-                        var _crowdSource = _crowdSources[i];
-
-                        if (_crowdSource != null)
-                        {
-                            Destroy(_crowdSource);
-                        }
-                    }
-                }
-
-            }
-
-
-        }
-
-        /// <summary>
-        /// Generates the placeholders back in, for editor
-        /// </summary>
-        /// <param name="groupData"> data about the gruop being generated</param>
-        /// <returns></returns>
-        private CrowdGroup GenerateGroupAndPlaceholders(GroupData groupData)
-        {
-
-            var _newGroup = new CrowdGroup(groupData._name);
-            _newGroup.OverwriteModelData(groupData._models);
-
-            int _memberIndex = 0;
-
-            
-
-
-            while (_memberIndex < groupData._groupMembers.Length)
-            {
-                var _newMember = GameObject.Instantiate(_placeholderPrefab);
-                var _transformData = groupData._groupMembers[_memberIndex]._position;
-                int _source = groupData._groupMembers[_memberIndex].source;
-
-                _newMember.transform.position = new Vector3(_transformData._posX, _transformData._posY, _transformData._posZ);
-                _newMember.transform.rotation = new Quaternion(_transformData._rotX, _transformData._rotY, _transformData._rotZ, _transformData._rotW);
-
-                _newGroup.AddCrowdMember(_newMember);
-
-                if(_source>0 && _source < _crowdSources.Count)
-                {
-                   _newMember.transform.parent = _crowdSources[_source].transform;
-                }
-                _memberIndex++;
-            }
-
-            return _newGroup;
-        }
-
-        /// <summary>
-        /// Reads all data from the disk then overwrites 
-        /// </summary>
+        
        
         /// <summary>
         /// Gets the current instance of the crowd controller
@@ -949,6 +624,15 @@ namespace CrowdAI
             get
             {
                 return _scene;
+            }
+        }
+
+        //done as a workaround, 
+       public List<GameObject> Sources
+        {
+            get
+            {
+                return _crowdSources;
             }
         }
     }

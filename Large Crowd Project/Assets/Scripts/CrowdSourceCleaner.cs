@@ -18,7 +18,7 @@ namespace CrowdAI
             
             if (controller!= null && !EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                var _children = new GameObject[transform.GetChildCount()];
+                var _children = new GameObject[transform.childCount];
 
                 for (int i = 0; i < _children.Length; i++)
                 {

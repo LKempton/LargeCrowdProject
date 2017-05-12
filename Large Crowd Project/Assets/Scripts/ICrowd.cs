@@ -48,10 +48,16 @@ namespace CrowdAI
 
     }
 
+
+    public struct ModelWrapper
+    {
+        public GameObject[] _LODLevel;
+    }
+
     /// <summary>
     /// JSON Serializeable structure to store transforms
     /// </summary>
-    public struct TransFormData
+    public struct TransformData
     {
         public float _posX;
         public float _posY;
@@ -82,7 +88,6 @@ namespace CrowdAI
     public struct ModelData
     {
         public string[] _modelNames;
-        public int[] _sizes;
     }
 
     /// <summary>
@@ -90,7 +95,7 @@ namespace CrowdAI
     /// </summary>
     public struct MemberData
     {
-        public TransFormData _position;
+        public TransformData _transform;
         public int source;
         
     }
@@ -100,15 +105,9 @@ namespace CrowdAI
     /// </summary>
     public struct CrowdData
     {
-        public TransFormData _position;
-        public string _path;
-        public int _stateNameSize;
-        public int _groupCount;
-        public float _animationStagger;
-
         public string[] _stateNames;
         public GroupData[] _groups;
         public GroupData _unassignedGroup;
-        public TransFormData[] _parents;
+        public TransformData[] _parents;
     }
 }
