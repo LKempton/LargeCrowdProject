@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
-
+/*
 namespace CrowdAI
 {
     [ExecuteInEditMode]
     public class CrowdSourceCleaner : MonoBehaviour
     {
-        CrowdController controller;
+        SimplifiedCrowdController controller;
 
         
 
@@ -58,3 +58,4 @@ namespace CrowdAI
     }
 
 }
+*/

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-
+/*
 [CustomEditor(typeof(CrowdAI.CrowdController)), CanEditMultipleObjects]
 public class CrowdEditorScript : Editor {
 
@@ -136,14 +136,14 @@ public class CrowdEditorScript : Editor {
                 Debug.Log("Saved Controller Data");
 
             }
-            /*
+            
             if (GUILayout.Button("LoadController Data"))
             {
                 script.ReadAll();
                 Debug.Log("Loaded Controller Data");
 
             }
-            */
+            
         }
 
        
@@ -164,3 +164,4 @@ public class CrowdEditorScript : Editor {
    
 
 }
+*/

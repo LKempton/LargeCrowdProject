@@ -63,13 +63,13 @@ namespace CrowdAI
             if (!_rend)
                 _rend = GetComponentInChildren<Renderer>();
 
-            var _crowdController = GetComponentInParent<CrowdController>();
+            var _crowdController = GetComponentInParent<SimplifiedCrowdController>();
 
            // Only links animations to states not vice versa
             for (int i = 0; i < _animStateNames.Length; i++)
             {
                 // if the state name corresponds to the animation then add it to lookup
-
+                /*
                 if (_crowdController.StateExists(_animStateNames[i]))
                 {
                     if (_animator.GetClip(_stateAnimClips[i].name) == null) 
@@ -83,6 +83,7 @@ namespace CrowdAI
                 {// if the state does not exist then it is an error
                     Debug.LogError("State: " + _animStateNames[i] + " Does not exist in CrowdController Class");
                 }
+                */
             }
             // start playing the first animation 
             _animator.wrapMode = WrapMode.Loop;

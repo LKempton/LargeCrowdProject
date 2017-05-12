@@ -7,7 +7,7 @@ namespace CrowdAI
     public static class CrowdGen
     {
 
-        public static GameObject[] GenCrowdCircle(float crowdDensity, float rotDir, GameObject parent, Vector3 bounds,  GameObject prefab)
+        public static GameObject[] GenCrowdCircle(Team team, float crowdDensity, float rotDir, GameObject parent, Vector3 bounds,  GameObject prefab)
         {
             var _outList = new List<GameObject>();
             //used list since the number of game objects generated isn't determined in a linear manner
@@ -22,7 +22,7 @@ namespace CrowdAI
             for (float i = 0; i <=_radius; i+= 1/crowdDensity)
             {
                float  _tilt = (i / _radius) * bounds.y;
-                GenerateRing(i, crowdDensity, _tilt, parent,  prefab,ref _outList);
+                GenerateRing(team, i, crowdDensity, _tilt, parent,  prefab,ref _outList);
                 
 
             }
@@ -31,7 +31,7 @@ namespace CrowdAI
             return _outList.ToArray() ;
         }
 
-        public static GameObject[] GenCrowdSquare(float crowdDensity, float rotDir, GameObject parent,  Vector3 bounds,   GameObject prefab)
+        public static GameObject[] GenCrowdSquare(Team team, float crowdDensity, float rotDir, GameObject parent,  Vector3 bounds,   GameObject prefab)
         {
 
 
@@ -70,6 +70,7 @@ namespace CrowdAI
                     _newPos += new Vector3(j / crowdDensity,i*_tilt, i / crowdDensity);
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
+                    _newObj.name = team + "_1_1";
                     _newObj.transform.position = _newPos; ;
 
 
@@ -84,7 +85,7 @@ namespace CrowdAI
           
          }
 
-        public static GameObject[] GenCrowdSquare(float crowdDensity,float rotDir, GameObject parent, Vector3 bounds, float densityRange, GameObject prefab )
+        public static GameObject[] GenCrowdSquare(Team team, float crowdDensity,float rotDir, GameObject parent, Vector3 bounds, float densityRange, GameObject prefab )
         { // e = m/v, e = crowdDensity, m = n of people , v = bounds. Therefore n of people  =  CrowdDensity * bounds
 
             var _parentTrans = parent.transform;
@@ -114,6 +115,7 @@ namespace CrowdAI
                         
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
+                    _newObj.name = team + "_1_1";
                     _newObj.transform.position = _newPos;
 
                     _crowdMembers[i * _arrDiv+j] = _newObj;
@@ -127,7 +129,7 @@ namespace CrowdAI
 
         }
 
-        public static GameObject[] GenCrowdRing(float crowdDensity,float rotDir, GameObject parent, Vector3 bounds, GameObject prefab, float innerRadius )
+        public static GameObject[] GenCrowdRing(Team team, float crowdDensity,float rotDir, GameObject parent, Vector3 bounds, GameObject prefab, float innerRadius )
         {
             float _radius = (bounds.x + bounds.z) / 4;
 
@@ -138,7 +140,7 @@ namespace CrowdAI
             {
                 float _tilt = (i / _radius) * bounds.y;
 
-                GenRingCentreFacing(i, rotDir, crowdDensity, _tilt, parent, prefab, ref _outList);
+                GenRingCentreFacing(team, i, rotDir, crowdDensity, _tilt, parent, prefab, ref _outList);
             }
             
             return _outList.ToArray();
@@ -230,7 +232,7 @@ namespace CrowdAI
             return(float)2 * Mathf.PI * radius * crowdDensity;
         }
 
-        private static void GenerateRing(float radius, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
+        private static void GenerateRing(Team team, float radius, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
         {
             float _objCount = 2 * Mathf.PI * radius * density;
          
@@ -245,6 +247,7 @@ namespace CrowdAI
                 float _posZ = radius * Mathf.Sin(Mathf.Deg2Rad * (i * (360 / _objCount)));
 
                 var _newObj = GameObject.Instantiate(prefab, _parentTrans);
+                _newObj.name = team + "_1_1";
                 _newObj.transform.position = new Vector3(_parentPos.x + _posX, _yPos, _parentPos.z + _posZ);
                 list.Add(_newObj);
 
@@ -254,7 +257,7 @@ namespace CrowdAI
 
         }
 
-        private static void GenRingCentreFacing(float radius, float rotation, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
+        private static void GenRingCentreFacing(Team team, float radius, float rotation, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
         {
             float _objCount = 2 * Mathf.PI * radius * density;
 
@@ -274,6 +277,8 @@ namespace CrowdAI
                 var _newObj = GameObject.Instantiate(prefab, _parentTrans);
 
                 float _yRotz = Mathf.Sin((i * (360 / _objCount)));
+
+                _newObj.name = team + "_1_1";
 
                 _newObj.transform.position = new Vector3(_parentPos.x + _posX, _yPos, _parentPos.z + _posZ);
                 _newObj.transform.LookAt(_lookDir, Vector3.up);

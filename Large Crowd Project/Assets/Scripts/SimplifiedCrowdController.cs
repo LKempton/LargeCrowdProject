@@ -54,20 +54,20 @@ namespace CrowdAI
                 case CrowdFormation.CIRCLE:
 
                     parent.transform.position += .5f * bounds;
-                    newCrowd = CrowdGen.GenCrowdCircle(_density, _rotDir, parent, bounds, _startingPrefab);
+                    newCrowd = CrowdGen.GenCrowdCircle(_team, _density, _rotDir, parent, bounds, _startingPrefab);
                     break;
 
 
                 case CrowdFormation.SQUARE:
 
                     parent.transform.position += .5f * CrowdGen.GetObjectBounds(_startingPrefab);
-                    newCrowd = CrowdGen.GenCrowdSquare(_density, _rotDir, parent, bounds, _startingPrefab);
+                    newCrowd = CrowdGen.GenCrowdSquare(_team, _density, _rotDir, parent, bounds, _startingPrefab);
                     break;
 
                 default:
                     parent.transform.position += .5f * bounds;
 
-                    newCrowd = CrowdGen.GenCrowdRing(_density, _rotDir, parent, bounds, _startingPrefab, _innerRadius);
+                    newCrowd = CrowdGen.GenCrowdRing(_team, _density, _rotDir, parent, bounds, _startingPrefab, _innerRadius);
                     break;
             }
 
@@ -128,6 +128,14 @@ namespace CrowdAI
             get
             {
                 return _crowdCount;
+            }
+        }
+
+        public int CrowdMemberLayer
+        {
+            get
+            {
+                return _crowdMemberLayer;
             }
         }
     }
