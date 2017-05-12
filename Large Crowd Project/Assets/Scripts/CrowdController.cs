@@ -636,6 +636,22 @@ namespace CrowdAI
                 return _crowdSources;
             }
         }
+
+        public void OverWriteData(CrowdData data)
+        {
+            if (Application.isPlaying)
+            {
+                // load the empty placeholders
+
+            }
+            else
+            {
+                // load the placeholders
+            }
+
+        }
+
+        
     }
 
 }

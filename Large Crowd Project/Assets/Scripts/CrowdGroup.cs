@@ -36,7 +36,48 @@ namespace CrowdAI
             _groupName = groupName;
         }
 
+        public CrowdGroup(GroupData data, List<GameObject> sources, GameObject prefab)
+        {
+            _groupName = data._name;
 
+            _crowdMembers = new List<GameObject>();
+            _models = new List<ModelWrapper>();
+            if (data._groupMembers != null)
+            {
+                for (int i = 0; i < data._groupMembers.Length; i++)
+                {
+                    var _newMember = GameObject.Instantiate(prefab);
+                    var _memberData = data._groupMembers[i];
+
+                    _newMember.transform.position = IOHandler.GetPosition(_memberData._transform);
+                    _newMember.transform.rotation = IOHandler.GetRotation(_memberData._transform);
+
+                    if (_memberData.source > 0 && _memberData.source < sources.Count)
+                    {
+                        _newMember.transform.parent = sources[_memberData.source].transform;
+                    }
+
+                    _crowdMembers.Add(_newMember);
+                }
+            }
+            
+            if (data._models != null)
+            {
+                // NEEDS TO BE TESTED
+                for (int i = 0; i < data._models.Length; i++)
+                {
+                    int _length = data._models[i]._modelNames.Length;
+
+                    var _models = new GameObject[_length];
+
+                    for (int j = 0; j < _length; j++)
+                    {
+                        var _modelName = data._models[i]._modelNames[j];
+                        //_models[i] = Resources.Load()
+                    }
+                }
+            }
+        }
 
         public void CheckForNullMembers()
         {
@@ -140,7 +181,8 @@ namespace CrowdAI
                 {
                     for (int j = 0; j <_models[i]._LODLevel.Length ; j++)
                     {
-                        _outData._models[i]._modelNames[j] = _models[i]._LODLevel[j].name;
+                        //_outData._models[i]._modelNames[j] = _models[i]._LODLevel[j];
+                       // Resources.Lo
                     }
                 }
 

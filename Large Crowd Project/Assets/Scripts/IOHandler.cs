@@ -52,10 +52,11 @@ namespace CrowdAI
             }
 
 
-            string _path = Application.dataPath + @"/CrowdAIData";
-
-            string _fileName = "CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
-
+            string _path = Application.streamingAssetsPath + @"/CrowdAIData";
+            Debug.Log(_path);
+           
+            string _fileName = @"/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
+            Debug.Log(_fileName);
             Directory.CreateDirectory(_path);
 
             var _serializedData = JsonConvert.SerializeObject(_controllerData);
