@@ -11,7 +11,7 @@ namespace CrowdAI
     ///Creates Crowds in edit mode and manages them in play mode
     /// </summary>
     /// 
-    [RequireComponent(typeof(ControllerDelegator))]
+
     public class CrowdController : MonoBehaviour
     {
         ///ctrl + m + o = collapse all, ctrl + m + l = expand all 
@@ -152,7 +152,7 @@ namespace CrowdAI
         /// </summary>
         void Awake()
         {
-            ReadAll();
+    
 
             int _groupLength = (_crowdGroups == null) ? 0 : _crowdGroups.Count;
 
@@ -931,32 +931,7 @@ namespace CrowdAI
         /// <summary>
         /// Reads all data from the disk then overwrites 
         /// </summary>
-        public void ReadAll()
-        {
-
-            if (_savePath == null)
-            {
-                _savePath = Application.dataPath + @"/CrowdAssetData/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
-
-            }
-
-            if (File.Exists(_savePath))
-            {
-                var _reader = new StreamReader(_savePath);
-
-
-                var _jsonFile = _reader.ReadToEnd();
-
-                var data = JsonConvert.DeserializeObject<CrowdData>(_jsonFile);
-
-                _reader.Dispose();
-
-                OverWriteData(data);
-
-               RecalculateCount();
-            }
-        }
-
+       
         /// <summary>
         /// Gets the current instance of the crowd controller
         /// </summary>
