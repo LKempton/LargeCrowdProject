@@ -132,15 +132,15 @@ public class CrowdEditorScript : Editor {
 
             if (GUILayout.Button("Save Controller Data", GUILayout.Width(200), GUILayout.Height(25)))
             {
-                script.SaveAll(false);
-                Debug.Log("Saved Controller Data");
+                //script.SaveAll(false);
+                //Debug.Log("Saved Controller Data");
 
             }
             
             if (GUILayout.Button("LoadController Data"))
             {
-                script.ReadAll();
-                Debug.Log("Loaded Controller Data");
+                //script.ReadAll();
+               // Debug.Log("Loaded Controller Data");
 
             }
             
