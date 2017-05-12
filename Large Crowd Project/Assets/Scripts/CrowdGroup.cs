@@ -66,6 +66,19 @@ namespace CrowdAI
 
         }
 
+
+        public void CheckForNullMembers()
+        {
+            for (int i = _crowdMembers.Count; i>-1 ; i--)
+            {
+                var _member = _crowdMembers[i];
+
+                if(_member == null)
+                {
+                    _crowdMembers.Remove(_member);
+                }
+            }
+        }
        
         public void DestroyCrowdMembers()
         {
@@ -178,18 +191,20 @@ namespace CrowdAI
         {
             if (value == null || parents == null)
             {
+                
                 return -1;
             }
 
             for (int i = 0; i < parents.Count; i++)
             {
-                if (value == parents[i])
+                if (value.gameObject == parents[i])
                 {
-                    
+                   
                     return i;
                 }
             }
 
+          
             return -1;
         }
 
@@ -198,14 +213,10 @@ namespace CrowdAI
             GroupData _outData = new GroupData();
 
             _outData._groupMembers = new MemberData[_crowdMembers.Count];
-             
-            
-         
-           
-
            
 
             _outData._name = _groupName;
+
             if (_crowdMembers != null)
             {
                 if (_crowdMembers.Count > 0)
@@ -213,6 +224,7 @@ namespace CrowdAI
                     for (int i = 0; i < _crowdMembers.Count; i++)
                     {
                         var _currentTransform = _crowdMembers[i].transform;
+                        
 
                         _outData._groupMembers[i]._position._posX = _currentTransform.position.x;
                         _outData._groupMembers[i]._position._posY = _currentTransform.position.y;

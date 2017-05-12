@@ -136,14 +136,14 @@ public class CrowdEditorScript : Editor {
                 Debug.Log("Saved Controller Data");
 
             }
-            /*
+            
             if (GUILayout.Button("LoadController Data"))
             {
                 script.ReadAll();
                 Debug.Log("Loaded Controller Data");
 
             }
-            */
+            
         }
 
        

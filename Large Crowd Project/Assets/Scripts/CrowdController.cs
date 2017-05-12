@@ -51,6 +51,10 @@ namespace CrowdAI
         /// </summary>
         private int _crowdCount = 0;
 
+        /// <summary>
+        /// falg for whether the controller has been set up or not
+        /// </summary>
+        bool _setUp = false;
 
         /// <summary>
         /// All the crowd groups in the scene
@@ -160,6 +164,8 @@ namespace CrowdAI
 
         }
 
+      
+
         /// <summary>
         /// Puts all variables in a structure so that they can be serialized by a JSON writer
         /// </summary>
@@ -203,14 +209,18 @@ namespace CrowdAI
 
             if (_crowdSources != null)
             {
+                
                 if (_crowdSources.Count > 0)
                 {
                     _outData._parents = new TransFormData[_crowdSources.Count];
 
+                    
                     for (int i = 0; i < _crowdSources.Count; i++)
                     {
                         var _transformData = new TransFormData();
                         var _currentParent = _crowdSources[i].transform;
+
+                        
 
                         _transformData._posX = _currentParent.position.x;
                         _transformData._posY = _currentParent.position.y;
@@ -223,6 +233,7 @@ namespace CrowdAI
                     }
                 }
             }
+            
 
             return _outData;
         }
@@ -392,6 +403,7 @@ namespace CrowdAI
                 }
             }
 
+            RecalculateCount();
 
         }
 
@@ -434,7 +446,7 @@ namespace CrowdAI
 
         public void GenerateCrowd()
         {
-            if (_groupUnassigned == null)
+            if (!_setUp)
             {
                 SetUp();
             }
@@ -446,6 +458,16 @@ namespace CrowdAI
 
 
             var _bounds = transform.GetChild(0).transform.localPosition;
+
+            if (!transform)
+            {
+                print("For some reason the transform is null");
+            }
+            else if (!_parent)
+            {
+                print("For some reason the parent is null");
+            }
+
             _parent.transform.position = transform.position;
 
             var _posModifier = Vector3.zero;
@@ -493,12 +515,10 @@ namespace CrowdAI
 
             if (_newCrowd.Length > 0)
             {
-
+                
                 _groupUnassigned.AddCrowdMember(_newCrowd);
-                _crowdCount = RecalculateCount();
                 _crowdSources.Add(_parent);
-
-
+                RecalculateCount();
             }
             else
             {
@@ -541,24 +561,23 @@ namespace CrowdAI
         /// Recounts the number of models in the scene
         /// </summary>
         /// <returns>The number of models in the scene</returns>
-        private int RecalculateCount()
+        public void RecalculateCount()
         {
             if (_groupUnassigned == null)
             {
-                return 0;
+                return;
             }
 
-            int size = _groupUnassigned.Size;
+            _crowdCount = _groupUnassigned.Size;
 
             if (_crowdGroups != null)
             {
                 for (int i = 0; i < _crowdGroups.Count; i++)
                 {
-                    size += _crowdGroups[i].Size;
+                    _crowdCount += _crowdGroups[i].Size;
 
                 }
             }
-            return size;
         }
 
         /// <summary>
@@ -674,6 +693,7 @@ namespace CrowdAI
             _groupUnassigned = new CrowdGroup("Unassigned");
             _crowdSources = new List<GameObject>();
 
+            _setUp = true;
         }
 
         /// <summary>
@@ -692,6 +712,7 @@ namespace CrowdAI
 
             var _data = GetData();
 
+          
 
             _savePath = Application.dataPath + @"/CrowdAssetData";
             _fileName = @"/CrowdData - " + SceneManager.GetActiveScene().name + ".data.json";
@@ -712,7 +733,7 @@ namespace CrowdAI
             if (destroyPlacholders)
             {
                 RemovePlaceholderReferences();
-                _crowdCount = RecalculateCount();
+               RecalculateCount();
             }
 
         }
@@ -751,6 +772,7 @@ namespace CrowdAI
 
             if (Application.isEditor && !EditorApplication.isPlaying)
             {
+                
                 _crowdSources = new List<GameObject>();
                 if (data._parents != null)
                 {
@@ -760,12 +782,16 @@ namespace CrowdAI
                         var _newParentData = data._parents[i];
 
                         _newSource.name = "Crowd Source";
+                        var _cleaner = _newSource.AddComponent<CrowdSourceCleaner>();
+                        _cleaner.Controller = this;
+
                         _newSource.transform.position = new Vector3(_newParentData._posX, _newParentData._posY, _newParentData._posZ);
                         _newSource.transform.rotation = new Quaternion(_newParentData._rotX, _newParentData._rotY, _newParentData._rotZ, _newParentData._rotW);
 
                         _crowdSources.Add(_newSource);
                     }
                 }
+                
 
 
                 if (data._unassignedGroup._groupMembers != null)
@@ -787,6 +813,7 @@ namespace CrowdAI
             }
             else
             {
+                print("LoadMode: Player");
                 if (data._groupCount > 0)
                 {
                     for (int i = 0; i < data._groupCount; i++)
@@ -877,6 +904,9 @@ namespace CrowdAI
 
             int _memberIndex = 0;
 
+            
+
+
             while (_memberIndex < groupData._groupMembers.Length)
             {
                 var _newMember = GameObject.Instantiate(_placeholderPrefab);
@@ -888,17 +918,9 @@ namespace CrowdAI
 
                 _newGroup.AddCrowdMember(_newMember);
 
-                if(_source>0)
+                if(_source>0 && _source < _crowdSources.Count)
                 {
-                    if (_source > _crowdSources.Count)
-                    {
-                        while(_source<= _crowdSources.Count)
-                        {
-                            var _newSource = new GameObject();
-                        }
-                    }
-
-                    _crowdSources.Add(_newMember.transform.parent.gameObject);
+                   _newMember.transform.parent = _crowdSources[_source].transform;
                 }
                 _memberIndex++;
             }
@@ -931,7 +953,7 @@ namespace CrowdAI
 
                 OverWriteData(data);
 
-                _crowdCount = RecalculateCount();
+               RecalculateCount();
             }
         }
 

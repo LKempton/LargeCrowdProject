@@ -12,85 +12,50 @@ namespace CrowdAI
     [ExecuteInEditMode]
     public class ControllerDelegator :MonoBehaviour
     {
-     static void Save()
-        {
-            if (Application.isPlaying & !EditorApplication.isPlayingOrWillChangePlaymode)
-            {                
-                return;
-            }
-           
-                var _controller = CrowdController.GetCrowdController();
+   
 
-                if (_controller != null)
-                {
-                    _controller.SaveAll(true);
-                }
-            
-            
-        }
-
-        static void Load(Scene scene, LoadSceneMode mode)
-        {
-            if (Application.isPlaying)
-            {
-                return;
-            }
-
-            print("I tried to load");
-
-            var _controller = CrowdController.GetCrowdController();
-
-            if (_controller != null)
-            {
-                _controller.ReadAll();
-            }
-        }
+       
 
         static ControllerDelegator()
         {
             
-            EditorSceneManager.sceneLoaded += Load;
-            EditorApplication.playmodeStateChanged += SaveForPlayMode;
+         
+            EditorApplication.playmodeStateChanged += SaveLoad;
 
-           // EditorSceneManager.sceneUnloaded += SaveForUnload;
-        }
-
-        static void SaveForPlayMode()
-        {
-            if (Application.isPlaying & !EditorApplication.isPlayingOrWillChangePlaymode)
-            {
-                return;
-            }
-
-            var _controller = CrowdController.GetCrowdController();
-
-            if (_controller != null)
-            {
-                print("saved");
-                _controller.SaveAll(true);
-            }
-
-        }
-
-        static void SaveForUnload(Scene scene)
-        {
-            
            
+        }
+
+        static void SaveLoad()
+        {
+            print("called save");
             if (Application.isPlaying & !EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 return;
             }
-
             var _controller = CrowdController.GetCrowdController();
-
-            if (_controller != null)
+            if (_controller == null)
             {
-                print("saved");
-                _controller.SaveAll(true);
+                Debug.LogError("The controller is null");
+                return;
             }
+           
+
+            if (!Application.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                _controller.ReadAll();
+            }
+            else
+            {
+                    _controller.SaveAll(true);
+                
+            }  
 
             
+            
+
         }
+
+       
        
         void Awake()
         {
