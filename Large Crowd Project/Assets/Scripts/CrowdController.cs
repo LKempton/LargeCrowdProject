@@ -597,6 +597,7 @@ namespace CrowdAI
                     return;
                 }
             }
+            print("set up");
             _instance = this;
 
             _crowdGroups = new List<CrowdGroup>();

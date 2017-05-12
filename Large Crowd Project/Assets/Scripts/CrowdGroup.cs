@@ -113,7 +113,17 @@ namespace CrowdAI
 
                     var _memberData = new MemberData();
 
-                    _memberData.source = parents.BinarySearch(_member.transform.parent.gameObject);
+                    _memberData.source = -1;
+
+                    for (int j = 0; j < parents.Count; j++)
+                    {
+                        if (_member.transform.parent.gameObject == parents[j])
+                        {
+                            Debug.Log("found the source");
+                            _memberData.source = j;
+                            break;
+                        }
+                    }
 
                     _memberData._transform = IOHandler.GetTransformData(_member.transform);
 
