@@ -12,10 +12,54 @@ namespace CrowdAI
         [SerializeField] //interval at which the levels of detail of the objects are updated in milliseconds
         private float updateInterval = 0.5f;
 
+        private Collider[] hitColliders;
+        private int currentColliderIndex = 0;
+        [SerializeField]
+        private int maxCalculationsPerFrame = 100;
+
         void Start()
         {
             //repeatedly get the crowdmembers to update on an interval
             InvokeRepeating("GetCrowdMembers", 0, updateInterval);
+        }
+
+        void Update()
+        {
+            if (hitColliders != null)
+            {
+                int _maxIndex = (currentColliderIndex + maxCalculationsPerFrame > hitColliders.Length) ? hitColliders.Length - 1 : currentColliderIndex + maxCalculationsPerFrame;
+                for ( ; currentColliderIndex < _maxIndex; currentColliderIndex++)
+                {
+                    var hitCollider = hitColliders[currentColliderIndex];
+
+                    float distance = Mathf.Abs((hitCollider.gameObject.transform.position - transform.position).sqrMagnitude);
+
+                    //depending on distance to the camera, set the level of detail of the crowd member
+                    //distance is squared to save performance on square root calculations
+                    if (distance <= (highDetailModelDistance * highDetailModelDistance))
+                    {
+                        if (hitCollider.gameObject.name.Substring(hitCollider.gameObject.name.Length - 1, 1) != "3")
+                        {
+                            SetLOD(2, hitCollider.gameObject);
+                        }
+                    }
+                    else if (distance <= (lowDetailModelDistance * lowDetailModelDistance) && distance > (highDetailModelDistance * highDetailModelDistance))
+                    {
+                        if (hitCollider.gameObject.name.Substring(hitCollider.gameObject.name.Length - 1, 1) != "2")
+                        {
+                            SetLOD(1, hitCollider.gameObject);
+                        }
+                    }
+                    else if (distance > (lowDetailModelDistance * lowDetailModelDistance))
+                    {
+                        if (hitCollider.gameObject.name.Substring(hitCollider.gameObject.name.Length - 1, 1) != "1")
+                        {
+                            SetLOD(0, hitCollider.gameObject);
+                        }
+                    }
+                }
+            }
+
         }
 
         /// <summary>
@@ -26,36 +70,9 @@ namespace CrowdAI
             float detectionRadius = spriteDistance*2;
 
             //get an array of every crowd member within a radius and depending on distance set a level of detail
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, (1 << 8), QueryTriggerInteraction.Collide);
-            //, LayerMask.NameToLayer("CrowdMembers"), QueryTriggerInteraction.Collide
-            foreach (Collider hitCollider in hitColliders)
-            {
-                float distance = Mathf.Abs((hitCollider.gameObject.transform.position - transform.position).sqrMagnitude);
+            hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, (1 << 8), QueryTriggerInteraction.Collide);
 
-                //depending on distance to the camera, set the level of detail of the crowd member
-                //distance is squared to save performance on square root calculations
-                if (distance <= (highDetailModelDistance * highDetailModelDistance))
-                {
-                    if (hitCollider.gameObject.name.Substring(hitCollider.gameObject.name.Length - 1, 1) != "3")
-                    {
-                        SetLOD(2, hitCollider.gameObject);
-                    }
-                }
-                else if (distance <= (lowDetailModelDistance * lowDetailModelDistance) && distance > (highDetailModelDistance * highDetailModelDistance))
-                {
-                    if (hitCollider.gameObject.name.Substring(hitCollider.gameObject.name.Length - 1, 1) != "2")
-                    {
-                        SetLOD(1, hitCollider.gameObject);
-                    }
-                }
-                else if (distance > (lowDetailModelDistance * lowDetailModelDistance))
-                {
-                    if (hitCollider.gameObject.name.Substring(hitCollider.gameObject.name.Length - 1, 1) != "1")
-                    {
-                        SetLOD(0, hitCollider.gameObject);
-                    }
-                }
-            }
+            currentColliderIndex = 0;
         }
 
         private void SetLOD(int LOD, GameObject currentObj)
