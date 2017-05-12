@@ -6,6 +6,8 @@ namespace CrowdAI
 {
     public class SimplifiedCrowdController : MonoBehaviour
     {
+        private SimplifiedLODPooler _poolManager;
+
         [SerializeField]
         private CrowdFormation _crowdFormation;
 
@@ -136,6 +138,14 @@ namespace CrowdAI
             get
             {
                 return _crowdMemberLayer;
+            }
+        }
+
+        public SimplifiedLODPooler PoolManager
+        {
+            get
+            {
+                return PoolManager;
             }
         }
     }

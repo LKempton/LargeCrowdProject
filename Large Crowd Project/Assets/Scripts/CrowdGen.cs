@@ -71,6 +71,7 @@ namespace CrowdAI
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
                     _newObj.name = team + "_1_1";
+                    _newObj.GetComponent<CrowdMemberInfo>().Team = team;
                     _newObj.transform.position = _newPos; ;
 
 
@@ -116,6 +117,7 @@ namespace CrowdAI
 
                     var _newObj = GameObject.Instantiate(prefab, _parentTrans);
                     _newObj.name = team + "_1_1";
+                    _newObj.GetComponent<CrowdMemberInfo>().Team = team;
                     _newObj.transform.position = _newPos;
 
                     _crowdMembers[i * _arrDiv+j] = _newObj;
@@ -248,6 +250,7 @@ namespace CrowdAI
 
                 var _newObj = GameObject.Instantiate(prefab, _parentTrans);
                 _newObj.name = team + "_1_1";
+                _newObj.GetComponent<CrowdMemberInfo>().Team = team;
                 _newObj.transform.position = new Vector3(_parentPos.x + _posX, _yPos, _parentPos.z + _posZ);
                 list.Add(_newObj);
 
@@ -279,6 +282,7 @@ namespace CrowdAI
                 float _yRotz = Mathf.Sin((i * (360 / _objCount)));
 
                 _newObj.name = team + "_1_1";
+                _newObj.GetComponent<CrowdMemberInfo>().Team = team;
 
                 _newObj.transform.position = new Vector3(_parentPos.x + _posX, _yPos, _parentPos.z + _posZ);
                 _newObj.transform.LookAt(_lookDir, Vector3.up);

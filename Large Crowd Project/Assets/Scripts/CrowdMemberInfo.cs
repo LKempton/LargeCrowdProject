@@ -7,13 +7,21 @@ namespace CrowdAI
     public class CrowdMemberInfo : MonoBehaviour
     {
         [SerializeField]
-        private GameObject _lowDetailModel, _highDetailModel;
+        private GameObject _sprite, _lowDetailModel, _highDetailModel;
 
         [SerializeField]
         private bool _isDynamicCrowdMember = false;
 
         [SerializeField]
         private Team _team;
+
+        public GameObject Sprite
+        {
+            get
+            {
+                return _sprite;
+            }
+        }
 
         public GameObject LowDetailModel
         {
@@ -48,6 +56,10 @@ namespace CrowdAI
             get
             {
                 return _team;
+            }
+            set
+            {
+                _team = value;
             }
         }
     }

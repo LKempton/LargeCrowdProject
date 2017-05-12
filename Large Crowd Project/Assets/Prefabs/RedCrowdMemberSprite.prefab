@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4239267364159508}
   - component: {fileID: 212439661309939996}
+  - component: {fileID: 114598181216279488}
   m_Layer: 0
   m_Name: RedCrowdMemberSprite
   m_TagString: Untagged
@@ -40,6 +41,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114598181216279488
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1712500106780742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878f889b206bbd54fac33cf01b869112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprite: {fileID: 1712500106780742}
+  _lowDetailModel: {fileID: 1559287542478844, guid: d04af7557f5713c4583d3ba7f6ee45bc,
+    type: 2}
+  _highDetailModel: {fileID: 1452606857415106, guid: 60d4bc9bb21edb840830c566c5ef61d1,
+    type: 2}
+  _isDynamicCrowdMember: 0
+  _team: 1
 --- !u!212 &212439661309939996
 SpriteRenderer:
   m_ObjectHideFlags: 1
