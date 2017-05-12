@@ -7,6 +7,7 @@ using UnityEditor;
 namespace CrowdAI
 {
     [ExecuteInEditMode]
+    
     public class CrowdSourceCleaner : MonoBehaviour
     {
         CrowdController controller;

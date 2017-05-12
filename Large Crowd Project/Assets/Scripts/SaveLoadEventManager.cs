@@ -6,8 +6,8 @@ using UnityEditor;
 namespace CrowdAI
 {
     
-    [InitializeOnLoad]
-    public class SaveLoadEventManager : AssetModificationProcessor
+    
+    public class SaveLoadEventManager : UnityEditor.AssetModificationProcessor
     {
         static string[] OnWillSaveAssets(string[] paths)
         {
