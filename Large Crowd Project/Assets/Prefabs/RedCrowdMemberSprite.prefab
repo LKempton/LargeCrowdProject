@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4239267364159508}
   - component: {fileID: 212439661309939996}
+  - component: {fileID: 65941025858947006}
   - component: {fileID: 114598181216279488}
   m_Layer: 8
   m_Name: RedCrowdMemberSprite
@@ -27,7 +28,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4239267364159508
 Transform:
   m_ObjectHideFlags: 1
@@ -35,12 +36,24 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1712500106780742}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03, y: 1.22, z: 0}
+  m_LocalPosition: {x: 1.917, y: 3.625, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &65941025858947006
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1712500106780742}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2622635, y: 5.6566663, z: 1.2576938}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114598181216279488
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -57,7 +70,7 @@ MonoBehaviour:
     type: 2}
   _highDetailModel: {fileID: 1452606857415106, guid: 60d4bc9bb21edb840830c566c5ef61d1,
     type: 2}
-  _isDynamicCrowdMember: 0
+  _isDynamicCrowdMember: 1
   _team: 1
 --- !u!212 &212439661309939996
 SpriteRenderer:

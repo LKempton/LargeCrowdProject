@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4725096695201142}
   - component: {fileID: 114705562126206292}
-  - component: {fileID: 114955209777336916}
   - component: {fileID: 114345993228596506}
+  - component: {fileID: 114406600378483992}
   m_Layer: 0
   m_Name: SimplifiedCrowdController
   m_TagString: Untagged
@@ -85,6 +85,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedColour: {r: 1, g: 0, b: 0, a: 1}
   isCircle: 0
+--- !u!114 &114406600378483992
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1371077466759310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f04bd2308afded4c8cd87320c0c427a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114705562126206292
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -99,11 +110,10 @@ MonoBehaviour:
   _crowdFormation: 1
   _team: 0
   _startingPrefab: {fileID: 0}
-  _density: 0.742
+  _density: 0.5
   _startHeight: 0
   _innerRadius: 0
   _rotDir: 0
-  _crowdMemberLayer: 0
 --- !u!114 &114797558697762176
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -117,14 +127,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedColour: {r: 1, g: 0, b: 0, a: 1}
   isCircle: 0
---- !u!114 &114955209777336916
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1371077466759310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14c7d59c7c8a538489575148374f3695, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

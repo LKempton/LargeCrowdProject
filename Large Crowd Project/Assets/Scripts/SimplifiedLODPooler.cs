@@ -6,37 +6,44 @@ namespace CrowdAI
 {
     public class SimplifiedLODPooler : MonoBehaviour
     {
-        private SimplifiedCrowdController scc;
+        public static SimplifiedLODPooler instance;
 
         private Hashtable _mainPool = new Hashtable();
 
         private List<GameObject> _tempList = new List<GameObject>();
-
+        
         /// <summary>
         /// Goes through each crowd member sprite game object in the scene and instantiates two higher detail game objects
         /// Puts all of the gameobjects in hashtable indexed by the name of that detail of gameobject
         /// </summary>
-        void Start()
+        void Awake()
         {
+            instance = this;
+
             List<GameObject> tempSpriteList = new List<GameObject>();
             List<GameObject> tempLowDetailModelList = new List<GameObject>();
             List<GameObject> tempHighDetailModelList = new List<GameObject>();
+
+            var parentObj = new GameObject();
+            parentObj.name = "Pooled Objects";
 
             GameObject[] gameObjectsInScene = FindObjectsOfType(typeof(GameObject)) as GameObject[];
 
             for (int i = 0; i < gameObjectsInScene.Length; i++)
             {
-                if (gameObjectsInScene[i].layer == scc.CrowdMemberLayer)
+                if (gameObjectsInScene[i].layer == LayerMask.NameToLayer("CrowdMembers"))
                 {
                     tempSpriteList.Add(gameObjectsInScene[i]);
 
                     CrowdMemberInfo info = gameObjectsInScene[i].GetComponent<CrowdMemberInfo>();
 
                     GameObject lowDetailGameObject = Instantiate(info.LowDetailModel);
+                    lowDetailGameObject.transform.parent = parentObj.transform;
                     lowDetailGameObject.name = info.Team + "_1_2";
                     tempLowDetailModelList.Add(lowDetailGameObject);
 
                     GameObject highDetailGameObject = Instantiate(info.HighDetailModel);
+                    highDetailGameObject.transform.parent = parentObj.transform;
                     highDetailGameObject.name = info.Team + "_1_3";
                     tempHighDetailModelList.Add(highDetailGameObject);
                     
@@ -61,7 +68,6 @@ namespace CrowdAI
             {
                 //create a list of all instances of the crowd model gameobject
                 _tempList = (List<GameObject>)_mainPool[name];
-
                 //find the first instance that is inactive and not null and return it
                 for (int i = 0; i < _tempList.Count; i++)
                 {

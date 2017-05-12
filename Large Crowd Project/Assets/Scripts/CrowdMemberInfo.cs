@@ -10,7 +10,7 @@ namespace CrowdAI
         private GameObject _sprite, _lowDetailModel, _highDetailModel;
 
         [SerializeField]
-        private bool _isDynamicCrowdMember = false;
+        private bool _isDynamicCrowdMember = true;
 
         [SerializeField]
         private Team _team;

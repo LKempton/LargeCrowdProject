@@ -6,8 +6,6 @@ namespace CrowdAI
 {
     public class SimplifiedCrowdController : MonoBehaviour
     {
-        private SimplifiedLODPooler _poolManager;
-
         [SerializeField]
         private CrowdFormation _crowdFormation;
 
@@ -21,9 +19,6 @@ namespace CrowdAI
 
         [SerializeField]
         private float _density, _startHeight, _innerRadius, _rotDir = 0;
-
-        [SerializeField]
-        private int _crowdMemberLayer;
 
         public void GenerateCrowd(Vector3 bounds)
         {
@@ -51,6 +46,8 @@ namespace CrowdAI
 
             GameObject[] newCrowd;
 
+            _startingPrefab.SetActive(true);
+
             switch (_crowdFormation)
             {
                 case CrowdFormation.CIRCLE:
@@ -72,6 +69,8 @@ namespace CrowdAI
                     newCrowd = CrowdGen.GenCrowdRing(_team, _density, _rotDir, parent, bounds, _startingPrefab, _innerRadius);
                     break;
             }
+
+            _startingPrefab.SetActive(false);
 
             if (newCrowd.Length > 0)
             {
@@ -116,7 +115,7 @@ namespace CrowdAI
 
             for (int i = 0; i < gameObjectsInScene.Length; i++)
             {
-                if (gameObjectsInScene[i].layer == _crowdMemberLayer)
+                if (gameObjectsInScene[i].layer == LayerMask.NameToLayer("CrowdMembers"))
                 {
                     total++;
                 }
@@ -130,22 +129,6 @@ namespace CrowdAI
             get
             {
                 return _crowdCount;
-            }
-        }
-
-        public int CrowdMemberLayer
-        {
-            get
-            {
-                return _crowdMemberLayer;
-            }
-        }
-
-        public SimplifiedLODPooler PoolManager
-        {
-            get
-            {
-                return PoolManager;
             }
         }
     }

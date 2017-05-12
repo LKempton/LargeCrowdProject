@@ -304,7 +304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9cb9e83d2c848d43b6c1467184b9fd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highDetailModelDistance: 5
-  lowDetailModelDistance: 10
-  spriteDistance: 15
+  scc: {fileID: 114705562126206292, guid: 7ca38298036ab674f9930168d84d2663, type: 2}
+  highDetailModelDistance: 15
+  lowDetailModelDistance: 30
+  spriteDistance: 60
   updateInterval: 0.5

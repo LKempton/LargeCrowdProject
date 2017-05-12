@@ -5,9 +5,7 @@ using UnityEngine;
 namespace CrowdAI
 {
     public class DynamicLODCamera : MonoBehaviour {
-
-        private SimplifiedCrowdController scc;
-
+        
         [SerializeField] //the distance between the camera and the object at which the object changes level of detail
         private float highDetailModelDistance, lowDetailModelDistance, spriteDistance;
 
@@ -25,40 +23,53 @@ namespace CrowdAI
         /// </summary>
         private void GetCrowdMembers()
         {
-            Vector3 centre = transform.position;
             float detectionRadius = spriteDistance*2;
 
             //get an array of every crowd member within a radius and depending on distance set a level of detail
-            Collider[] hitColliders = Physics.OverlapSphere(centre, detectionRadius, scc.CrowdMemberLayer, QueryTriggerInteraction.Collide);
-            if (hitColliders == null)
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
+            //, LayerMask.NameToLayer("CrowdMembers"), QueryTriggerInteraction.Collide
+            foreach (Collider hitCollider in hitColliders)
             {
-                return;
-            }
+                Debug.Log("Current hitCollider is " + hitCollider.gameObject.name);
+                float distance = Mathf.Abs((hitCollider.gameObject.transform.position - transform.position).sqrMagnitude);
 
-            for (int i = 0; i < hitColliders.Length; i++)
-            {
-                float distance = Mathf.Abs((hitColliders[i].gameObject.transform.position - centre).sqrMagnitude);
+                Debug.Log("Distance to camera is " + distance);
 
                 //depending on distance to the camera, set the level of detail of the crowd member
                 //distance is squared to save performance on square root calculations
                 if (distance <= (highDetailModelDistance * highDetailModelDistance))
                 {
-                    SetLOD(2, hitColliders[i].gameObject);
+                    if (gameObject.name.Substring(gameObject.name.Length - 1, 1) != "3")
+                    {
+                        SetLOD(2, hitCollider.gameObject);
+                    }
                 }
                 else if (distance <= (lowDetailModelDistance * lowDetailModelDistance) && distance > (highDetailModelDistance * highDetailModelDistance))
                 {
-                    SetLOD(1, hitColliders[i].gameObject);
+                    if (gameObject.name.Substring(gameObject.name.Length - 1, 1) != "2")
+                    {
+                        SetLOD(1, hitCollider.gameObject);
+                    }
                 }
-                else //if (distance <= (spriteDistance * spriteDistance) && distance > (lowDetailModelDistance * lowDetailModelDistance))
+                else if (distance > (lowDetailModelDistance * lowDetailModelDistance))
                 {
-                    SetLOD(0, hitColliders[i].gameObject);
+                    if (gameObject.name.Substring(gameObject.name.Length - 1, 1) != "1")
+                    {
+                        SetLOD(0, hitCollider.gameObject);
+                    }
                 }
             }
         }
 
         private void SetLOD(int LOD, GameObject currentObj)
         {
+            Debug.Log("Trying to set LOD to " + LOD);
             var info = currentObj.GetComponent<CrowdMemberInfo>();
+
+            if (info == null)
+            {
+                return;
+            }
 
             string newObjName;
 
@@ -67,7 +78,6 @@ namespace CrowdAI
             {
                 case 0:
                     newObjName = info.Team + "_1_1";
-
                     break;
                 case 1:
                     newObjName = info.Team + "_1_2";
@@ -81,16 +91,18 @@ namespace CrowdAI
                     break;
 
             }
-
-            var newObj = scc.PoolManager.GetPooledObject(newObjName);
+            Debug.Log("Searching for " + newObjName + " in pool");
+            var newObj = SimplifiedLODPooler.instance.GetPooledObject(newObjName);
 
             //set position and rotation of new model
             newObj.transform.position = currentObj.transform.position;
             newObj.transform.rotation = currentObj.transform.rotation;
             newObj.SetActive(true);
+            Debug.Log("Set new LOD");
 
             //Disable current model
             currentObj.SetActive(false);
+            Debug.Log("Set current object off");
         }
     }
 }

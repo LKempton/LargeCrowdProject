@@ -695,13 +695,15 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4551489185077848}
+  - component: {fileID: 65333961994710942}
+  - component: {fileID: 114709909124505010}
   m_Layer: 8
   m_Name: RedCrowdMemberHigh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1461441033294540
 GameObject:
   m_ObjectHideFlags: 1
@@ -1975,8 +1977,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1452606857415106}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 1.901, y: 6.159, z: -0.23905}
+  m_LocalScale: {x: 0.20781265, y: 0.20781264, z: 0.20781264}
   m_Children:
   - {fileID: 4503913577587294}
   m_Father: {fileID: 0}
@@ -2593,6 +2595,18 @@ Transform:
   m_Father: {fileID: 4632816100155540}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &65333961994710942
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1452606857415106}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.1840477, y: 26.795912, z: 4.4482446}
+  m_Center: {x: 0, y: -12.359202, z: -0.244578}
 --- !u!95 &95705301622544332
 Animator:
   serializedVersion: 3
@@ -2610,6 +2624,23 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114709909124505010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1452606857415106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878f889b206bbd54fac33cf01b869112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprite: {fileID: 1712500106780742, guid: 0869d7652ae42324f85168833cb74e5a, type: 2}
+  _lowDetailModel: {fileID: 1559287542478844, guid: d04af7557f5713c4583d3ba7f6ee45bc,
+    type: 2}
+  _highDetailModel: {fileID: 1452606857415106}
+  _isDynamicCrowdMember: 1
+  _team: 1
 --- !u!137 &137678887439804792
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
