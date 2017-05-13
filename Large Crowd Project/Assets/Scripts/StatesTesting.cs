@@ -5,6 +5,7 @@ using UnityEngine;
 namespace CrowdAI
 {
     /// <summary>
+    /// (Legacy)
     /// This class is used to test the state system of crowds
     /// Left Mouse and right mouse change the state in a linear fashion
     /// </summary>

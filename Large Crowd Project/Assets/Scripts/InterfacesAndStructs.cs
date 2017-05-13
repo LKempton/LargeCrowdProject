@@ -6,6 +6,8 @@ using UnityEngine;
 /// </summary>
 namespace CrowdAI
 {
+    // File for storing all interfaces and structures
+
     /// <summary>
     /// Interface for crowdmembers 
     /// </summary>
@@ -40,14 +42,6 @@ namespace CrowdAI
         Playing,Stopped,Transistioning,Paused
     }
 
-    public interface ICrowdPosition
-    {
-         GameObject PlaceholderObject();
-         bool IsStatic();
-
-
-    }
-
 
     public struct ModelWrapper
     {
@@ -59,10 +53,12 @@ namespace CrowdAI
     /// </summary>
     public struct TransformData
     {
+        //Vector3 data
         public float _posX;
         public float _posY;
         public float _posZ;
 
+        //Quaternion data
         public float _rotW;
         public float _rotX;
         public float _rotY;
@@ -87,6 +83,7 @@ namespace CrowdAI
     /// </summary>
     public struct ModelData
     {
+        //Hyperthetically load them back in using Asset class
         public string[] _modelNames;
     }
 

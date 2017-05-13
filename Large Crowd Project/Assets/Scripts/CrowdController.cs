@@ -150,7 +150,7 @@ namespace CrowdAI
         /// <summary>
         /// Gets all the groups in the controller
         /// </summary>
-        /// <returns> All crowd groups in </returns>
+        /// <returns> All crowd groups in the controller </returns>
         public CrowdGroup[] GetGroups()
         {
             if (_crowdGroups == null)
@@ -368,15 +368,6 @@ namespace CrowdAI
 
             var _bounds = transform.GetChild(0).transform.localPosition;
 
-            if (!transform)
-            {
-                print("For some reason the transform is null");
-            }
-            else if (!_parent)
-            {
-                print("For some reason the parent is null");
-            }
-
             _parent.transform.position = transform.position;
 
             var _posModifier = Vector3.zero;
@@ -415,7 +406,7 @@ namespace CrowdAI
                     _newCrowd = CrowdGen.GenCrowdSquare(_density, _rotDir, _parent, _bounds, _placeholderPrefab);
                     break;
 
-                default:
+                default: // for ring formation
                     _parent.transform.position += .5f * _bounds;
 
                     _newCrowd = CrowdGen.GenCrowdRing(_density, _rotDir, _parent, _bounds, _placeholderPrefab, _innerRadius);
@@ -424,7 +415,6 @@ namespace CrowdAI
 
             if (_newCrowd.Length > 0)
             {
-                
                 _groupUnassigned.AddCrowdMember(_newCrowd);
                 _crowdSources.Add(_parent);
                 RecalculateCount();

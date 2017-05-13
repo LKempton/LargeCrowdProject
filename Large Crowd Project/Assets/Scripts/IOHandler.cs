@@ -8,10 +8,15 @@ using UnityEngine.SceneManagement;
 namespace CrowdAI
 {
 
-
+    /// <summary>
+    /// Class for Handling input and output
+    /// </summary>
     public static class IOHandler
     {
-        
+        /// <summary>
+        ///  Writes the data about the controller to disk in the streaming assets folder
+        /// </summary>
+        /// <param name="controller">The controller being saveds </param>
         public static void SaveController(CrowdController controller)
         {
             if (controller == null)
@@ -65,7 +70,10 @@ namespace CrowdAI
 
 
         }
-
+        /// <summary>
+        /// Attempts to find the static instance of the controller and 
+        ///  Writes the data about the controller to disk in the streaming assets folder
+        /// </summary>
         public static void SaveController()
         {
             var _controller = CrowdController.GetCrowdController();
@@ -82,7 +90,11 @@ namespace CrowdAI
 
         
 
-
+        /// <summary>
+        /// Puts the position and rotation of a transform into the TransformData strcut then returns it
+        /// </summary>
+        /// <param name="transform"> The transform to get data from</param>
+        /// <returns>The positions and rotation in a structure</returns>
         public static TransformData GetTransformData(Transform transform)
         {
             var _tranformData = new TransformData();
@@ -101,11 +113,21 @@ namespace CrowdAI
             return _tranformData;
         }
 
+        /// <summary>
+        /// Makes a Vector3 from the position in TransformData
+        /// </summary>
+        /// <param name="data">The Transform to get the position from</param>
+        /// <returns>A Vector3 that has the same position as given in the data</returns>
         public static Vector3 GetPosition(TransformData data)
         {
             return new Vector3(data._posX, data._posY, data._posZ);
         }
 
+        /// <summary>
+        /// Makes a Quaternioin from the rotations in TransformData
+        /// </summary>
+        /// <param name="data">The Transform to get the rotations from</param>
+        /// <returns>A Quaternion that has the same rotations as given in the data</returns>
         public static Quaternion GetRotation(TransformData data)
         {
             return new Quaternion(data._rotX, data._rotY, data._rotZ, data._rotW);

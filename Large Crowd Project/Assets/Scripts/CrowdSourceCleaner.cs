@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 using UnityEditor;
 
 namespace CrowdAI
@@ -13,7 +10,9 @@ namespace CrowdAI
         CrowdController controller;
 
         
-
+        /// <summary>
+        /// When a crowd source is deleted, removes the crowd members from the crowd members list
+        /// </summary>
         void OnDestroy()
         {
             
@@ -35,12 +34,6 @@ namespace CrowdAI
         }
 
       
-        void Awake()
-        {
-
-            
-        }
-
         public CrowdController Controller
         {
             set

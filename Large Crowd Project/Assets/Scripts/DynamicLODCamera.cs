@@ -56,14 +56,13 @@ namespace CrowdAI
             }
         }
 
+        /// <summary>
+        /// (To be coded) Activate the new LOD model, set it to the position of the current model, and deactivate the current model
+        /// </summary>
+        /// <param name="LOD">the LOD number to change the model to</param>
         private void SetLOD(int LOD)
         {
-            //Disable previous model
-
-            //Get new model
-            GameObject model = CrowdController.GetCrowdController().GetPooled("string");
-
-            //place model at position
+            
         }
     }
 }

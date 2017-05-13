@@ -6,11 +6,19 @@ namespace CrowdAI
 {
     public static class CrowdGen
     {
-
+        /// <summary>
+        /// Creates a crowd as a child of a crowd source in a circle formation
+        /// </summary>
+        /// <param name="crowdDensity">How densely packed the crowd members are in the crowd</param>
+        /// <param name="rotDir">The direction the crowd members are rotated to face</param>
+        /// <param name="parent">The gameobject representing the first corner of the crowd</param>
+        /// <param name="bounds">The position of the second corner of the crowd</param>
+        /// <param name="prefab">The crowd member to spawn a crowd of</param>
+        /// <returns>The list of crowd member gameobjects generated</returns>
         public static GameObject[] GenCrowdCircle(float crowdDensity, float rotDir, GameObject parent, Vector3 bounds,  GameObject prefab)
         {
-            var _outList = new List<GameObject>();
-            //used list since the number of game objects generated isn't determined in a linear manner
+            var _outList = new List<GameObject>(); //used list since the number of game objects generated isn't determined in a linear manner
+
 
             prefab.transform.Rotate(0, rotDir, 0);
 
@@ -31,6 +39,15 @@ namespace CrowdAI
             return _outList.ToArray() ;
         }
 
+        /// <summary>
+        /// Creates a crowd as a child of a crowd source in a square formation
+        /// </summary>
+        /// <param name="crowdDensity">How densely packed the crowd members are in the crowd</param>
+        /// <param name="rotDir">The direction the crowd members are rotated to face</param>
+        /// <param name="parent">The gameobject representing the first corner of the crowd</param>
+        /// <param name="bounds">The position of the second corner of the crowd</param>
+        /// <param name="prefab">The crowd member to spawn a crowd of</param>
+        /// <returns>The array of crowd member gameobjects generated</returns>
         public static GameObject[] GenCrowdSquare(float crowdDensity, float rotDir, GameObject parent,  Vector3 bounds,   GameObject prefab)
         {
 
@@ -84,49 +101,16 @@ namespace CrowdAI
           
          }
 
-        public static GameObject[] GenCrowdSquare(float crowdDensity,float rotDir, GameObject parent, Vector3 bounds, float densityRange, GameObject prefab )
-        { // e = m/v, e = crowdDensity, m = n of people , v = bounds. Therefore n of people  =  CrowdDensity * bounds
-
-            var _parentTrans = parent.transform;
-           
-
-            prefab.transform.Rotate(0,rotDir,0);
-
-            var _startPos = new Vector3(parent.transform.position.x - 0.5f * bounds.x, 0, parent.transform.position.z - 0.5f * bounds.z);
-
-            int _rows = Mathf.RoundToInt(crowdDensity * bounds.x);
-            int _columns = Mathf.RoundToInt(crowdDensity * bounds.z);
-
-            int _arrDiv = (_columns > _rows) ? _rows : _columns;
-
-            float _tilt = bounds.y / (_rows * _columns);
-            
-
-            var _crowdMembers = new GameObject[_columns* _rows];
-
-            for (int i = 0; i < _columns; i++)
-            {
-                for (int j = 0; j < _rows; j++)
-                {
-                    var _newPos = _startPos;
-                    float _newDensity = crowdDensity + Random.Range(-densityRange, densityRange);
-                    _newPos += new Vector3(j / _newDensity,i*_tilt, i / _newDensity);
-                        
-
-                    var _newObj = GameObject.Instantiate(prefab, _parentTrans);
-                    _newObj.transform.position = _newPos;
-
-                    _crowdMembers[i * _arrDiv+j] = _newObj;
-                   
-                }
-            }
-
-            prefab.transform.Rotate(0, -rotDir, 0);
-
-            return _crowdMembers;
-
-        }
-
+        /// <summary>
+        /// Creates a crowd as a child of a crowd source in a ring formation
+        /// </summary>
+        /// <param name="crowdDensity">How densely packed the crowd members are in the crowd</param>
+        /// <param name="rotDir">The direction the crowd members are rotated to face</param>
+        /// <param name="parent">The gameobject representing the first corner of the crowd</param>
+        /// <param name="bounds">The position of the second corner of the crowd</param>
+        /// <param name="prefab">The crowd member to spawn a crowd of</param>
+        /// <param name="innerRadius">The radius of the hole in the middle of the ring</param>
+        /// <returns>The list of crowd member gameobjects generateds</returns>
         public static GameObject[] GenCrowdRing(float crowdDensity,float rotDir, GameObject parent, Vector3 bounds, GameObject prefab, float innerRadius )
         {
             float _radius = (bounds.x + bounds.z) / 4;
@@ -144,6 +128,11 @@ namespace CrowdAI
             return _outList.ToArray();
         }
 
+        /// <summary>
+        /// Gets the boundaries of the size of a game object
+        /// </summary>
+        /// <param name="gO">The gameobject to get the boundaries of the size of</param>
+        /// <returns>The boundaries of the size of a gameobject</returns>
         public static Vector3 GetObjectBounds(GameObject gO)
         {
             var _outBounds = new Vector3();
@@ -183,6 +172,13 @@ namespace CrowdAI
 
         }
 
+        /// <summary>
+        /// Estimate the number of crowd members that will be generated in a ring formation with the current settings
+        /// </summary>
+        /// <param name="crowdDensity">How densely packed the crowd members are in the crowd</param>
+        /// <param name="bounds">The position of the second corner of the crowd</param>
+        /// <param name="innerRadius">The radius of the hole in the middle of the ring</param>
+        /// <returns>The number of crowd members that will be generated in a ring formation with the current settings</returns>
         public static int EstimateRing(float crowdDensity, Vector3 bounds, float innerRadius)
         {
            
@@ -205,11 +201,23 @@ namespace CrowdAI
             return Mathf.RoundToInt(_count)+1;
         }
 
+        /// <summary>
+        /// Estimate the number of crowd members that will be generated in a square formation with the current settings
+        /// </summary>
+        /// <param name="crowdDensity">How densely packed the crowd members are in the crowd</param>
+        /// <param name="bounds">The position of the second corner of the crowd</param>
+        /// <returns>The number of crowd members that will be generated in a square formation with the current settings</returns>
         public static int EstimateSquare(float crowdDensity, Vector3 bounds)
         {
             return Mathf.RoundToInt(Mathf.Abs(bounds.x)* Mathf.Abs(bounds.z) * crowdDensity * crowdDensity);
         }
 
+        /// <summary>
+        /// Estimate the number of crowd members that will be generated in a circle formation with the current settings
+        /// </summary>
+        /// <param name="crowdDensity">How densely packed the crowd members are in the crowd</param>
+        /// <param name="bounds">The position of the second corner of the crowd</param>
+        /// <returns>The number of crowd members that will be generated in a circle formation with the current settings</returns>
         public static int EstimateCircle(float crowdDensity, Vector3 bounds)
         {
             float _count = 0;
@@ -225,11 +233,26 @@ namespace CrowdAI
             return Mathf.RoundToInt(_count)+1;
         }
 
+        /// <summary>
+        /// Estimate the number of crowd members in a single loop of a ring or circle formation crowd
+        /// </summary>
+        /// <param name="crowdDensity">How densely packed the crowd members are in the crowd</param>
+        /// <param name="radius">The radius of the ring being estimated</param>
+        /// <returns>The number of crowd members in a single loop of a ring or circle formation crowd</returns>
         private static float EstRing(float crowdDensity, float radius)
         {
             return(float)2 * Mathf.PI * radius * crowdDensity;
         }
 
+        /// <summary>
+        /// Generate the crowd members for a single loop of a ring or circle formation crowd
+        /// </summary>
+        /// <param name="radius">The radius of the loop being generated</param>
+        /// <param name="density">How densely packed the crowd members are in the crowd</param>
+        /// <param name="_yPos">The height of the loop being generated</param>
+        /// <param name="parent">The gameobject representing the first corner of the crowd</param>
+        /// <param name="prefab">The crowd member to spawn a crowd of</param>
+        /// <param name="list">The list of crowd member gameobjects generated in the crowd so far</param>
         private static void GenerateRing(float radius, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
         {
             float _objCount = 2 * Mathf.PI * radius * density;
@@ -253,7 +276,16 @@ namespace CrowdAI
 
 
         }
-
+        /// <summary>
+        /// Generate the crowd members for a single loop of a ring or circle formation crowd
+        /// </summary>
+        /// <param name="radius">The radius of the loop being generated</param>
+        /// <param name="rotation">The direction the crowd members in the loop are generated facing</param>
+        /// <param name="density">How densely packed the crowd members are in the crowd</param>
+        /// <param name="_yPos">The height of the loop being generated</param>
+        /// <param name="parent">The gameobject representing the first corner of the crowd</param>
+        /// <param name="prefab">The crowd member to spawn a crowd of</param>
+        /// <param name="list">The list of crowd member gameobjects generated in the crowd so far</param>
         private static void GenRingCentreFacing(float radius, float rotation, float density, float _yPos, GameObject parent, GameObject prefab, ref List<GameObject> list)
         {
             float _objCount = 2 * Mathf.PI * radius * density;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System;
+
 
 
 
@@ -9,8 +9,6 @@ namespace CrowdAI
     /// <summary>
     /// Group of crowd members abritrarily seperated 
     /// </summary>
-    /// 
-    [System.Serializable]
     public class CrowdGroup
     {
         [SerializeField]
@@ -19,15 +17,10 @@ namespace CrowdAI
         private List<GameObject> _crowdMembers;
         private List<ModelWrapper> _models;
       
-
-
-
-
-
         /// <summary>
-        /// Constructs a new instance of CrowdGroup
+        /// Constructs a new crowd group
         /// </summary>
-        /// <param name="groupName">The name associated with this crowd group</param>
+        /// <param name="groupName">The name of the group</param>
 
         public CrowdGroup(string groupName)
         {
@@ -36,12 +29,20 @@ namespace CrowdAI
             _groupName = groupName;
         }
 
+        /// <summary>
+        /// Constructs a new crowd group
+        /// </summary>
+        /// <param name="data">group object data</param>
+        /// <param name="sources">list of crowd sources in the scene</param>
+        /// <param name="prefab">crowd member to generate group for</param>
         public CrowdGroup(GroupData data, List<GameObject> sources, GameObject prefab)
         {
             _groupName = data._name;
 
             _crowdMembers = new List<GameObject>();
             _models = new List<ModelWrapper>();
+
+            //instantiate and initialise crowd members inside new group
             if (data._groupMembers != null)
             {
                 for (int i = 0; i < data._groupMembers.Length; i++)
@@ -79,6 +80,9 @@ namespace CrowdAI
             }
         }
 
+        /// <summary>
+        /// Removes null crowd members from list
+        /// </summary>
         public void CheckForNullMembers()
         {
             for (int i = _crowdMembers.Count; i > -1; i--)
@@ -92,6 +96,9 @@ namespace CrowdAI
             }
         }
 
+        /// <summary>
+        /// Destroys crowd members in list
+        /// </summary>
         public void DestroyCrowdMembers()
         {
             if (Application.isEditor)
@@ -130,6 +137,10 @@ namespace CrowdAI
             _crowdMembers.Add(crowdMember);
         }
 
+        /// <summary>
+        /// Adds crowd members objects to crowd member list
+        /// </summary>
+        /// <param name="crowdMembers">array of crowd members to add to list</param>
         public void AddCrowdMember(GameObject[] crowdMembers)
         {
             for (int i = 0; i < crowdMembers.Length; i++)
@@ -138,6 +149,11 @@ namespace CrowdAI
             }
         }
 
+        /// <summary>
+        /// Get all the data in this instance of the class
+        /// </summary>
+        /// <param name="parents">A list of the crowd source objects in the scene</param>
+        /// <returns>The data in this instance of the class</returns>
         public GroupData GetData(List<GameObject> parents)
         {
             var _outData = new GroupData();
@@ -191,8 +207,10 @@ namespace CrowdAI
             return _outData;
         }
 
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
         public void AddModelGroup(ModelWrapper model)
         {
             if (!Application.isEditor)
@@ -201,8 +219,6 @@ namespace CrowdAI
             }
 
             _models.Add(model);
-
-
         }
 
         /// <summary>
