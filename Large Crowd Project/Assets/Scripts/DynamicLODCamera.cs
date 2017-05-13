@@ -27,6 +27,7 @@ namespace CrowdAI
         {
             if (hitColliders != null)
             {
+                //cycle through the array of crowd member colliders from where the index got up to last frame
                 int _maxIndex = (currentColliderIndex + maxCalculationsPerFrame > hitColliders.Length) ? hitColliders.Length - 1 : currentColliderIndex + maxCalculationsPerFrame;
                 for ( ; currentColliderIndex < _maxIndex; currentColliderIndex++)
                 {
@@ -63,18 +64,24 @@ namespace CrowdAI
         }
 
         /// <summary>
-        /// Get the distance from the camera of all the crowd members in a radius
+        /// Get an array of all crowd member colliders in a radius
         /// </summary>
         private void GetCrowdMembers()
         {
             float detectionRadius = spriteDistance*2;
 
-            //get an array of every crowd member within a radius and depending on distance set a level of detail
+            //get an array of every crowd member within a radius
             hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, (1 << 8), QueryTriggerInteraction.Collide);
 
+            //reset how far into the array was calculated
             currentColliderIndex = 0;
         }
 
+        /// <summary>
+        /// Activates a crowd member object with a new level of detail, positions it in the place of the current one, and deactivates the current one
+        /// </summary>
+        /// <param name="LOD">The level of detail to change the current object to</param>
+        /// <param name="currentObj">the crowd member game object that is having its level of detail changed</param>
         private void SetLOD(int LOD, GameObject currentObj)
         {
             var info = currentObj.GetComponent<CrowdMemberInfo>();
