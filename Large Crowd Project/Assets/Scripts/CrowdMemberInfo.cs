@@ -6,6 +6,8 @@ namespace CrowdAI
 {
     public class CrowdMemberInfo : MonoBehaviour
     {
+        Collider collider;
+
         [SerializeField]
         private GameObject _sprite, _lowDetailModel, _highDetailModel;
 
@@ -14,6 +16,21 @@ namespace CrowdAI
 
         [SerializeField]
         private Team _team;
+
+        void Start()
+        {
+            collider = GetComponent<Collider>();
+        }
+
+        void OnBecameVisible()
+        {
+            collider.enabled = true;
+        }
+
+        void OnBecameInvisible()
+        {
+            collider.enabled = false;
+        }
 
         public GameObject Sprite
         {
