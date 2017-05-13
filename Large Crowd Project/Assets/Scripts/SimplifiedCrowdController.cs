@@ -20,6 +20,8 @@ namespace CrowdAI
         [SerializeField]
         private float _density, _startHeight, _innerRadius, _rotDir = 0;
 
+   
+
         public void GenerateCrowd(Vector3 bounds)
         {
             var parent = new GameObject();
@@ -131,5 +133,7 @@ namespace CrowdAI
                 return _crowdCount;
             }
         }
+
+       
     }
 }

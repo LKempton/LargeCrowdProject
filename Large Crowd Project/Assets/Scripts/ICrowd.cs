@@ -23,7 +23,7 @@ namespace CrowdAI
 
     public enum Team
     {
-        NONE, RED, BLUE
+        RED, BLUE
     }
 
     public enum AnimationStatus

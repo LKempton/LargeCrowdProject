@@ -39,7 +39,6 @@ namespace CrowdAI
             tiltAmount_Prop = serializedObject.FindProperty("_tiltAmount");
             startHeight_Prop = serializedObject.FindProperty("_startHeight");
             crowdObject_Prop = serializedObject.FindProperty("_startingPrefab");
-            crowdStates_Prop = serializedObject.FindProperty("_crowdStates");
             models_Prop = serializedObject.FindProperty("_groupModels");
 
 
@@ -120,6 +119,7 @@ namespace CrowdAI
         {
             if (val == null)
             {
+
                 return;
             }
 

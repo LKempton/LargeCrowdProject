@@ -140,6 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4619471293095832}
   - component: {fileID: 95660061756251902}
+  - component: {fileID: 111075699704113654}
   m_Layer: 0
   m_Name: Humanoid_LowDetail
   m_TagString: Untagged
@@ -2624,6 +2625,22 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!111 &111075699704113654
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1104631190209692}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 112b744339e47304887e6fa75b82cf38, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 112b744339e47304887e6fa75b82cf38, type: 2}
+  - {fileID: 7400000, guid: e9a5e9e85b9a1bb48b247aed0685985a, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 1
 --- !u!114 &114372437404044874
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2640,6 +2657,7 @@ MonoBehaviour:
   _highDetailModel: {fileID: 1452606857415106, guid: 60d4bc9bb21edb840830c566c5ef61d1,
     type: 2}
   _isDynamicCrowdMember: 1
+  _clipNames: []
   _team: 1
 --- !u!137 &137307683210632904
 SkinnedMeshRenderer:

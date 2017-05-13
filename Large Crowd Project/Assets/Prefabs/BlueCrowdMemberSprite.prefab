@@ -71,6 +71,7 @@ MonoBehaviour:
   _highDetailModel: {fileID: 1419545620313524, guid: 483724b01a647f74593fceb9bd77e4f0,
     type: 2}
   _isDynamicCrowdMember: 1
+  _clipNames: []
   _team: 2
 --- !u!212 &212706302692684848
 SpriteRenderer:
