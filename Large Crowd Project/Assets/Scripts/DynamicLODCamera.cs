@@ -4,12 +4,15 @@ using UnityEngine;
 
 namespace CrowdAI
 {
+    /// <summary>
+    /// MonoBehaviour that updates the LOD on objects based on it's distance from it
+    /// </summary>
     public class DynamicLODCamera : MonoBehaviour {
         
         [SerializeField] //the distance between the camera and the object at which the object changes level of detail
         private float highDetailModelDistance, lowDetailModelDistance, spriteDistance;
 
-        [SerializeField] //interval at which the levels of detail of the objects are updated in milliseconds
+        [SerializeField] //interval at which the levels of detail of the objects are updated in seconds
         private float updateInterval = 0.5f;
 
         private Collider[] hitColliders;
@@ -23,6 +26,9 @@ namespace CrowdAI
             InvokeRepeating("GetCrowdMembers", 0, updateInterval);
         }
 
+        /// <summary>
+        /// Goes through a set amount of objects in each frame and updates their LOD
+        /// </summary>
         void Update()
         {
             if (hitColliders != null)

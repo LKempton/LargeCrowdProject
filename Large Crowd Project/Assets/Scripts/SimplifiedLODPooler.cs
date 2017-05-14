@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace CrowdAI
 {
+    /// <summary>
+    /// Monobehaviour that pools all crowd objects on scene
+    /// </summary>
     public class SimplifiedLODPooler : MonoBehaviour
     {
         public static SimplifiedLODPooler instance;
