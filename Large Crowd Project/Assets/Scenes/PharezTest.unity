@@ -308,7 +308,8 @@ Prefab:
       propertyPath: _density
       value: 0.729
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114652939967795062, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 78050e1a55d0c884ab0ba3ee5a0a5a3b, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &2086973589

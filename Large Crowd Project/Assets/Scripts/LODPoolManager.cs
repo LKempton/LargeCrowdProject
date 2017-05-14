@@ -4,15 +4,25 @@ using System.Collections.Generic;
 
 namespace CrowdAI
 {
+   /// <summary>
+   /// Pools crowd objects in the scene
+   /// </summary>
     [System.Serializable]
     public class LODPoolManager
     {
-
+        /// <summary>
+        /// the number of levels of detail models for each crowd character
+        /// </summary>
         [SerializeField]
-        private int _lodLayers = 5; //the number of levels of detail models for each crowd character
-
+        private int _lodLayers = 5; 
+        /// <summary>
+        /// Stores the pool as a GameObject, string pair
+        /// </summary>
         private Hashtable _mainPool = new Hashtable();
 
+        /// <summary>
+        /// used to temporarily store values taken from the Hashtable
+        /// </summary>
         private List<GameObject> _tempList;
 
 		/// <summary>

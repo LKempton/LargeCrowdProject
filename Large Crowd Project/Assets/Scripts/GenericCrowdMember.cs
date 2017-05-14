@@ -11,8 +11,15 @@ namespace CrowdAI
     /// </summary>
     public class GenericCrowdMember : MonoBehaviour, ICrowd
     {
-        private Dictionary<string, string> _animDict; // links animation clip names to animation states
-        private Renderer _rend;
+        /// <summary>
+        /// animation names, state names pair
+        /// </summary>
+        private Dictionary<string, string> _animDict; 
+
+        /// <summary>
+        /// Renderer attached to th
+        /// </summary>
+       
         private Animation _animator;
 
         bool _isTransitioning = false;
@@ -35,6 +42,9 @@ namespace CrowdAI
         private string _currentState;
         private string _currentAnimName;
 
+        /// <summary>
+        /// Gets the game object the script is attached to, for the interface
+        /// </summary>
         public GameObject Member
         {
             get
@@ -43,22 +53,17 @@ namespace CrowdAI
             }
         }
 
+      
         private void Start()
         {
             _animDict = new Dictionary<string,string>();
-
             
-            
-            _rend = gameObject.GetComponent<Renderer>();
+         
             _animator = GetComponent<Animation>();
-          
 
             // if the animator or the Rendere can't be found in the parent it must be in the child
             if (!_animator)
                 _animator = GetComponentInChildren<Animation>();
-
-            if (!_rend)
-                _rend = GetComponentInChildren<Renderer>();
 
             var _crowdController = GetComponentInParent<CrowdController>();
 
@@ -187,14 +192,14 @@ namespace CrowdAI
             }
 
             if (!_animator.isPlaying)
-            {
+            {// plays the animation immediately if there isn't one playing
                 _animator.Play(newAnimName);
                 _currentAnimName = newAnimName;
                 _isTransitioning = false;
                 yield break;
             }
             else
-            {
+            {//otherwise makes the animation no longer loop and wait for it to finish
                
                 _animator.wrapMode = WrapMode.Once;
 

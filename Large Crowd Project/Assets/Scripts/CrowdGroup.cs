@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System;
+
 
 
 
@@ -9,8 +9,6 @@ namespace CrowdAI
     /// <summary>
     /// Group of crowd members abritrarily seperated 
     /// </summary>
-    /// 
-    [System.Serializable]
     public class CrowdGroup
     {
         [SerializeField]
@@ -18,68 +16,89 @@ namespace CrowdAI
         [SerializeField]
         private List<GameObject> _crowdMembers;
         private List<ModelWrapper> _models;
-       
-
       
-
-      
-
         /// <summary>
-        /// Constructs a new instance of CrowdGroup
+        /// Constructs a new crowd group
         /// </summary>
-        /// <param name="groupName">The name associated with this crowd group</param>
+        /// <param name="groupName">The name of the group</param>
 
-         public CrowdGroup(string groupName)
+        public CrowdGroup(string groupName)
         {
             _crowdMembers = new List<GameObject>();
             _models = new List<ModelWrapper>();
             _groupName = groupName;
         }
 
-        public CrowdGroup(GroupData data)
+        /// <summary>
+        /// Constructs a new crowd group
+        /// </summary>
+        /// <param name="data">group object data</param>
+        /// <param name="sources">list of crowd sources in the scene</param>
+        /// <param name="prefab">crowd member to generate group for</param>
+        public CrowdGroup(GroupData data, List<GameObject> sources, GameObject prefab)
         {
-            _crowdMembers = new List<GameObject>();
-            _models = new List<ModelWrapper>();
             _groupName = data._name;
 
-            if (data._models != null)
+            _crowdMembers = new List<GameObject>();
+            _models = new List<ModelWrapper>();
+
+            //instantiate and initialise crowd members inside new group
+            if (data._groupMembers != null)
             {
-                for (int i = 0; i < data._models.Length; i++)
+                for (int i = 0; i < data._groupMembers.Length; i++)
                 {
-                    var _nextModel = GetModelFromData(data._models[i]);
-                    _models.Add(_nextModel);
+                    var _newMember = GameObject.Instantiate(prefab);
+                    var _memberData = data._groupMembers[i];
+
+                    _newMember.transform.position = IOHandler.GetPosition(_memberData._transform);
+                    _newMember.transform.rotation = IOHandler.GetRotation(_memberData._transform);
+
+                    if (_memberData.source > 0 && _memberData.source < sources.Count)
+                    {
+                        _newMember.transform.parent = sources[_memberData.source].transform;
+                    }
+
+                    _crowdMembers.Add(_newMember);
                 }
             }
             
-            if (data._groupMembers != null)
+            if (data._models != null)
             {
-                var _parentGameObject = new GameObject();
-                _parentGameObject.name = GroupName + "_Source";
-                for (int i = 0; i < data._groupMembers.Length; i++)
+                // NEEDS TO BE TESTED
+                for (int i = 0; i < data._models.Length; i++)
                 {
+                    int _length = data._models[i]._modelNames.Length;
 
-                    var _newCrowdMember = MakeCrowdPosition(data._groupMembers[i]._position);
-                    _newCrowdMember.transform.parent = _parentGameObject.transform;
-                    _crowdMembers.Add(_newCrowdMember);
+                    var _models = new GameObject[_length];
+
+                    for (int j = 0; j < _length; j++)
+                    {
+                        var _modelName = data._models[i]._modelNames[j];
+                        //_models[i] = Resources.Load()
+                    }
                 }
             }
-
         }
 
-
+        /// <summary>
+        /// Removes null crowd members from list
+        /// </summary>
         public void CheckForNullMembers()
         {
-            for (int i = _crowdMembers.Count; i>-1 ; i--)
+            for (int i = _crowdMembers.Count; i > -1; i--)
             {
                 var _member = _crowdMembers[i];
 
-                if(_member == null)
+                if (_member == null)
                 {
                     _crowdMembers.Remove(_member);
                 }
             }
         }
-       
+
+        /// <summary>
+        /// Destroys crowd members in list
+        /// </summary>
         public void DestroyCrowdMembers()
         {
             if (Application.isEditor)
@@ -95,7 +114,7 @@ namespace CrowdAI
             }
             else
             {
-                
+
                 for (int i = _crowdMembers.Count - 1; i > -1; i--)
                 {
                     if (_crowdMembers[i] != null)
@@ -106,67 +125,7 @@ namespace CrowdAI
                 }
             }
             _crowdMembers.Clear();
-            
-        }
 
-        public void OverwriteModelData(ModelData[] data)
-        {
-
-            if (data == null)
-            {
-                return;
-            }
-
-            if (data.Length < 1)
-            {
-                return;
-            }
-
-            for (int i = 0; i <data.Length ; i++)
-            {
-                _models.Add(GetModelFromData(data[i]));
-            }
-
-        }
-        private GameObject MakeCrowdPosition(TransFormData data)
-        {
-            var _outGO = new GameObject();
-            _outGO.name = GroupName+"_Crowd Member_"+_crowdMembers.Count;
-
-            // add components go here for any scripts that need to be on the objects
-            _outGO.transform.position = new Vector3(data._posX, data._posY, data._posZ);
-            _outGO.transform.rotation = new Quaternion(data._rotX, data._rotY, data._rotZ, data._rotW);
-
-            return _outGO;
-            
-        }
-
-        private void MakeCrowdPlaceholder(TransFormData data, GameObject placeholder)
-        {
-            var _crowdMember = GameObject.Instantiate(placeholder);
-
-            _crowdMember.transform.position = new Vector3(data._posX, data._posY, data._posZ);
-            _crowdMember.transform.rotation = new Quaternion(data._rotX, data._rotY, data._rotZ, data._rotW);
-            _crowdMembers.Add(_crowdMember);
-
-        }
-
-        private ModelWrapper GetModelFromData(ModelData data)
-        {
-            int _length = data._modelNames.Length;
-
-            var _outModel = new ModelWrapper();
-
-            _outModel._LODLevel = new GameObject[_length];
-            _outModel.sizes = new int[_length];
-
-            for (int i = 0; i < _length; i++)
-            {
-                _outModel._LODLevel[i] = (GameObject)Resources.Load(data._modelNames[i], typeof (GameObject));
-                _outModel.sizes[i] = data._sizes[i];
-            }
-
-            return _outModel;
         }
 
         /// <summary>
@@ -177,7 +136,11 @@ namespace CrowdAI
         {
             _crowdMembers.Add(crowdMember);
         }
-       
+
+        /// <summary>
+        /// Adds crowd members objects to crowd member list
+        /// </summary>
+        /// <param name="crowdMembers">array of crowd members to add to list</param>
         public void AddCrowdMember(GameObject[] crowdMembers)
         {
             for (int i = 0; i < crowdMembers.Length; i++)
@@ -185,91 +148,69 @@ namespace CrowdAI
                 _crowdMembers.Add(crowdMembers[i]);
             }
         }
-        
-       
-      private int GetParentIndex(Transform value, List<GameObject> parents)
-        {
-            if (value == null || parents == null)
-            {
-                
-                return -1;
-            }
 
-            for (int i = 0; i < parents.Count; i++)
-            {
-                if (value.gameObject == parents[i])
-                {
-                   
-                    return i;
-                }
-            }
-
-          
-            return -1;
-        }
-
+        /// <summary>
+        /// Get all the data in this instance of the class
+        /// </summary>
+        /// <param name="parents">A list of the crowd source objects in the scene</param>
+        /// <returns>The data in this instance of the class</returns>
         public GroupData GetData(List<GameObject> parents)
         {
-            GroupData _outData = new GroupData();
-
-            _outData._groupMembers = new MemberData[_crowdMembers.Count];
-           
+            var _outData = new GroupData();
 
             _outData._name = _groupName;
-
-            if (_crowdMembers != null)
+            // save crowd members
+            if (_crowdMembers.Count > 0)
             {
-                if (_crowdMembers.Count > 0)
+                _outData._groupMembers = new MemberData[_crowdMembers.Count];
+
+                for (int i = 0; i < _crowdMembers.Count; i++)
                 {
-                    for (int i = 0; i < _crowdMembers.Count; i++)
+                    var _member = _crowdMembers[i];
+
+                    var _memberData = new MemberData();
+
+                    _memberData.source = -1;
+
+                    for (int j = 0; j < parents.Count; j++)
                     {
-                        var _currentTransform = _crowdMembers[i].transform;
-                        
-
-                        _outData._groupMembers[i]._position._posX = _currentTransform.position.x;
-                        _outData._groupMembers[i]._position._posY = _currentTransform.position.y;
-                        _outData._groupMembers[i]._position._posZ = _currentTransform.position.z;
-
-                        _outData._groupMembers[i]._position._rotW = _currentTransform.rotation.w;
-                        _outData._groupMembers[i]._position._rotX = _currentTransform.rotation.x;
-                        _outData._groupMembers[i]._position._rotY = _currentTransform.rotation.y;
-                        _outData._groupMembers[i]._position._rotZ = _currentTransform.rotation.z;
-
-                        _outData._groupMembers[i].source = GetParentIndex(_currentTransform.parent, parents);
-                       
-                    }
-                }
-            }
-           
-
-            if (_models !=null)
-            {
-                if (_models.Count > 0)
-                {
-                    _outData._models = new ModelData[_models.Count];
-
-                    for (int i = 0; i < _models.Count; i++)
-                    {
-                        var _currentModel = _models[i];
-                        int _LODCount = _currentModel.sizes.Length;
-
-                        _outData._models[i]._modelNames = new string[_LODCount];
-                        _outData._models[i]._sizes = _models[i].sizes;
-
-                        for (int j = 0; j < _LODCount; j++)
+                        if (_member.transform.parent.gameObject == parents[j])
                         {
-                            _outData._models[i]._modelNames[j] = _models[i]._LODLevel[j].name;
-
+                            Debug.Log("found the source");
+                            _memberData.source = j;
+                            break;
                         }
                     }
+
+                    _memberData._transform = IOHandler.GetTransformData(_member.transform);
+
+                    
                 }
-                
+
             }
-           
+
+            if (_models.Count > 0)
+            {
+                _outData._models = new ModelData[_models.Count];
+
+                for (int i = 0; i < _models.Count; i++)
+                {
+                    for (int j = 0; j <_models[i]._LODLevel.Length ; j++)
+                    {
+                        //_outData._models[i]._modelNames[j] = _models[i]._LODLevel[j];
+                       // Resources.Lo
+                    }
+                }
+
+            }
 
             return _outData;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
         public void AddModelGroup(ModelWrapper model)
         {
             if (!Application.isEditor)
@@ -278,8 +219,6 @@ namespace CrowdAI
             }
 
             _models.Add(model);
-            
-
         }
 
         /// <summary>
@@ -289,7 +228,7 @@ namespace CrowdAI
         /// <param name="useRandDelay"> whether there should be a delay before the animation starts </param>
         public void SetState(string state, bool useRandDelay)
         {
-            
+
         }
 
         public void ToggleAnimations()
@@ -297,11 +236,11 @@ namespace CrowdAI
 
         }
 
-       /// <summary>
-       /// Removes all crowd Members from the group
-       /// Does not dispose of them !
-       /// </summary>
-
+        /// <summary>
+        /// Removes all crowd Members from the group
+        /// Does not dispose of them !
+        /// </summary>
+        /// <returns>An array of all the members in the group</returns>
         public GameObject[] ClearAllForDeletion()
         {
             if (_crowdMembers == null)
@@ -321,8 +260,6 @@ namespace CrowdAI
 
             return _outGOs;
         }
-        
-       
 
         public bool Remove(GameObject crowdMember)
         {
@@ -349,7 +286,7 @@ namespace CrowdAI
             return _crowdMembers.Contains(crowdMember);
         }
 
-       
+
 
         /// <summary>
         /// The name of the group
@@ -366,7 +303,7 @@ namespace CrowdAI
             }
             set
             {
-                if (_groupName != "Unassigned" )
+                if (_groupName != "Unassigned")
                 {
                     _groupName = value;
                 }
@@ -388,8 +325,8 @@ namespace CrowdAI
             }
         }
 
-      
+
     }
 
-    
+
 }
