@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace CrowdAI
 {
     /// <summary>
-    ///Creates Crowds in edit mode and manages them in play mode
+    ///Monobehaviour that Creates Crowds in edit mode and manages them in play mode
     /// </summary>
     /// 
 
@@ -102,39 +102,9 @@ namespace CrowdAI
         [SerializeField]
         private GameObject _placeholderPrefab;
 
-        /// <summary>
-        /// (PlayMode Only)
-        /// Gets a pooled Game Object
-        /// By default the naming is GroupName_ModelNumberInGroup_LODLevel
-        /// </summary>
-        /// <param name="name"> The name of the object pooled</param>
-        /// <returns>The game object  if it exists, otherwise null</returns>
-        public GameObject GetPooled(string name)
-        {
-            return _poolManager.GetPooledObject(name);
-        }
+        
 
-        /// <summary>
-        /// Gets the name of the group names
-        /// </summary>
-        /// <returns> </returns>
-        public string[] GetGroupNames()
-        {
-            if (_crowdGroups == null)
-            {
-                return null;
-            }
-
-            var _names = new string[_crowdGroups.Count];
-
-            for (int i = 0; i < _crowdGroups.Count; i++)
-            {
-                _names[i] = _crowdGroups[i].GroupName;
-            }
-
-            return _names;
-        }
-
+        #region Initialisation 
         /// <summary>
         /// Called when play mode starts
         /// </summary>
@@ -147,6 +117,40 @@ namespace CrowdAI
 
         }
 
+        /// <summary>
+        /// Instantiates classes inside of the controller
+        /// This will cause the controller to lose all references to objects
+        /// </summary>
+        public void SetUp()
+        {
+
+            _scene = SceneManager.GetActiveScene().name;
+
+
+            if (_instance != null)
+            {
+                if (_instance != this && _instance.ControllerScene == _scene)
+                {
+
+
+                    Debug.LogWarning("Can Only Have one Crowd Controller per scene");
+                    Destroy(gameObject);
+                    return;
+                }
+            }
+            print("set up");
+            _instance = this;
+
+            _crowdGroups = new List<CrowdGroup>();
+            _groupUnassigned = new CrowdGroup("Unassigned");
+            _crowdSources = new List<GameObject>();
+
+            _setUp = true;
+        }
+
+        #endregion
+
+        #region GroupManagement
         /// <summary>
         /// Gets all the groups in the controller
         /// </summary>
@@ -184,6 +188,110 @@ namespace CrowdAI
         }
 
         /// <summary>
+        /// Creates a new group and stores it privately
+        /// </summary>
+        /// <param name="groupName"> The name of the group created</param>
+        public void AddGroup(string groupName)
+        {
+            if (_crowdGroups == null)
+            {
+                _crowdGroups = new List<CrowdGroup>();
+            }
+            _crowdGroups.Add(new CrowdGroup(groupName));
+
+
+        }
+
+        /// <summary>
+        /// Removes a group and puts its members into the unassigned group
+        /// </summary>
+        /// <param name="groupName"> The name of the group to be removed</param>
+        /// <returns>True if the group existed (and therefore has been removed)</returns>
+        public bool RemoveGroup(string groupName)
+        {
+
+
+            for (int i = 0; i < _crowdGroups.Count; i++)
+            {
+                if (_crowdGroups[i].GroupName == groupName)
+                {
+                    var _group = _crowdGroups[i];
+
+                    var _previousMembers = _group.ClearAllForDeletion();
+
+                    if (_previousMembers != null)
+                    {
+                        if (_previousMembers.Length > 0)
+                        {
+                            _groupUnassigned.AddCrowdMember(_previousMembers);
+                        }
+
+                    }
+
+                    _crowdGroups.RemoveAt(i);
+
+
+                    return true;
+                }
+            }
+
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the name of the group names
+        /// </summary>
+        /// <returns> An array of all group names </returns>
+        public string[] GetGroupNames()
+        {
+            if (_crowdGroups == null)
+            {
+                return null;
+            }
+
+            var _names = new string[_crowdGroups.Count];
+
+            for (int i = 0; i < _crowdGroups.Count; i++)
+            {
+                _names[i] = _crowdGroups[i].GroupName;
+            }
+
+            return _names;
+        }
+
+        /// <summary>
+        /// Attempts to add crowd members to the group given by name
+        /// </summary>
+        /// <param name="groupName">The name of the group to add crowd members to</param>
+        /// <param name="group"> The array of crowd members to be added</param>
+        /// <returns>True if the group has been found (and the crowd members were added)</returns>
+        public bool AddCrowdMembers(string groupName, GameObject[] group)
+        {
+            if (_crowdGroups == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < _crowdGroups.Count; i++)
+            {
+                var _currentGroup = _crowdGroups[i];
+
+                if (_currentGroup.GroupName == groupName)
+                {
+                    _currentGroup.AddCrowdMember(group);
+                    return true;
+                }
+            }
+
+
+            return false;
+        }
+
+        #endregion
+
+        #region AnimationStates
+        /// <summary>
         /// Gets all the States that any crowd member may have
         /// </summary>
         /// <returns>An array of strings that are the names of the states</returns>
@@ -203,7 +311,7 @@ namespace CrowdAI
         /// Searches for a state
         /// </summary>
         /// <param name="stateName">The name of the state to be searched for</param>
-        /// <returns> true if the state exists</returns>
+        /// <returns> True if the state exists</returns>
         public bool StateExists(string stateName)
         {
             for (int i = 0; i < _crowdStates.Length; i++)
@@ -262,97 +370,13 @@ namespace CrowdAI
             }
         }
 
+        #endregion
+
+
+        #region Generation
         /// <summary>
-        /// Creates a new group and stores it privately
+        /// Generates a crowd based on the current values in the controller
         /// </summary>
-        /// <param name="groupName"> the name of the group created</param>
-        public void AddGroup(string groupName)
-        {
-            if (_crowdGroups == null)
-            {
-                _crowdGroups = new List<CrowdGroup>();
-            }
-            _crowdGroups.Add(new CrowdGroup(groupName));
-
-
-        }
-
-        /// <summary>
-        ///Used to destory a crowd formation
-        /// </summary>
-        /// <param name="crowdMembers"> The crowd members </param>
-        public void RemoveSourceChildren(GameObject[] crowdMembers)
-        {
-            for (int i = 0; i < crowdMembers.Length; i++)
-            {
-                var _currentChild = crowdMembers[i];
-
-                bool _childRemoved = _groupUnassigned.Remove(_currentChild);
-
-                if (_childRemoved)
-                {
-                    continue;
-                }
-                else
-                {
-                    if (_crowdGroups == null)
-                    {
-
-
-                        for (int j = 0; j < _crowdGroups.Count; j++)
-                        {
-                            _childRemoved = _crowdGroups[j].Remove(_currentChild);
-
-                            if (_childRemoved)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            RecalculateCount();
-
-        }
-
-        /// <summary>
-        /// Removes a group and puts it's members into unassigned
-        /// </summary>
-        /// <param name="groupName"> The name of the group to be removed</param>
-        /// <returns>true if the group existed (and therefore has been removed)</returns>
-        public bool RemoveGroup(string groupName)
-        {
-
-
-            for (int i = 0; i < _crowdGroups.Count; i++)
-            {
-                if (_crowdGroups[i].GroupName == groupName)
-                {
-                    var _group = _crowdGroups[i];
-
-                    var _previousMembers = _group.ClearAllForDeletion();
-
-                    if (_previousMembers != null)
-                    {
-                        if (_previousMembers.Length > 0)
-                        {
-                            _groupUnassigned.AddCrowdMember(_previousMembers);
-                        }
-
-                    }
-
-                    _crowdGroups.RemoveAt(i);
-
-
-                    return true;
-                }
-            }
-
-
-            return false;
-        }
-
         public void GenerateCrowd()
         {
             if (!_setUp)
@@ -425,11 +449,12 @@ namespace CrowdAI
             }
         }
 
+
         /// <summary>
         /// Approximates the number of crowd members that will be generated ,
         /// based on the current values in this object
         /// </summary>
-        /// <returns> the predicted value for the crowd members generated</returns>
+        /// <returns> The predicted value for the crowd members generated</returns>
         public int GetPrediction()
         {
             int _prediction = 0;
@@ -457,9 +482,8 @@ namespace CrowdAI
         }
 
         /// <summary>
-        /// Recounts the number of models in the scene
+        /// Recounts the number of models in the scene and stores it
         /// </summary>
-        /// <returns>The number of models in the scene</returns>
         public void RecalculateCount()
         {
             if (_groupUnassigned == null)
@@ -491,32 +515,71 @@ namespace CrowdAI
         }
 
         /// <summary>
-        /// Attempts to add crowd members to the group given by name
+        ///Used to destroy a crowd formation
         /// </summary>
-        /// <param name="groupName">The name of the group to add crowd members to</param>
-        /// <param name="group"> The array of crowd members to be added</param>
-        /// <returns>true if the group has been found (and therefore the crowd member were added)</returns>
-        public bool AddCrowdMembers(string groupName, GameObject[] group)
+        /// <param name="crowdMembers"> The crowd members </param>
+        public void RemoveSourceChildren(GameObject[] crowdMembers)
         {
-            if (_crowdGroups == null)
+            for (int i = 0; i < crowdMembers.Length; i++)
             {
-                return false;
-            }
+                var _currentChild = crowdMembers[i];
 
-            for (int i = 0; i < _crowdGroups.Count; i++)
-            {
-                var _currentGroup = _crowdGroups[i];
+                bool _childRemoved = _groupUnassigned.Remove(_currentChild);
 
-                if (_currentGroup.GroupName == groupName)
+                if (_childRemoved)
                 {
-                    _currentGroup.AddCrowdMember(group);
-                    return true;
+                    continue;
+                }
+                else
+                {
+                    if (_crowdGroups == null)
+                    {
+
+
+                        for (int j = 0; j < _crowdGroups.Count; j++)
+                        {
+                            _childRemoved = _crowdGroups[j].Remove(_currentChild);
+
+                            if (_childRemoved)
+                            {
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
+            RecalculateCount();
 
-            return false;
         }
+
+        #endregion
+        
+
+        #region InstanceManagement
+
+
+        /// <summary>
+        /// Gets the current instance of the crowd controller
+        /// </summary>
+        /// <returns>the current instance of the controller on scene</returns>
+        public static CrowdController GetCrowdController()
+        {
+            return _instance;
+        }
+
+        /// <summary>
+        /// The scene that this controller was created on
+        /// </summary>
+        public string ControllerScene
+        {
+            get
+            {
+                return _scene;
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Prints out current object values to the console 
@@ -567,59 +630,9 @@ namespace CrowdAI
         }
 
         /// <summary>
-        /// Instansiates classes inside of the controller
-        /// This will cause the controller to lose all references to objects
+        /// Returns a list of all the source parent gameobjects
         /// </summary>
-        public void SetUp()
-        {
-
-            _scene = SceneManager.GetActiveScene().name;
-
-
-            if (_instance != null)
-            {
-                if (_instance != this && _instance.ControllerScene == _scene)
-                {
-
-
-                    Debug.LogWarning("Can Only Have one Crowd Controller per scene");
-                    Destroy(gameObject);
-                    return;
-                }
-            }
-            print("set up");
-            _instance = this;
-
-            _crowdGroups = new List<CrowdGroup>();
-            _groupUnassigned = new CrowdGroup("Unassigned");
-            _crowdSources = new List<GameObject>();
-
-            _setUp = true;
-        }
-        
-       
-        /// <summary>
-        /// Gets the current instance of the crowd controller
-        /// </summary>
-        /// <returns>the current instance of the controller on scene</returns>
-        public static CrowdController GetCrowdController()
-        {
-            return _instance;
-        }
-
-        /// <summary>
-        /// The scene that this controller was created on
-        /// </summary>
-        public string ControllerScene
-        {
-            get
-            {
-                return _scene;
-            }
-        }
-
-        //done as a workaround, 
-       public List<GameObject> Sources
+        public List<GameObject> Sources
         {
             get
             {
@@ -627,6 +640,10 @@ namespace CrowdAI
             }
         }
 
+        /// <summary>
+        /// Overwrites the current controller with data passed in
+        /// </summary>
+        /// <param name="data"> crowd controller data</param>
         public void OverWriteData(CrowdData data)
         {
             if (Application.isPlaying)
@@ -641,7 +658,26 @@ namespace CrowdAI
 
         }
 
-        
+        /// <summary>
+        /// (PlayMode Only)
+        /// Gets a pooled Game Object
+        /// By default the naming is GroupName_ModelNumberInGroup_LODLevel
+        /// </summary>
+        /// <param name="name"> The name of the object in the pooler </param>
+        /// <returns>The game object  if it exists, otherwise null</returns>
+        public GameObject GetPooled(string name)
+        {
+            if (Application.isPlaying)
+            {
+                return _poolManager.GetPooledObject(name);
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
     }
 
 }

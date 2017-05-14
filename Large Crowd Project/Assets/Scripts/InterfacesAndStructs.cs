@@ -9,19 +9,41 @@ namespace CrowdAI
     // File for storing all interfaces and structures
 
     /// <summary>
-    /// Interface for crowdmembers 
+    /// Interface for crowd members 
     /// </summary>
     public interface ICrowd
-    {
+    {/// <summary>
+    ///Sets the states of crowd members
+    /// </summary>
+    /// <param name="state"> the name of the state to be set to</param>
+    /// <param name="useRandDelay">whether a random amount of time should be added to the delay</param>
+    /// <returns> True if the crowd member is changing to the new state</returns>
         bool SetState(string state, bool useRandDelay);
+
+        /// <summary>
+        /// Gets the current state of the crowdmember
+        /// </summary>
+        /// <returns> The crowd members current state</returns>
         string GetCurrentState();
-      
-       bool SetState(string state,float delay);
-      
+
+        /// <summary>
+        ///Sets the states of crowd members
+        /// </summary>
+        /// <param name="state"> The name of the state to be set to</param>
+        /// <param name="delay">Added delay before the crowd member switches state</param>
+        ///  <returns> True if the crowd member is changing to the new state</returns>
+        bool SetState(string state,float delay);
+
+      /// <summary>
+      /// Toggles the crowd member's animations
+      /// </summary>
         void ToggleAnimation();
 
+        /// <summary>
+        /// Gets the gameobject associated with the crowd member
+        /// </summary>
         GameObject Member { get; }
-        // possibly use a way of using a mix of global and local animations
+        
     }
 
     /// <summary>
@@ -42,7 +64,9 @@ namespace CrowdAI
         Playing,Stopped,Transistioning,Paused
     }
 
-
+    /// <summary>
+    /// Used to store Lod levels for a model
+    /// </summary>
     public struct ModelWrapper
     {
         public GameObject[] _LODLevel;

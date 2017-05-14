@@ -6,7 +6,9 @@ using System;
 
 namespace CrowdAI
 {
-    
+    /// <summary>
+    /// Editor UI class for managing group members and prefab models
+    /// </summary>
     public class GroupUI : EditorWindow
     {
         private CrowdController _crowdController;
@@ -17,12 +19,16 @@ namespace CrowdAI
         private GUIStyle _headingTextStyle;
         private string _newGroupName = "Group Name";
 
+        
         private int _numberOfModels = 0;
 
         GameObject[] levelsOfDetail = new GameObject[30];
 
         Vector2 scrollPosition = new Vector2();
 
+        /// <summary>
+        /// Called to initialise the GUI
+        /// </summary>
         void Awake()
         {
             _genericTextStyle = new GUIStyle();
@@ -37,7 +43,9 @@ namespace CrowdAI
             _genericTextStyle.padding = new RectOffset(6, 3, 6, 6);
         }
 
-
+        /// <summary>
+        /// GUI loop 
+        /// </summary>
         void OnGUI()
         {
             if (_crowdController != null)
@@ -89,7 +97,10 @@ namespace CrowdAI
                 
             }
         }
-
+        /// <summary>
+        /// Manages displaying the window
+        /// </summary>
+        /// <returns>a new editor window with this class</returns>
         [MenuItem("Window/GroupUI")]
         public static EditorWindow ShowWindow()
         {
@@ -100,6 +111,9 @@ namespace CrowdAI
             return window;
         }
 
+        /// <summary>
+        /// Reference to the CrowdController on scene
+        /// </summary>
             public CrowdController Controller
         {
             set
@@ -112,6 +126,10 @@ namespace CrowdAI
         }
         
 
+        /// <summary>
+        /// Displays a CrowdGroup group on the GUI
+        /// </summary>
+        /// <param name="group">The group to be displayed</param>
         public void ShowGroup(CrowdGroup group)
         {
             GUILayout.Label("Group Name: ");

@@ -3,7 +3,9 @@ using UnityEditor;
 
 namespace CrowdAI
 {
-
+    /// <summary>
+    /// Overrides the default monobehaviour GUI for the CrowdController class
+    /// </summary>
 
     [CustomEditor(typeof(CrowdAI.CrowdController)), CanEditMultipleObjects]
     public class CrowdEditorScript : Editor
@@ -61,6 +63,9 @@ namespace CrowdAI
 
         }
 
+        /// <summary>
+        /// Inspector GUI loop for crowd controller
+        /// </summary>
         public override void OnInspectorGUI()
         {
             int _estimatedCount = script.GetPrediction();
@@ -167,7 +172,7 @@ namespace CrowdAI
         /// <summary>
         /// Displays an array as a GUI element
         /// </summary>
-        /// <param name="val"></param>
+        /// <param name="val">The array being displayed</param>
         void GUIArray(SerializedProperty val)
         {
 

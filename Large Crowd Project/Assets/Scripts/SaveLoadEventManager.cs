@@ -6,7 +6,7 @@ using UnityEditor;
 namespace CrowdAI
 {
     /// <summary>
-    /// Makes The Crowd Asset data save when the editor saves
+    /// Monobehaviour that makes The Crowd Asset data save when the editor saves
     /// </summary>
     public class SaveLoadEventManager : UnityEditor.AssetModificationProcessor
     {

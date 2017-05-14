@@ -5,7 +5,7 @@ namespace CrowdAI
 
 
     /// <summary>
-    ///  Draws guidlines to show where crowd members will be created
+    ///  Draws guidelines to show where crowd members will be created
     /// </summary>
     public class EditorSquareScript : MonoBehaviour
     {

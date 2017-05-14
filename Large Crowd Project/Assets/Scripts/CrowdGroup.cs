@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace CrowdAI
 {
     /// <summary>
-    /// Group of crowd members abritrarily seperated 
+    /// Manages a Group of crowd members
     /// </summary>
     public class CrowdGroup
     {
@@ -30,7 +30,7 @@ namespace CrowdAI
         }
 
         /// <summary>
-        /// Constructs a new crowd group
+        /// Constructs a new crowd group based on data
         /// </summary>
         /// <param name="data">group object data</param>
         /// <param name="sources">list of crowd sources in the scene</param>
@@ -64,7 +64,7 @@ namespace CrowdAI
             
             if (data._models != null)
             {
-                // NEEDS TO BE TESTED
+           // not complete
                 for (int i = 0; i < data._models.Length; i++)
                 {
                     int _length = data._models[i]._modelNames.Length;
@@ -97,9 +97,9 @@ namespace CrowdAI
         }
 
         /// <summary>
-        /// Destroys crowd members in list
+        /// Destroys all crowd members in group
         /// </summary>
-        public void DestroyCrowdMembers()
+        public void DestroyAllCrowdMembers()
         {
             if (Application.isEditor)
             {
@@ -131,7 +131,7 @@ namespace CrowdAI
         /// <summary>
         /// Adds a crowd member to the group
         /// </summary>
-        /// <param name="crowdMember"> the crowd member game object</param>
+        /// <param name="crowdMember"> The crowd member game object to add to the group</param>
         public void AddCrowdMember(GameObject crowdMember)
         {
             _crowdMembers.Add(crowdMember);
@@ -140,7 +140,7 @@ namespace CrowdAI
         /// <summary>
         /// Adds crowd members objects to crowd member list
         /// </summary>
-        /// <param name="crowdMembers">array of crowd members to add to list</param>
+        /// <param name="crowdMembers">Array of crowd members to add to the group</param>
         public void AddCrowdMember(GameObject[] crowdMembers)
         {
             for (int i = 0; i < crowdMembers.Length; i++)
@@ -208,9 +208,9 @@ namespace CrowdAI
         }
 
         /// <summary>
-        /// 
+        /// Adds a model if the application is the editor
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">The model to be added</param>
         public void AddModelGroup(ModelWrapper model)
         {
             if (!Application.isEditor)
@@ -222,23 +222,28 @@ namespace CrowdAI
         }
 
         /// <summary>
-        /// Sets the state of all crowd members in the gruop
+        /// Sets the state of all crowd members in the group
+        /// Not Implemented
         /// </summary>
         /// <param name="state">Name of the new state</param>
-        /// <param name="useRandDelay"> whether there should be a delay before the animation starts </param>
+        /// <param name="useRandDelay"> whether there should be a random delay before the animation starts </param>
         public void SetState(string state, bool useRandDelay)
         {
-
+            throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Toggles the animation in this group
+        /// Not Implemented
+        /// </summary>
         public void ToggleAnimations()
         {
-
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
         /// Removes all crowd Members from the group
-        /// Does not dispose of them !
+        /// Does not dispose of them 
         /// </summary>
         /// <returns>An array of all the members in the group</returns>
         public GameObject[] ClearAllForDeletion()
@@ -261,6 +266,11 @@ namespace CrowdAI
             return _outGOs;
         }
 
+        /// <summary>
+        /// Removes a crowdMember from the group
+        /// </summary>
+        /// <param name="crowdMember">The crowd member to be removed</param>
+        /// <returns>True if the the crowd member has been removed</returns>
         public bool Remove(GameObject crowdMember)
         {
             if (crowdMember == null)
@@ -280,7 +290,11 @@ namespace CrowdAI
             return false;
         }
 
-
+        /// <summary>
+        /// Whether the crowd member is part of this group
+        /// </summary>
+        /// <param name="crowdMember"> The crowd member searched for</param>
+        /// <returns>True if the crowd members is in this group</returns>
         public bool Contains(GameObject crowdMember)
         {
             return _crowdMembers.Contains(crowdMember);
@@ -310,6 +324,9 @@ namespace CrowdAI
             }
         }
 
+        /// <summary>
+        /// The number of members in this group
+        /// </summary>
         public int Size
         {
             get
