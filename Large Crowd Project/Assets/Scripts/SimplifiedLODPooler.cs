@@ -20,9 +20,12 @@ namespace CrowdAI
         {
             instance = this;
 
-            List<GameObject> tempSpriteList = new List<GameObject>();
-            List<GameObject> tempLowDetailModelList = new List<GameObject>();
-            List<GameObject> tempHighDetailModelList = new List<GameObject>();
+            List<GameObject> tempRedSpriteList = new List<GameObject>();
+            List<GameObject> tempRedLowDetailModelList = new List<GameObject>();
+            List<GameObject> tempRedHighDetailModelList = new List<GameObject>();
+            List<GameObject> tempBlueSpriteList = new List<GameObject>();
+            List<GameObject> tempBlueLowDetailModelList = new List<GameObject>();
+            List<GameObject> tempBlueHighDetailModelList = new List<GameObject>();
 
             var parentObj = new GameObject();
             parentObj.name = "Pooled Objects";
@@ -33,26 +36,38 @@ namespace CrowdAI
             {
                 if (gameObjectsInScene[i].layer == LayerMask.NameToLayer("CrowdMembers"))
                 {
-                    tempSpriteList.Add(gameObjectsInScene[i]);
-
                     CrowdMemberInfo info = gameObjectsInScene[i].GetComponent<CrowdMemberInfo>();
 
                     GameObject lowDetailGameObject = Instantiate(info.LowDetailModel);
                     lowDetailGameObject.transform.parent = parentObj.transform;
                     lowDetailGameObject.name = info.Team + "_1_2";
-                    tempLowDetailModelList.Add(lowDetailGameObject);
 
                     GameObject highDetailGameObject = Instantiate(info.HighDetailModel);
                     highDetailGameObject.transform.parent = parentObj.transform;
                     highDetailGameObject.name = info.Team + "_1_3";
-                    tempHighDetailModelList.Add(highDetailGameObject);
-                    
+
+                    if (info.Team == Team.RED)
+                    {
+                        tempRedSpriteList.Add(gameObjectsInScene[i]);
+                        tempRedLowDetailModelList.Add(lowDetailGameObject);
+                        tempRedHighDetailModelList.Add(highDetailGameObject);
+                    }
+                    else if (info.Team == Team.BLUE)
+                    {
+                        tempBlueSpriteList.Add(gameObjectsInScene[i]);
+                        tempBlueLowDetailModelList.Add(lowDetailGameObject);
+                        tempBlueHighDetailModelList.Add(highDetailGameObject);
+                    }
+
                 }
             }
 
-            _mainPool.Add(tempSpriteList[0].name, tempSpriteList);
-            _mainPool.Add(tempLowDetailModelList[0].name, tempLowDetailModelList);
-            _mainPool.Add(tempHighDetailModelList[0].name, tempHighDetailModelList);
+            _mainPool.Add(tempRedSpriteList[0].name, tempRedSpriteList);
+            _mainPool.Add(tempRedLowDetailModelList[0].name, tempRedLowDetailModelList);
+            _mainPool.Add(tempRedHighDetailModelList[0].name, tempRedHighDetailModelList);
+            _mainPool.Add(tempBlueSpriteList[0].name, tempBlueSpriteList);
+            _mainPool.Add(tempBlueLowDetailModelList[0].name, tempBlueLowDetailModelList);
+            _mainPool.Add(tempBlueHighDetailModelList[0].name, tempBlueHighDetailModelList);
         }
 
         /// <summary>
