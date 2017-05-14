@@ -6,6 +6,9 @@ using System;
 
 namespace CrowdAI
 {
+    /// <summary>
+    /// Editor GUI for Handling groups
+    /// </summary>
     
     public class GroupUI : EditorWindow
     {
