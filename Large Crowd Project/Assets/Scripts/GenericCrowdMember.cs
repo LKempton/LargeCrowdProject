@@ -6,8 +6,7 @@ using UnityEngine;
 namespace CrowdAI
 {
     /// <summary>
-    /// This Class is placed on Each crowd Member
-    /// Allows Renderer to be switched off and to modify animation states
+    /// Monobehaviour that manages animation states for each crowd member
     /// </summary>
     public class GenericCrowdMember : MonoBehaviour, ICrowd
     {
@@ -43,7 +42,7 @@ namespace CrowdAI
         private string _currentAnimName;
 
         /// <summary>
-        /// Gets the game object the script is attached to, for the interface
+        /// Gets the game object the script is attached to
         /// </summary>
         public GameObject Member
         {
@@ -53,7 +52,9 @@ namespace CrowdAI
             }
         }
 
-      
+      /// <summary>
+      /// Used for initialisation
+      /// </summary>
         private void Start()
         {
             _animDict = new Dictionary<string,string>();
@@ -95,14 +96,18 @@ namespace CrowdAI
         
        
         /// <returns> The name of the animation state playing</returns>
-        public string GetCurrentState()
+        public string GetCurrentState
         {
-            return _currentState;
+            get
+            {
+                return _currentState;
+            }
+            
         }
 
         /// <summary>
-        /// Attempts to find the animtation state then plays it if it exists 
-        /// and it is not in the middle of transisitioning between animations
+        /// Attempts to find the animation state then plays it if it exists 
+        /// and it is not in the middle of transitioning between animations
         /// </summary>
         /// <param name="state"> The name of the state that will be looked for</param>
         /// <param name="useRandDelay">Whether the object should use a random delay</param>
@@ -177,9 +182,9 @@ namespace CrowdAI
         /// <summary>
         /// Transistions to next animation after a delay
         /// </summary>
-        /// <param name="delay"> time in seconds before start transistion</param>
-        /// <param name="newAnimName">assumed correct name of the animation clip to be played</param>
-        /// <returns></returns>
+        /// <param name="delay"> Time in seconds before start transistion</param>
+        /// <param name="newAnimName">(unvalidated) name of the animation clip to be played</param>
+        
         IEnumerator StartNextAnimation(float delay, string newAnimName)
         {
             _isTransitioning = true;
@@ -238,6 +243,7 @@ namespace CrowdAI
             }
         }
 
+        
        void OnDisable()
         {
             StopAllCoroutines();

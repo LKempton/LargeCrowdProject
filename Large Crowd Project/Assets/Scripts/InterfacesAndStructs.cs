@@ -24,7 +24,7 @@ namespace CrowdAI
         /// Gets the current state of the crowdmember
         /// </summary>
         /// <returns> The crowd members current state</returns>
-        string GetCurrentState();
+        string GetCurrentState {get; }
 
         /// <summary>
         ///Sets the states of crowd members

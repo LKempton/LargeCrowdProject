@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace CrowdAI
 {
+    /// <summary>
+    /// Monobehaviour that removes crowd members from the controller if their source has been removed
+    /// </summary>
     [ExecuteInEditMode]
     
     public class CrowdSourceCleaner : MonoBehaviour
@@ -33,7 +36,10 @@ namespace CrowdAI
             
         }
 
-      
+      /// <summary>
+      /// Reference to the controller
+      /// This is to be set on initialisation
+      /// </summary>
         public CrowdController Controller
         {
             set

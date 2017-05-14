@@ -7,7 +7,6 @@ namespace CrowdAI
    /// <summary>
    /// Pools crowd objects in the scene
    /// </summary>
-    [System.Serializable]
     public class LODPoolManager
     {
         /// <summary>
@@ -28,9 +27,9 @@ namespace CrowdAI
 		/// <summary>
 		/// Creates instances of each individual crowd model object and pools them
 		/// </summary>
-		/// <param name="size">array storing the number of instances to create of each crowd model object (one for each level of detail for each crowd member type e.g. medium detail model for woman character in red group)</param>
-		/// <param name="objects">the array containing the crowd model gameobjects to have instances made of (one for each level of detail for each crowd member type e.g. medium detail model for woman character in red group)</param>
-		/// <param name="objectNames">the array containing the names of each crowd model gameobject to have instances made of (one for each level of detail for each crowd member type e.g. Red_2_3)</param>
+		/// <param name="size">Array storing the number of instances to create of each crowd model object (one for each level of detail for each crowd member type e.g. medium detail model for woman character in red group)</param>
+		/// <param name="objects">The array containing the crowd model gameobjects to have instances made of (one for each level of detail for each crowd member type e.g. medium detail model for woman character in red group)</param>
+		/// <param name="objectNames">The array containing the names of each crowd model gameobject to have instances made of (one for each level of detail for each crowd member type e.g. Red_2_3)</param>
         public LODPoolManager(int[] size, GameObject[] objects, string[] objectNames)
         {
       
@@ -59,7 +58,7 @@ namespace CrowdAI
 		/// Returns if found, throws exception if not
 		/// </summary>
 		/// <returns>The next available instance of a crowd model gameobject in the pool</returns>
-		/// <param name="name">the name of the crowd model gameobject to search for</param>
+		/// <param name="name">The name of the crowd model gameobject to search for</param>
         public GameObject GetPooledObject(string name)
         {
             //if a crowd model gameobject by the name searched for is in the pool
