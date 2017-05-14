@@ -58,16 +58,15 @@ namespace CrowdAI
                         tempBlueLowDetailModelList.Add(lowDetailGameObject);
                         tempBlueHighDetailModelList.Add(highDetailGameObject);
                     }
-
                 }
             }
 
-            _mainPool.Add(tempRedSpriteList[0].name, tempRedSpriteList);
-            _mainPool.Add(tempRedLowDetailModelList[0].name, tempRedLowDetailModelList);
-            _mainPool.Add(tempRedHighDetailModelList[0].name, tempRedHighDetailModelList);
-            _mainPool.Add(tempBlueSpriteList[0].name, tempBlueSpriteList);
-            _mainPool.Add(tempBlueLowDetailModelList[0].name, tempBlueLowDetailModelList);
-            _mainPool.Add(tempBlueHighDetailModelList[0].name, tempBlueHighDetailModelList);
+            _mainPool.Add("RED_1_1", tempRedSpriteList);
+            _mainPool.Add("RED_1_2", tempRedLowDetailModelList);
+            _mainPool.Add("RED_1_3", tempRedHighDetailModelList);
+            _mainPool.Add("BLUE_1_1", tempBlueSpriteList);
+            _mainPool.Add("BLUE_1_2", tempBlueLowDetailModelList);
+            _mainPool.Add("BLUE_1_3", tempBlueHighDetailModelList);
         }
 
         /// <summary>
